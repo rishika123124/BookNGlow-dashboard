@@ -3,7 +3,7 @@
     {
       "id": "salon-hero",
       "description": "Luxury salon interior with warm lighting",
-      "imageUrl": "https://images.unsplash.com/photo-1662289031972-df424bb541bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxsdXh1cnklMjBzYWxvbnxlbnwwfHx8fDE3NzI0MzU0NTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1662289031972-df424bb541bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHh8N3x8bHV4dXJ5JTIwc2Fsb258ZW58MHx8fHwxNzcyNDM1NDU1fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "luxury salon"
     },
     {
@@ -26,7 +26,7 @@
     },
     {
       "id": "salon-aura",
-      "description": "Luxury spa interior for Aura Luxe Spa",
+      "description": "Serene and luxury spa interior for Aura Luxe Spa",
       "imageUrl": "https://images.unsplash.com/photo-1544161515-436cead54573?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGAlMjBsdXh1cnl8ZW58MHx8fHwxNzcyNDQxMjMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "spa luxury"
     },
@@ -44,19 +44,19 @@
     },
     {
       "id": "salon-lush",
-      "description": "Elegant hair styling station",
+      "description": "Elegant hair styling station for The Lush Studio",
       "imageUrl": "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxoYWlyJTIwc3R1ZGlvJTIwbHV4dXJ5fGVufDB8fHx8MTc3MjQ0MTU0NXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "hair studio"
     },
     {
       "id": "salon-serene",
-      "description": "Calm relaxation area in a spa",
+      "description": "Calm relaxation area for Serene Day Spa",
       "imageUrl": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8c3BhJTIwcmVsYXhhdGlvbnxlbnwwfHx8fDE3NzI0NDE1NDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "spa relaxation"
     },
     {
       "id": "salon-classic",
-      "description": "Vintage style barbershop chair",
+      "description": "Vintage style premium barbershop for Classic Cut Barbers",
       "imageUrl": "https://images.unsplash.com/photo-1599351431247-f13b283253f9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNXx8YmFyYmVyJTIwc2hvcHxlbnwwfHx8fDE3NzI0NDE1NDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "barber shop"
     }

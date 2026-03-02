@@ -1,3 +1,4 @@
+
 import { Navbar } from '@/components/dashboard/Navbar'
 import Image from 'next/image'
 import { PlaceHolderImages } from '@/lib/placeholder-images'
