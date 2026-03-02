@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "User": {
@@ -156,56 +157,17 @@
     ]
   },
   "firestore": {
-    "structure": [
-      {
-        "path": "/users/{userId}",
-        "definition": {
-          "entityName": "User",
-          "schema": {
-            "$ref": "#/backend/entities/User"
-          },
-          "description": "Stores individual user profiles.",
-          "params": [
-            {
-              "name": "userId",
-              "description": "The unique Firebase Authentication UID of the user."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/salons/{salonId}",
-        "definition": {
-          "entityName": "Salon",
-          "schema": {
-            "$ref": "#/backend/entities/Salon"
-          },
-          "description": "Stores public profiles and details for each salon.",
-          "params": [
-            {
-              "name": "salonId",
-              "description": "The unique identifier for the salon."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/bookings/{bookingId}",
-        "definition": {
-          "entityName": "Booking",
-          "schema": {
-            "$ref": "#/backend/entities/Booking"
-          },
-          "description": "Stores service bookings. Accessible for availability checks and user history.",
-          "params": [
-            {
-              "name": "bookingId",
-              "description": "The unique identifier for a booking."
-            }
-          ]
-        }
-      }
-    ],
-    "reasoning": "Standard collection-based structure for users, salons, and bookings. Bookings are maintained in a global collection to facilitate cross-salon availability queries and centralized user history management."
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Stores individual user profiles."
+    },
+    "/salons/{salonId}": {
+      "schema": "Salon",
+      "description": "Stores public profiles and details for each salon."
+    },
+    "/bookings/{bookingId}": {
+      "schema": "Booking",
+      "description": "Stores service bookings. Accessible for availability checks and user history."
+    }
   }
 }
