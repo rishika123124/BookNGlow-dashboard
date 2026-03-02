@@ -6,7 +6,7 @@ import { Footer } from '@/components/dashboard/Footer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Star, MapPin, Scissors, Info } from 'lucide-react';
+import { Star, MapPin, Scissors } from 'lucide-react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -46,10 +46,13 @@ export default function MaleSalonsPage() {
   const [price, setPrice] = useState('all');
 
   return (
-    <div className="min-h-screen bg-[#020617] text-white selection:bg-blue-500/30 font-body relative overflow-hidden">
-      {/* Universal Mesh Gradient Background */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
-        <div className="absolute inset-0 bg-gradient-to-br from-pink-500/20 via-blue-500/20 to-purple-500/20 blur-[100px]" />
+    <div className="min-h-screen bg-slate-950 text-white selection:bg-blue-500/30 font-body relative overflow-hidden">
+      {/* Dynamic Pink-Blue-Purple Background Layers */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-pink-600/20 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-blue-600/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-[-10%] left-[25%] w-[45%] h-[45%] bg-purple-600/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '4s' }} />
+        <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px]" />
       </div>
 
       <Navbar />
@@ -94,7 +97,7 @@ export default function MaleSalonsPage() {
                   </SelectContent>
                 </Select>
              </div>
-             <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold hidden lg:block">Showing Discoverable Salons in Doon</span>
+             <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold hidden lg:block">Discover Top Rated Grooming Spots</span>
           </div>
         </div>
 
@@ -104,7 +107,7 @@ export default function MaleSalonsPage() {
               Discover Salons for Men
             </h1>
             <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto font-light tracking-wide italic">
-              Find top rated spots for your next cut or shave in the heart of Dehradun.
+              Find the perfect spot for your next cut or shave in the heart of Dehradun.
             </p>
           </div>
 
@@ -112,11 +115,11 @@ export default function MaleSalonsPage() {
             {MALE_SALONS.map((salon, i) => (
               <div 
                 key={i} 
-                className="group relative rounded-[2rem] overflow-hidden bg-white/5 border border-white/20 backdrop-blur-md shadow-2xl hover:scale-[1.02] transition-all duration-300"
+                className="group relative rounded-[2.5rem] overflow-hidden bg-white/5 border border-white/20 backdrop-blur-md shadow-2xl hover:scale-[1.02] transition-all duration-300"
               >
                 <div className="relative h-64">
                   <Image src={salon.img} alt={salon.name} fill className="object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
                   <Badge className="absolute top-4 left-4 bg-blue-600 text-white border-none font-bold shadow-lg">
                     {salon.price === 'High' ? 'LUXURY' : salon.price === 'Average' ? 'VALUE' : 'BUDGET'}
                   </Badge>
