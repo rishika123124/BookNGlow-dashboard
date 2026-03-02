@@ -4,7 +4,8 @@
 
 @layer base {
   :root {
-    --background: 210 40% 99%;
+    /* A soft mixture of purple and blue for the background */
+    --background: 255 45% 98.5%; 
     --foreground: 222 47% 11%;
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
@@ -12,9 +13,9 @@
     --popover-foreground: 222 47% 11%;
     --primary: 262 83% 58%; /* Purple */
     --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
+    --secondary: 250 40% 96%; /* Light Blue-Purple */
     --secondary-foreground: 222 47% 11.2%;
-    --muted: 210 40% 96.1%;
+    --muted: 250 40% 96%;
     --muted-foreground: 215.4 16.3% 46.9%;
     --accent: 221 83% 53%; /* Blue */
     --accent-foreground: 210 40% 98%;
@@ -59,5 +60,10 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* Subtle mesh gradient background */
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(262, 83%, 58%, 0.03) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, hsla(221, 83%, 53%, 0.03) 0px, transparent 50%);
+    background-attachment: fixed;
   }
 }
