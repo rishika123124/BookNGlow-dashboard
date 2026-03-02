@@ -62,30 +62,24 @@ export default function UnisexSalonsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#F1F5F9] text-[#333333] selection:bg-purple-200/50 font-body relative overflow-hidden">
-      {/* Background Fusion Mesh Glows - Prominent Pink & Blue Mix */}
+    <div className="min-h-screen bg-[#A6969A] text-white selection:bg-white/30 font-body relative overflow-hidden">
+      {/* Background Radial Gradient for Depth */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#FDF2F8_0%,_#F1F5F9_40%,_#E0F2FE_70%,_#F3E8FF_100%)] opacity-80" />
-        
-        {/* Large Pink-Blue Gradient Blobs */}
-        <div className="absolute top-[-5%] left-[-5%] w-[60%] h-[60%] bg-gradient-to-br from-pink-200/40 to-blue-200/40 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-5%] right-[-5%] w-[60%] h-[60%] bg-gradient-to-tl from-purple-200/40 to-pink-200/40 rounded-full blur-[120px]" />
-        
-        {/* Center Accent Glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40%] h-[40%] bg-blue-100/30 rounded-full blur-[100px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#B8A9AD_0%,_#A6969A_100%)]" />
       </div>
 
       <Navbar />
       
       <main className="relative z-10">
-        <div className="sticky top-20 md:top-24 z-40 w-full bg-white/40 backdrop-blur-md border-b border-gray-200 py-4 px-4 shadow-sm">
+        {/* Glass Filter Bar */}
+        <div className="sticky top-20 md:top-24 z-40 w-full bg-white/10 backdrop-blur-md border-b border-white/10 py-4 px-4 shadow-sm">
           <div className="container mx-auto flex flex-col md:flex-row gap-4 items-center justify-between">
              <div className="flex flex-wrap gap-4 items-center w-full md:w-auto">
                 <Select onValueChange={setLocation} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-950/80 to-purple-950/80 border-white/20 text-white rounded-full transition-all hover:brightness-110 shadow-lg">
+                  <SelectTrigger className="w-full md:w-[180px] bg-white/10 border-white/20 text-white rounded-full transition-all hover:bg-white/20 shadow-lg">
                     <SelectValue placeholder="📍 Location" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white border-gray-200 text-[#333333]">
+                  <SelectContent className="bg-[#FAF9F6] border-gray-200 text-[#333333]">
                     <SelectItem value="all">All Dehradun</SelectItem>
                     <SelectItem value="Rajpur Road">Rajpur Road</SelectItem>
                     <SelectItem value="Jakhan">Jakhan</SelectItem>
@@ -94,10 +88,10 @@ export default function UnisexSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setRating} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-950/80 to-purple-950/80 border-white/20 text-white rounded-full transition-all hover:brightness-110 shadow-lg">
+                  <SelectTrigger className="w-full md:w-[180px] bg-white/10 border-white/20 text-white rounded-full transition-all hover:bg-white/20 shadow-lg">
                     <SelectValue placeholder="⭐ Rating" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white border-gray-200 text-[#333333]">
+                  <SelectContent className="bg-[#FAF9F6] border-gray-200 text-[#333333]">
                     <SelectItem value="all">All Ratings</SelectItem>
                     <SelectItem value="4.5">Top Rated (4.5+)</SelectItem>
                     <SelectItem value="4.0">Highly Recommended (4.0+)</SelectItem>
@@ -105,27 +99,27 @@ export default function UnisexSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setPrice} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-950/80 to-purple-950/80 border-white/20 text-white rounded-full transition-all hover:brightness-110 shadow-lg">
+                  <SelectTrigger className="w-full md:w-[180px] bg-white/10 border-white/20 text-white rounded-full transition-all hover:bg-white/20 shadow-lg">
                     <SelectValue placeholder="💰 Price Range" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white border-gray-200 text-[#333333]">
+                  <SelectContent className="bg-[#FAF9F6] border-gray-200 text-[#333333]">
                     <SelectItem value="all">All Prices</SelectItem>
-                    <SelectItem value="Low">Budget Friendly (Low)</SelectItem>
-                    <SelectItem value="Average">Value for Money (Average)</SelectItem>
-                    <SelectItem value="High">Luxury Treatment (High)</SelectItem>
+                    <SelectItem value="Low">Low</SelectItem>
+                    <SelectItem value="Average">Average</SelectItem>
+                    <SelectItem value="High">High</SelectItem>
                   </SelectContent>
                 </Select>
              </div>
-             <span className="text-[10px] uppercase tracking-widest text-[#333333]/40 font-bold hidden lg:block">Discover Inclusive Spots in Doon</span>
+             <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold hidden lg:block">Discover Inclusive Spots in Doon</span>
           </div>
         </div>
 
         <div className="container mx-auto px-4 py-12 md:py-20 space-y-16">
           <div className="text-center space-y-4 max-w-4xl mx-auto">
-            <h1 className="font-display text-4xl md:text-7xl text-[#333333] drop-shadow-sm leading-tight">
-              Inclusive Styling for <span className="italic text-purple-600">Everyone</span>
+            <h1 className="font-display text-4xl md:text-7xl text-white drop-shadow-sm leading-tight">
+              The Finest Inclusive Styling & Care
             </h1>
-            <p className="text-[#333333]/60 text-lg md:text-xl max-w-2xl mx-auto font-light tracking-wide italic">
+            <p className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto font-light tracking-wide italic">
               Experience modern, inclusive styling for the whole family across Dehradun.
             </p>
           </div>
@@ -134,16 +128,16 @@ export default function UnisexSalonsPage() {
             {filteredSalons.map((salon, i) => (
               <div 
                 key={i} 
-                className="group relative rounded-[2.5rem] overflow-hidden bg-white/30 border border-white/50 backdrop-blur-lg shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:scale-[1.02] transition-all duration-500 hover:shadow-[0_20px_50px_rgba(168,85,247,0.15)]"
+                className="group relative rounded-[2.5rem] overflow-hidden bg-white/20 border border-white/20 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)]"
               >
                 <div className="relative h-64 md:h-72">
                   <Image src={salon.img} alt={salon.name} fill className="object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-700" data-ai-hint="unisex salon interior" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-transparent to-transparent" />
-                  <Badge className="absolute top-6 left-6 bg-purple-600 text-white border-none font-bold shadow-lg">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                  <Badge className="absolute top-6 left-6 bg-white/20 text-white border-white/10 backdrop-blur-md font-bold shadow-lg">
                     {salon.price === 'High' ? 'MODERN LUXE' : 'INCLUSIVE'}
                   </Badge>
-                  <div className="absolute bottom-6 right-6 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold text-[#333333] flex items-center gap-2 border border-white/20">
-                    <Sparkles className="h-3.5 w-3.5 text-purple-600" />
+                  <div className="absolute bottom-6 right-6 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold text-white flex items-center gap-2 border border-white/20">
+                    <Sparkles className="h-3.5 w-3.5 text-white" />
                     Starts at {salon.startingPrice}
                   </div>
                 </div>
@@ -151,29 +145,29 @@ export default function UnisexSalonsPage() {
                 <div className="p-8 md:p-10 space-y-6">
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <h3 className="font-headline text-2xl md:text-3xl text-[#333333]">{salon.name}</h3>
-                      <div className="flex items-center gap-1.5 text-purple-600 font-bold">
+                      <h3 className="font-headline text-2xl md:text-3xl text-white">{salon.name}</h3>
+                      <div className="flex items-center gap-1.5 text-white font-bold">
                         <Star className="h-4 w-4 fill-current" />
                         <span className="text-lg">{salon.rating}</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 text-[#333333]/50 text-sm md:text-base">
-                      <MapPin className="h-4 w-4 text-purple-600/60" />
+                    <div className="flex items-center gap-2 text-white/60 text-sm md:text-base">
+                      <MapPin className="h-4 w-4 text-white/40" />
                       <span>{salon.area}, Dehradun</span>
                     </div>
                   </div>
 
                   <div className="flex flex-wrap gap-2.5">
                     {salon.tags.map(tag => (
-                      <span key={tag} className="text-[11px] uppercase tracking-[0.15em] border border-purple-200 bg-white/20 px-4 py-1.5 rounded-full text-[#333333]/70 font-medium">
+                      <span key={tag} className="text-[11px] uppercase tracking-[0.15em] border border-white/10 bg-white/5 px-4 py-1.5 rounded-full text-white/70 font-medium">
                         {tag}
                       </span>
                     ))}
                   </div>
 
                   <div className="pt-4">
-                    <Button className="w-full h-14 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-headline text-xl transition-all duration-300 shadow-[0_10px_20px_rgba(124,58,237,0.2)] hover:shadow-[0_15px_30px_rgba(124,58,237,0.3)] border-none">
-                      Check Availability
+                    <Button className="w-full h-14 rounded-full bg-[#E591B0] hover:bg-[#D47FA0] text-white font-headline text-xl transition-all duration-300 shadow-[0_10px_20px_rgba(229,145,176,0.2)] hover:shadow-[0_15px_30px_rgba(229,145,176,0.3)] border-none">
+                      Explore Salons
                     </Button>
                   </div>
                 </div>
