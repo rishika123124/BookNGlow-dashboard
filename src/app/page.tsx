@@ -219,7 +219,7 @@ export default function Home() {
 
         {/* 4. Interactive 'Doon-Map' Feature */}
         <section className="container mx-auto px-4 py-24">
-          <div className="rounded-[3rem] bg-slate-950 overflow-hidden shadow-[0_0_50px_rgba(124,58,237,0.2)] border-2 border-purple-500/20">
+          <div className="rounded-[3rem] bg-slate-950 overflow-hidden shadow-[0_0_50px_rgba(124,58,237,0.3)] border-2 border-purple-500/20">
             <div className="grid lg:grid-cols-2">
               {/* Map Left */}
               <div className="relative h-[600px] overflow-hidden group">
@@ -231,43 +231,47 @@ export default function Home() {
                   </span>
                 </div>
 
-                {/* Google Maps Embed with Dark Filter */}
+                {/* Blue, Purple, Pink Map Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/20 via-purple-600/20 to-pink-600/20 pointer-events-none mix-blend-overlay z-10" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-950/40 pointer-events-none z-10" />
+
+                {/* Google Maps Embed with custom Neon filters */}
                 <iframe
                   title="Dehradun Map"
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55110.42835848529!2d78.016629983411!3d30.325515321590483!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390929c356c888af%3A0x4c3562c03251d499!2sDehradun%2C%20Uttarakhand!5e0!3m2!1sen!2sin!4v1711200000000!5m2!1sen!2sin"
-                  className="w-full h-full grayscale invert opacity-70 contrast-125 brightness-75 scale-110 transition-transform duration-700 group-hover:scale-105"
-                  style={{ filter: 'invert(90%) hue-rotate(180deg) brightness(95%) contrast(90%)' }}
+                  className="w-full h-full grayscale invert contrast-125 brightness-75 scale-110 transition-transform duration-700 group-hover:scale-105"
+                  style={{ filter: 'invert(100%) hue-rotate(240deg) brightness(85%) contrast(110%) saturate(140%)' }}
                   loading="lazy"
                 />
 
-                {/* Neon Pins Overlays (Mockups for prototype) */}
-                <div className="absolute inset-0 pointer-events-none">
+                {/* Neon Pins Overlays */}
+                <div className="absolute inset-0 z-20 pointer-events-none">
                   {/* Purple Pin (Unisex) */}
                   <div className="absolute top-1/4 left-1/3 group/pin pointer-events-auto cursor-pointer">
-                    <div className="h-6 w-6 bg-purple-500 rounded-full border-2 border-white flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.8)] animate-bounce">
-                      <div className="h-2 w-2 bg-white rounded-full" />
+                    <div className="h-7 w-7 bg-purple-500 rounded-full border-2 border-white flex items-center justify-center shadow-[0_0_25px_rgba(168,85,247,0.9)] animate-bounce">
+                      <div className="h-2.5 w-2.5 bg-white rounded-full" />
                     </div>
-                    <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 hidden group-hover/pin:block bg-white text-slate-900 text-[10px] font-bold px-2 py-1 rounded shadow-xl whitespace-nowrap">
+                    <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 hidden group-hover/pin:block bg-slate-900 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-2xl border border-white/10 whitespace-nowrap">
                       Aura Luxe Spa (Unisex)
                     </div>
                   </div>
 
                   {/* Pink Pin (Female) */}
                   <div className="absolute top-1/2 right-1/3 group/pin pointer-events-auto cursor-pointer">
-                    <div className="h-6 w-6 bg-pink-500 rounded-full border-2 border-white flex items-center justify-center shadow-[0_0_20px_rgba(236,72,153,0.8)] animate-bounce" style={{ animationDelay: '0.2s' }}>
-                      <div className="h-2 w-2 bg-white rounded-full" />
+                    <div className="h-7 w-7 bg-pink-500 rounded-full border-2 border-white flex items-center justify-center shadow-[0_0_25px_rgba(236,72,153,0.9)] animate-bounce" style={{ animationDelay: '0.2s' }}>
+                      <div className="h-2.5 w-2.5 bg-white rounded-full" />
                     </div>
-                    <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 hidden group-hover/pin:block bg-white text-slate-900 text-[10px] font-bold px-2 py-1 rounded shadow-xl whitespace-nowrap">
+                    <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 hidden group-hover/pin:block bg-slate-900 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-2xl border border-white/10 whitespace-nowrap">
                       Serene Day Spa (Female)
                     </div>
                   </div>
 
                   {/* Blue Pin (Male) */}
                   <div className="absolute bottom-1/3 left-1/2 group/pin pointer-events-auto cursor-pointer">
-                    <div className="h-6 w-6 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.8)] animate-bounce" style={{ animationDelay: '0.4s' }}>
-                      <div className="h-2 w-2 bg-white rounded-full" />
+                    <div className="h-7 w-7 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center shadow-[0_0_25px_rgba(59,130,246,0.9)] animate-bounce" style={{ animationDelay: '0.4s' }}>
+                      <div className="h-2.5 w-2.5 bg-white rounded-full" />
                     </div>
-                    <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 hidden group-hover/pin:block bg-white text-slate-900 text-[10px] font-bold px-2 py-1 rounded shadow-xl whitespace-nowrap">
+                    <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 hidden group-hover/pin:block bg-slate-900 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-2xl border border-white/10 whitespace-nowrap">
                       Velvet Grooming (Male)
                     </div>
                   </div>
@@ -275,13 +279,13 @@ export default function Home() {
               </div>
               
               {/* Content Right */}
-              <div className="p-12 md:p-16 space-y-10 flex flex-col justify-center bg-gradient-to-br from-slate-900 to-slate-950 text-white">
+              <div className="p-12 md:p-16 space-y-10 flex flex-col justify-center bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 text-white">
                 <div className="space-y-4">
-                  <Badge className="bg-purple-600/20 text-purple-400 border-purple-600/30 px-4 py-1 flex items-center gap-2 w-fit">
+                  <Badge className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white border-none px-4 py-1.5 flex items-center gap-2 w-fit shadow-lg shadow-purple-500/20">
                     <LocateFixed className="h-3 w-3" />
-                    LIVE VIEW
+                    NEON LIVE VIEW
                   </Badge>
-                  <h2 className="font-headline text-5xl leading-tight">Locate Your <br /><span className="text-accent">Nearest Glow</span></h2>
+                  <h2 className="font-headline text-5xl leading-tight">Locate Your <br /><span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">Nearest Glow</span></h2>
                   <p className="text-white/60 text-lg leading-relaxed">
                     Instantly find top-rated salons across Dehradun's prime hotspots. Our interactive map tracks real-time availability in your neighborhood.
                   </p>
@@ -299,7 +303,7 @@ export default function Home() {
                     {localities.map((loc) => (
                       <button 
                         key={loc.name} 
-                        className="px-6 py-2.5 rounded-full border border-white/10 bg-white/5 hover:bg-purple-600 hover:text-white hover:border-purple-500/50 transition-all text-sm font-semibold tracking-wide shadow-lg active:scale-95"
+                        className="px-6 py-2.5 rounded-full border border-white/10 bg-white/5 hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 hover:text-white hover:border-transparent transition-all text-sm font-semibold tracking-wide shadow-lg active:scale-95"
                       >
                         {loc.name}
                       </button>
@@ -309,15 +313,15 @@ export default function Home() {
 
                 <div className="pt-8 grid grid-cols-3 gap-4 border-t border-white/5">
                   <div className="flex items-center gap-2">
-                    <div className="h-3 w-3 rounded-full bg-pink-500 shadow-[0_0_8px_rgba(236,72,153,0.5)]" />
+                    <div className="h-3 w-3 rounded-full bg-pink-500 shadow-[0_0_8px_rgba(236,72,153,0.7)]" />
                     <span className="text-[10px] uppercase text-white/40 tracking-widest font-bold">Female</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="h-3 w-3 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
+                    <div className="h-3 w-3 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.7)]" />
                     <span className="text-[10px] uppercase text-white/40 tracking-widest font-bold">Male</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="h-3 w-3 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]" />
+                    <div className="h-3 w-3 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.7)]" />
                     <span className="text-[10px] uppercase text-white/40 tracking-widest font-bold">Unisex</span>
                   </div>
                 </div>
@@ -327,7 +331,7 @@ export default function Home() {
         </section>
 
         {/* 5. Platform Stats & About */}
-        <section className="bg-gradient-to-r from-blue-600 to-purple-700 py-32 text-white relative overflow-hidden">
+        <section className="bg-gradient-to-r from-blue-700 via-purple-700 to-pink-700 py-32 text-white relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">
             <Sparkles className="h-full w-full rotate-12 scale-150" />
           </div>
