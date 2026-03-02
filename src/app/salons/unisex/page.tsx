@@ -54,7 +54,6 @@ export default function UnisexSalonsPage() {
 
   return (
     <div className="min-h-screen bg-[#020617] text-white selection:bg-purple-500/30 font-body relative overflow-hidden">
-      {/* Universal Mesh Gradient Background */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
         <div className="absolute inset-0 bg-gradient-to-br from-pink-500/20 via-blue-500/20 to-purple-500/20 blur-[100px]" />
       </div>
@@ -62,12 +61,11 @@ export default function UnisexSalonsPage() {
       <Navbar />
       
       <main className="relative z-10">
-        {/* Sticky Filter Bar */}
-        <div className="sticky top-20 md:top-24 z-40 w-full bg-slate-950/50 backdrop-blur-md border-b border-white/10 py-4 px-4 shadow-xl">
+        <div className="sticky top-20 md:top-24 z-40 w-full bg-slate-950/80 backdrop-blur-md border-b border-white/10 py-4 px-4 shadow-xl">
           <div className="container mx-auto flex flex-col md:flex-row gap-4 items-center justify-between">
              <div className="flex flex-wrap gap-4 items-center w-full md:w-auto">
                 <Select onValueChange={setLocation} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-white/10 text-white rounded-full transition-all hover:from-blue-600/40 hover:to-purple-600/40">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-950/80 to-purple-950/80 border-white/10 text-white rounded-full transition-all hover:brightness-110 shadow-lg">
                     <SelectValue placeholder="📍 Location" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -79,7 +77,7 @@ export default function UnisexSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setRating} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-white/10 text-white rounded-full transition-all hover:from-blue-600/40 hover:to-purple-600/40">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-950/80 to-purple-950/80 border-white/10 text-white rounded-full transition-all hover:brightness-110 shadow-lg">
                     <SelectValue placeholder="⭐ Rating" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -90,7 +88,7 @@ export default function UnisexSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setPrice} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-white/10 text-white rounded-full transition-all hover:from-blue-600/40 hover:to-purple-600/40">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-950/80 to-purple-950/80 border-white/10 text-white rounded-full transition-all hover:brightness-110 shadow-lg">
                     <SelectValue placeholder="💰 Price Range" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-white/10 text-white">

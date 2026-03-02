@@ -81,7 +81,6 @@ export default function FemaleSalonsPage() {
 
   return (
     <div className="min-h-screen bg-[#C7B1A6] text-[#333333] selection:bg-[#BCA396]/30 font-body relative">
-      {/* Background Radial Gradient */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#D6C4BC_0%,_#C7B1A6_100%)]" />
       </div>
@@ -89,12 +88,11 @@ export default function FemaleSalonsPage() {
       <Navbar />
       
       <main className="relative z-10">
-        {/* Sticky Filter Bar */}
         <div className="sticky top-20 md:top-24 z-40 w-full bg-[#BCA396]/40 backdrop-blur-md border-b border-white/20 py-4 px-4 shadow-sm">
           <div className="container mx-auto flex flex-col md:flex-row gap-4 items-center justify-between">
              <div className="flex flex-wrap gap-4 items-center w-full md:w-auto">
                 <Select onValueChange={setLocation} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-white/30 text-[#333333] rounded-full transition-all hover:from-blue-600/40 hover:to-purple-600/40">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-950/80 to-purple-950/80 border-white/20 text-white rounded-full transition-all hover:brightness-110 shadow-lg">
                     <SelectValue placeholder="📍 Location" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#FAF9F6] border-[#C7B1A6]/20 text-[#333333]">
@@ -106,7 +104,7 @@ export default function FemaleSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setRating} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-white/30 text-[#333333] rounded-full transition-all hover:from-blue-600/40 hover:to-purple-600/40">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-950/80 to-purple-950/80 border-white/20 text-white rounded-full transition-all hover:brightness-110 shadow-lg">
                     <SelectValue placeholder="⭐ Rating" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#FAF9F6] border-[#C7B1A6]/20 text-[#333333]">
@@ -117,7 +115,7 @@ export default function FemaleSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setPrice} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-white/30 text-[#333333] rounded-full transition-all hover:from-blue-600/40 hover:to-purple-600/40">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-950/80 to-purple-950/80 border-white/20 text-white rounded-full transition-all hover:brightness-110 shadow-lg">
                     <SelectValue placeholder="💰 Price Range" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#FAF9F6] border-[#C7B1A6]/20 text-[#333333]">
@@ -200,7 +198,6 @@ export default function FemaleSalonsPage() {
           </div>
         </div>
 
-        {/* Subtle Luxury Watermark */}
         <div className="fixed bottom-0 right-0 p-10 opacity-[0.03] pointer-events-none select-none z-0">
            <svg 
              viewBox="0 0 100 100" 

@@ -81,19 +81,17 @@ export default function MaleSalonsPage() {
 
   return (
     <div className="min-h-screen bg-[#020617] text-white selection:bg-blue-500/30 font-body relative overflow-hidden">
-      {/* Mesh Glow Blobs - Urban Midnight Look */}
-      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-500/20 rounded-full blur-[130px] pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[130px] pointer-events-none" />
+      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-500/20 rounded-full blur-[130px] pointer-events-none opacity-20" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[130px] pointer-events-none opacity-20" />
 
       <Navbar />
       
       <main className="relative z-10">
-        {/* Sticky Filter Bar */}
-        <div className="sticky top-20 md:top-24 z-40 w-full bg-[#020617]/60 backdrop-blur-md border-b border-white/10 py-4 px-4 shadow-2xl">
+        <div className="sticky top-20 md:top-24 z-40 w-full bg-[#020617]/80 backdrop-blur-md border-b border-white/10 py-4 px-4 shadow-2xl">
           <div className="container mx-auto flex flex-col md:flex-row gap-4 items-center justify-between">
              <div className="flex flex-wrap gap-4 items-center w-full md:w-auto">
                 <Select onValueChange={setLocation} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-white/10 text-white rounded-full transition-all hover:from-blue-600/40 hover:to-purple-600/40">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-950/80 to-purple-950/80 border-white/10 text-white rounded-full transition-all hover:brightness-110 shadow-lg">
                     <SelectValue placeholder="📍 Location" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -105,7 +103,7 @@ export default function MaleSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setRating} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-white/10 text-white rounded-full transition-all hover:from-blue-600/40 hover:to-purple-600/40">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-950/80 to-purple-950/80 border-white/10 text-white rounded-full transition-all hover:brightness-110 shadow-lg">
                     <SelectValue placeholder="⭐ Rating" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -116,7 +114,7 @@ export default function MaleSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setPrice} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-white/10 text-white rounded-full transition-all hover:from-blue-600/40 hover:to-purple-600/40">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-950/80 to-purple-950/80 border-white/10 text-white rounded-full transition-all hover:brightness-110 shadow-lg">
                     <SelectValue placeholder="💰 Price Range" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -127,7 +125,7 @@ export default function MaleSalonsPage() {
                   </SelectContent>
                 </Select>
              </div>
-             <span className="text-[10px] uppercase tracking-widest text-blue-400 font-bold hidden lg:block">
+             <span className="text-[10px] uppercase tracking-widest text-blue-400/60 font-bold hidden lg:block">
                Discover Top Rated Grooming Spots
              </span>
           </div>
