@@ -12,6 +12,7 @@ export default {
       fontFamily: {
         body: ['Alegreya', 'serif'],
         headline: ['Belleza', 'sans-serif'],
+        display: ['Playfair Display', 'serif'],
         code: ['monospace'],
       },
       colors: {

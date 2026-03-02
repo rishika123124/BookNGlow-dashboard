@@ -167,18 +167,23 @@ export default function Home() {
         </section>
 
         {/* 3. Premium Salons Grid */}
-        <section className="bg-white py-12 md:py-24">
-          <div className="container mx-auto px-4 space-y-12 md:space-y-16">
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 md:gap-10">
-              <div className="space-y-4 md:space-y-6 max-w-4xl">
-                <h2 className="font-headline text-3xl md:text-5xl text-foreground">Dehradun’s Premium Salons</h2>
-                <p className="text-muted-foreground text-sm md:text-xl leading-relaxed">
-                  Discover the gold standard of grooming in the heart of the Doon Valley. Explore Dehradun’s most exclusive premium salons—from the upscale vibes of Rajpur Road to the elite studios of Jakhan. Whether you’re looking for a signature glow or expert styling, check out our handpicked collection of verified partners dedicated to luxury, hygiene, and perfection.
-                </p>
+        <section className="relative bg-white py-12 md:py-24 overflow-hidden">
+          {/* Soft Radial Glow Background */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] md:w-[800px] h-[600px] md:h-[800px] bg-purple-500/5 rounded-full blur-[100px] md:blur-[120px] pointer-events-none" />
+          
+          <div className="container mx-auto px-4 relative z-10 space-y-12 md:space-y-16">
+            <div className="text-center space-y-6 md:space-y-8 max-w-4xl mx-auto">
+              <div className="space-y-4">
+                <h2 className="font-display text-4xl md:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-[#2563EB] via-[#DB2777] to-[#7C3AED] drop-shadow-[0_2px_10px_rgba(219,39,119,0.2)] leading-tight">
+                  Dehradun’s <span className="italic">Premium</span> Salons
+                </h2>
+                {/* Tiny Animated Gradient Line */}
+                <div className="h-1 w-20 mx-auto rounded-full bg-gradient-to-r from-[#2563EB] to-[#DB2777] animate-pulse" />
               </div>
-              <Button variant="link" className="text-primary font-bold text-base md:text-lg group h-auto p-0">
-                View All Elite <ChevronRight className="ml-2 h-4 w-4 md:h-5 md:w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+
+              <p className="text-[#475569] text-sm md:text-lg tracking-wide leading-[1.8] max-w-3xl mx-auto font-sans">
+                Discover the gold standard of grooming in the heart of the Doon Valley. Explore Dehradun’s most <span className="bg-gradient-to-r from-[#DB2777] to-[#7C3AED] bg-clip-text text-transparent font-bold">exclusive</span> premium salons—from the upscale vibes of <span className="bg-gradient-to-r from-[#DB2777] to-[#7C3AED] bg-clip-text text-transparent font-bold">Rajpur Road</span> to the elite studios of Jakhan. Whether you’re looking for a <span className="bg-gradient-to-r from-[#DB2777] to-[#7C3AED] bg-clip-text text-transparent font-bold">signature glow</span> or expert styling, check out our handpicked collection of verified partners dedicated to luxury, hygiene, and perfection.
+              </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
@@ -241,8 +246,8 @@ export default function Home() {
                   loading="lazy"
                 />
 
-                {/* Neon Pins Overlays (Hidden on small screens for better UX) */}
-                <div className="absolute inset-0 z-20 pointer-events-none hidden sm:block">
+                {/* Neon Pins Overlays */}
+                <div className="absolute inset-0 z-20 pointer-events-none">
                   <div className="absolute top-1/4 left-1/3 group/pin pointer-events-auto cursor-pointer">
                     <div className="h-6 w-6 md:h-7 md:w-7 bg-purple-500 rounded-full border-2 border-white flex items-center justify-center shadow-[0_0_25px_rgba(168,85,247,0.9)] animate-bounce">
                       <div className="h-2 w-2 md:h-2.5 md:w-2.5 bg-white rounded-full" />
