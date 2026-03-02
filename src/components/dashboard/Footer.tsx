@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 
 export function Footer() {
   return (
-    <footer className="bg-slate-950 text-white pt-16 md:pt-24 pb-8 md:pb-12 mt-12 md:mt-24">
+    <footer className="bg-slate-950 text-white pt-16 md:pt-24 pb-8 md:pb-12 mt-12 md:mt-24 w-full relative z-20">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-20">
           <div className="space-y-4 md:space-y-6 text-center sm:text-left">

@@ -55,6 +55,15 @@ const FEMALE_SALONS = [
     startingPrice: "₹799",
     tags: ["Manicure", "Pedicure"],
     img: PlaceHolderImages.find(img => img.id === 'salon-lush')?.imageUrl || "https://picsum.photos/seed/elegance/600/400"
+  },
+  {
+    name: "Divine Beauty Lounge",
+    area: "Rajpur Road",
+    rating: "4.4",
+    price: "Average",
+    startingPrice: "₹550",
+    tags: ["Hair Spa", "Bridal"],
+    img: PlaceHolderImages.find(img => img.id === 'category-female')?.imageUrl || "https://picsum.photos/seed/divine/600/400"
   }
 ];
 
@@ -71,7 +80,7 @@ export default function FemaleSalonsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#C7B1A6] text-[#333333] selection:bg-[#BCA396]/30 font-body relative overflow-hidden">
+    <div className="min-h-screen bg-[#C7B1A6] text-[#333333] selection:bg-[#BCA396]/30 font-body relative">
       {/* Background Radial Gradient */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#D6C4BC_0%,_#C7B1A6_100%)]" />
@@ -80,7 +89,7 @@ export default function FemaleSalonsPage() {
       <Navbar />
       
       <main className="relative z-10">
-        {/* Sticky Filter Bar - Muted semi-transparent theme */}
+        {/* Sticky Filter Bar */}
         <div className="sticky top-20 md:top-24 z-40 w-full bg-[#BCA396]/40 backdrop-blur-md border-b border-white/20 py-4 px-4 shadow-sm">
           <div className="container mx-auto flex flex-col md:flex-row gap-4 items-center justify-between">
              <div className="flex flex-wrap gap-4 items-center w-full md:w-auto">
@@ -124,7 +133,6 @@ export default function FemaleSalonsPage() {
         </div>
 
         <div className="container mx-auto px-4 py-12 md:py-20 space-y-16">
-          {/* Header Section */}
           <div className="text-center space-y-4 max-w-4xl mx-auto">
             <h1 className="font-display text-4xl md:text-7xl text-[#333333] drop-shadow-sm leading-tight">
               Beauty & Spa Therapies for Women
@@ -134,7 +142,6 @@ export default function FemaleSalonsPage() {
             </p>
           </div>
 
-          {/* Salon Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
             {filteredSalons.map((salon, i) => (
               <div 
@@ -186,9 +193,6 @@ export default function FemaleSalonsPage() {
                     <Button className="w-full h-14 rounded-full bg-[#DB2777] hover:bg-[#C21E66] text-white font-headline text-xl transition-all duration-300 shadow-[0_10px_20px_rgba(219,39,119,0.2)] hover:shadow-[0_15px_30px_rgba(219,39,119,0.3)] border-none">
                       Book Appointment
                     </Button>
-                    <button className="w-full mt-4 text-xs uppercase tracking-widest text-[#DB2777] hover:underline transition-all font-bold">
-                      View Details
-                    </button>
                   </div>
                 </div>
               </div>
