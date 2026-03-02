@@ -15,7 +15,7 @@
     {
       "id": "category-female",
       "description": "Luxury spa and beauty salon",
-      "imageUrl": "https://images.unsplash.com/photo-1560750588-73207b1ef5b8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzcGElMjBiZWF1dHl8ZW58MHx8fHwxNzcyNDQwOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1560750588-73207b1ef5b8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzcGAlMjBiZWF1dHl8ZW58MHx8fHwxNzcyNDQwOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "spa beauty"
     },
     {
@@ -27,7 +27,7 @@
     {
       "id": "salon-aura",
       "description": "Luxury spa interior for Aura Luxe Spa",
-      "imageUrl": "https://images.unsplash.com/photo-1544161515-436cead54573?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGElMjBsdXh1cnl8ZW58MHx8fHwxNzcyNDQxMjMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1544161515-436cead54573?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGAlMjBsdXh1cnl8ZW58MHx8fHwxNzcyNDQxMjMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "spa luxury"
     },
     {
@@ -41,6 +41,24 @@
       "description": "Elite grooming station for Velvet Grooming",
       "imageUrl": "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxiYXJiZXJzaG9wJTIwaW50ZXJpb3J8ZW58MHx8fHwxNzcyNDQxMjMwfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "barber interior"
+    },
+    {
+      "id": "salon-lush",
+      "description": "Elegant hair styling station",
+      "imageUrl": "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxoYWlyJTIwc3R1ZGlvJTIwbHV4dXJ5fGVufDB8fHx8MTc3MjQ0MTU0NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hair studio"
+    },
+    {
+      "id": "salon-serene",
+      "description": "Calm relaxation area in a spa",
+      "imageUrl": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8c3BhJTIwcmVsYXhhdGlvbnxlbnwwfHx8fDE3NzI0NDE1NDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "spa relaxation"
+    },
+    {
+      "id": "salon-classic",
+      "description": "Vintage style barbershop chair",
+      "imageUrl": "https://images.unsplash.com/photo-1599351431247-f13b283253f9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNXx8YmFyYmVyJTIwc2hvcHxlbnwwfHx8fDE3NzI0NDE1NDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "barber shop"
     }
   ]
 }

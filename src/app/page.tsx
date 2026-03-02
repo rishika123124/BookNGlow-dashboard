@@ -1,4 +1,3 @@
-
 import { Navbar } from '@/components/dashboard/Navbar'
 import Image from 'next/image'
 import { PlaceHolderImages } from '@/lib/placeholder-images'
@@ -67,6 +66,24 @@ export default function Home() {
       area: "Rajpur Road", 
       rating: "5.0", 
       img: PlaceHolderImages.find(img => img.id === 'salon-velvet')?.imageUrl || "https://picsum.photos/seed/velvet/600/600" 
+    },
+    { 
+      name: "The Lush Studio", 
+      area: "Jakhan", 
+      rating: "4.7", 
+      img: PlaceHolderImages.find(img => img.id === 'salon-lush')?.imageUrl || "https://picsum.photos/seed/lush/600/600" 
+    },
+    { 
+      name: "Serene Day Spa", 
+      area: "Rajpur Road", 
+      rating: "4.9", 
+      img: PlaceHolderImages.find(img => img.id === 'salon-serene')?.imageUrl || "https://picsum.photos/seed/serene/600/600" 
+    },
+    { 
+      name: "Classic Cut Barbers", 
+      area: "Ballupur", 
+      rating: "4.8", 
+      img: PlaceHolderImages.find(img => img.id === 'salon-classic')?.imageUrl || "https://picsum.photos/seed/classic/600/600" 
     }
   ];
 
@@ -159,7 +176,7 @@ export default function Home() {
               </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
               {premiumSalons.map((salon, i) => (
                 <div 
                   key={i} 
