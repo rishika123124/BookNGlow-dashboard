@@ -1,4 +1,3 @@
-
 "use client"
 
 import React, { useState } from 'react'
@@ -98,7 +97,9 @@ export function Navbar() {
                 </Link>
                 <div className="h-px bg-white/10 my-4" />
                 <Link href="/login" className="text-white/80 hover:text-white py-2">Log In</Link>
-                <Button className="bg-accent hover:bg-accent/90 text-white rounded-full w-full h-12 text-lg">Sign Up</Button>
+                <Button asChild className="bg-accent hover:bg-accent/90 text-white rounded-full w-full h-12 text-lg">
+                  <Link href="/signup">Sign Up</Link>
+                </Button>
               </div>
             </SheetContent>
           </Sheet>
@@ -222,10 +223,10 @@ export function Navbar() {
           >
             <Search className="h-5 w-5" />
           </Button>
-          <Button 
+          <Button asChild
             className="bg-accent hover:bg-accent/90 text-white rounded-full px-4 md:px-8 font-body font-semibold transition-all shadow-md active:scale-95 border-none h-9 md:h-12 text-xs md:text-base"
           >
-            Sign Up
+            <Link href="/signup">Sign Up</Link>
           </Button>
         </div>
       </div>
