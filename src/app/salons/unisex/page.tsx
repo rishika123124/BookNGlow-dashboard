@@ -63,9 +63,11 @@ export default function UnisexSalonsPage() {
 
   return (
     <div className="min-h-screen bg-[#020617] text-white selection:bg-purple-500/30 font-body relative overflow-hidden">
-      {/* Background Mesh Glows */}
-      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-500/20 rounded-full blur-[130px] pointer-events-none opacity-20" />
-      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[130px] pointer-events-none opacity-20" />
+      {/* Background Fusion Mesh Glows */}
+      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[130px] pointer-events-none opacity-20" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[130px] pointer-events-none opacity-20" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-slate-500/10 rounded-full blur-[150px] pointer-events-none opacity-10" />
+      <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-pink-500/15 rounded-full blur-[120px] pointer-events-none opacity-10" />
 
       <Navbar />
       
@@ -115,7 +117,7 @@ export default function UnisexSalonsPage() {
         <div className="container mx-auto px-4 py-12 md:py-20 space-y-16">
           <div className="text-center space-y-4 max-w-4xl mx-auto">
             <h1 className="font-display text-4xl md:text-7xl text-white drop-shadow-sm leading-tight">
-              Inclusive Styling for <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 italic">Everyone</span>
+              Inclusive Styling for <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 italic">Everyone</span>
             </h1>
             <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto font-light tracking-wide italic">
               Experience modern, inclusive styling for the whole family across Dehradun.
