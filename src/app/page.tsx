@@ -1,13 +1,13 @@
+'use client';
 
-"use client"
-
-import { Navbar } from '@/components/dashboard/Navbar'
-import { Footer } from '@/components/dashboard/Footer'
-import Image from 'next/image'
-import { PlaceHolderImages } from '@/lib/placeholder-images'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
+import { Navbar } from '@/components/dashboard/Navbar';
+import { Footer } from '@/components/dashboard/Footer';
+import Image from 'next/image';
+import Link from 'next/link';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
 import { 
   Star, 
   MapPin, 
@@ -19,7 +19,7 @@ import {
   Gift,
   CheckCircle2,
   Award
-} from 'lucide-react'
+} from 'lucide-react';
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(img => img.id === 'salon-hero')?.imageUrl || "https://picsum.photos/seed/salon-hero/1200/800";
@@ -32,7 +32,8 @@ export default function Home() {
       img: PlaceHolderImages.find(img => img.id === 'category-male')?.imageUrl || "https://picsum.photos/seed/male/600/800",
       theme: "border-blue-500 shadow-blue-500/30",
       overlay: "bg-blue-900/40",
-      btn: "bg-blue-600 hover:bg-blue-700 shadow-[0_0_15px_rgba(37,99,235,0.4)]"
+      btn: "bg-blue-600 hover:bg-blue-700 shadow-[0_0_15px_rgba(37,99,235,0.4)]",
+      link: "/salons/male"
     },
     { 
       id: 'female',
@@ -41,7 +42,8 @@ export default function Home() {
       img: PlaceHolderImages.find(img => img.id === 'category-female')?.imageUrl || "https://picsum.photos/seed/female/600/800",
       theme: "border-pink-500 shadow-pink-500/30",
       overlay: "bg-pink-900/40",
-      btn: "bg-pink-600 hover:bg-pink-700 shadow-[0_0_15px_rgba(219,39,119,0.4)]"
+      btn: "bg-pink-600 hover:bg-pink-700 shadow-[0_0_15px_rgba(219,39,119,0.4)]",
+      link: "/salons/female"
     },
     { 
       id: 'unisex',
@@ -50,7 +52,8 @@ export default function Home() {
       img: PlaceHolderImages.find(img => img.id === 'category-unisex')?.imageUrl || "https://picsum.photos/seed/unisex/600/800",
       theme: "border-purple-500 shadow-purple-500/30",
       overlay: "bg-purple-900/40",
-      btn: "bg-purple-600 hover:bg-purple-700 shadow-[0_0_15px_rgba(147,51,234,0.4)]"
+      btn: "bg-purple-600 hover:bg-purple-700 shadow-[0_0_15px_rgba(147,51,234,0.4)]",
+      link: "/salons/unisex"
     }
   ];
 
@@ -162,8 +165,8 @@ export default function Home() {
                 <div className="absolute inset-x-4 bottom-4 md:inset-x-6 md:bottom-6 p-6 md:p-8 rounded-[24px] md:rounded-[30px] bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl flex flex-col gap-3 md:gap-4 transform transition-all duration-500 group-hover:-translate-y-2">
                   <h3 className="font-headline text-2xl md:text-4xl text-white drop-shadow-md">{cat.title}</h3>
                   <p className="text-white/80 text-sm md:text-lg leading-snug drop-shadow-sm">{cat.desc}</p>
-                  <Button className={`w-full rounded-full h-10 md:h-12 text-sm md:text-base text-white font-semibold transition-all duration-300 border-none mt-2 ${cat.btn}`}>
-                    Explore Salons
+                  <Button asChild className={`w-full rounded-full h-10 md:h-12 text-sm md:text-base text-white font-semibold transition-all duration-300 border-none mt-2 ${cat.btn}`}>
+                    <Link href={cat.link}>Explore Salons</Link>
                   </Button>
                 </div>
               </div>
