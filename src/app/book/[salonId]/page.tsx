@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useMemo } from 'react';
@@ -17,7 +16,9 @@ import {
   Star,
   CheckCircle,
   CalendarCheck,
-  Calendar as CalendarIcon
+  Calendar as CalendarIcon,
+  CheckCircle2,
+  Scissors
 } from 'lucide-react';
 import { format, isBefore, startOfDay } from 'date-fns';
 import { 
@@ -48,6 +49,14 @@ const TIME_SLOTS = [
   "07:00 PM", "08:00 PM"
 ];
 
+const SALON_SERVICES = [
+  { id: 'haircut', name: 'Haircut', price: 499 },
+  { id: 'beard', name: 'Beard Trim', price: 299 },
+  { id: 'facial', name: 'Luxury Facial', price: 799 },
+  { id: 'spa', name: 'Head Massage', price: 399 },
+  { id: 'color', name: 'Hair Color', price: 999 },
+];
+
 export default function BookingPage() {
   const { salonId } = useParams();
   const router = useRouter();
@@ -57,6 +66,7 @@ export default function BookingPage() {
   
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
@@ -65,7 +75,7 @@ export default function BookingPage() {
   const salonRef = useMemoFirebase(() => doc(db, 'salons', salonId as string), [db, salonId]);
   const { data: salon, isLoading: salonLoading } = useDoc(salonRef);
 
-  // Fetch Bookings for the selected date and salon to manage real-time availability
+  // Fetch Bookings for the selected date and salon
   const bookingsQuery = useMemoFirebase(() => {
     if (!db || !salonId || !selectedDate) return null;
     const dateStr = format(selectedDate, 'yyyy-MM-dd');
@@ -83,8 +93,22 @@ export default function BookingPage() {
     return existingBookings?.map(b => b.time) || [];
   }, [existingBookings]);
 
+  const totalAmount = useMemo(() => {
+    return SALON_SERVICES
+      .filter(s => selectedServices.includes(s.id))
+      .reduce((sum, s) => sum + s.price, 0);
+  }, [selectedServices]);
+
+  const toggleService = (serviceId: string) => {
+    setSelectedServices(prev => 
+      prev.includes(serviceId) 
+        ? prev.filter(id => id !== serviceId) 
+        : [...prev, serviceId]
+    );
+  };
+
   const handleBooking = async () => {
-    if (isUserLoading) return; // Prevent action while auth is resolving
+    if (isUserLoading) return;
 
     if (!user) {
       toast({
@@ -96,13 +120,19 @@ export default function BookingPage() {
       return;
     }
 
-    if (!selectedDate || !selectedSlot) return;
+    if (!selectedDate || !selectedSlot || selectedServices.length === 0) return;
 
     setIsBooking(true);
+    const selectedServiceNames = SALON_SERVICES
+      .filter(s => selectedServices.includes(s.id))
+      .map(s => s.name);
+
     const bookingData = {
       customerId: user.uid,
       salonId: salonId as string,
       salonName: salon?.name || 'Velvet Grooming',
+      selectedServices: selectedServiceNames,
+      totalAmount: totalAmount,
       date: format(selectedDate, 'yyyy-MM-dd'),
       time: selectedSlot,
       status: 'confirmed',
@@ -179,41 +209,78 @@ export default function BookingPage() {
             </div>
           </div>
 
-          {/* Two-Column Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[45%_55%] gap-8 items-start">
             
-            {/* Left Column: Monthly Calendar */}
-            <div className="space-y-6">
-              <div className="flex items-center gap-3">
-                <CalendarIcon className="h-5 w-5 text-[#A78BFA]" />
-                <h2 className="font-headline text-2xl tracking-wide">Choose Date</h2>
+            {/* Left Column: Services & Calendar */}
+            <div className="space-y-10">
+              {/* Service Selection */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                  <Scissors className="h-5 w-5 text-[#A78BFA]" />
+                  <h2 className="font-headline text-2xl tracking-wide">Select Services</h2>
+                </div>
+                <div className="grid grid-cols-1 gap-3">
+                  {SALON_SERVICES.map((service) => {
+                    const isSelected = selectedServices.includes(service.id);
+                    return (
+                      <button
+                        key={service.id}
+                        onClick={() => toggleService(service.id)}
+                        className={cn(
+                          "flex items-center justify-between p-4 rounded-2xl border transition-all duration-300",
+                          isSelected 
+                            ? "bg-[#A78BFA]/10 border-[#A78BFA] shadow-[0_0_15px_rgba(167,139,250,0.1)]" 
+                            : "bg-white/5 border-white/10 hover:border-[#A78BFA]/30"
+                        )}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={cn(
+                            "h-5 w-5 rounded-md border flex items-center justify-center transition-colors",
+                            isSelected ? "bg-[#A78BFA] border-[#A78BFA]" : "border-white/20"
+                          )}>
+                            {isSelected && <CheckCircle2 className="h-4 w-4 text-white" />}
+                          </div>
+                          <span className={cn("font-medium", isSelected ? "text-white" : "text-white/60")}>
+                            {service.name}
+                          </span>
+                        </div>
+                        <span className="font-bold text-[#A78BFA]">₹{service.price}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-              <div className="bg-[#1E1E1E] border border-white/10 rounded-[2.5rem] p-6 shadow-2xl">
-                <Calendar
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={(date) => {
-                    if (date) {
-                      setSelectedDate(date);
-                      setSelectedSlot(null);
-                    }
-                  }}
-                  disabled={(date) => isBefore(date, startOfDay(new Date()))}
-                  className="w-full"
-                  classNames={{
-                    day_selected: "bg-[#A78BFA] text-white hover:bg-[#A78BFA] hover:text-white focus:bg-[#A78BFA] focus:text-white shadow-[0_0_15px_rgba(167,139,250,0.5)]",
-                    day_today: "bg-white/5 text-[#A78BFA] font-bold border border-[#A78BFA]/20",
-                    day: cn("h-10 w-10 p-0 font-normal aria-selected:opacity-100 hover:bg-white/10 rounded-xl transition-all"),
-                    head_cell: "text-white/40 font-bold uppercase text-[10px] tracking-widest pb-4",
-                  }}
-                />
+
+              {/* Calendar */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                  <CalendarIcon className="h-5 w-5 text-[#A78BFA]" />
+                  <h2 className="font-headline text-2xl tracking-wide">Choose Date</h2>
+                </div>
+                <div className="bg-[#1E1E1E] border border-white/10 rounded-[2.5rem] p-6 shadow-2xl">
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={(date) => {
+                      if (date) {
+                        setSelectedDate(date);
+                        setSelectedSlot(null);
+                      }
+                    }}
+                    disabled={(date) => isBefore(date, startOfDay(new Date()))}
+                    className="w-full"
+                    classNames={{
+                      day_selected: "bg-[#A78BFA] text-white hover:bg-[#A78BFA] hover:text-white focus:bg-[#A78BFA] focus:text-white shadow-[0_0_15px_rgba(167,139,250,0.5)]",
+                      day_today: "bg-white/5 text-[#A78BFA] font-bold border border-[#A78BFA]/20",
+                      day: cn("h-10 w-10 p-0 font-normal aria-selected:opacity-100 hover:bg-white/10 rounded-xl transition-all"),
+                      head_cell: "text-white/40 font-bold uppercase text-[10px] tracking-widest pb-4",
+                    }}
+                  />
+                </div>
               </div>
-              <p className="text-white/40 text-xs italic px-2">
-                * Past dates are locked. Select any date from the monthly view.
-              </p>
             </div>
 
-            {/* Right Column: Time Slots Grid */}
+            {/* Right Column: Time Slots & Summary */}
             <div className="space-y-6 lg:min-h-[500px] flex flex-col">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -266,7 +333,26 @@ export default function BookingPage() {
                   </div>
                 )}
 
-                {/* Confirm Slot Button (Sticky at bottom of column) */}
+                {/* Summary Section */}
+                {selectedServices.length > 0 && (
+                  <div className="p-6 rounded-3xl bg-white/5 border border-white/10 space-y-4 animate-in fade-in slide-in-from-bottom-2">
+                    <h3 className="font-headline text-xl text-white/80">Booking Summary</h3>
+                    <div className="space-y-2">
+                      {SALON_SERVICES.filter(s => selectedServices.includes(s.id)).map(s => (
+                        <div key={s.id} className="flex justify-between text-sm text-white/60">
+                          <span>{s.name}</span>
+                          <span>₹{s.price}</span>
+                        </div>
+                      ))}
+                      <div className="pt-2 border-t border-white/10 flex justify-between font-bold text-lg text-[#A78BFA]">
+                        <span>Total</span>
+                        <span>₹{totalAmount}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Confirm Slot Button */}
                 <div className="sticky bottom-0 pt-8 border-t border-white/10 bg-gradient-to-t from-[#020617]/80 via-[#020617]/50 to-transparent flex flex-col items-center gap-6 mt-auto pb-4 backdrop-blur-sm">
                   <div className="text-center">
                     <p className="text-white/40 text-sm italic">
@@ -279,13 +365,19 @@ export default function BookingPage() {
                     )}
                   </div>
                   <Button 
-                    disabled={!selectedSlot}
+                    disabled={!selectedSlot || selectedServices.length === 0}
                     onClick={() => setIsConfirmOpen(true)}
                     className="w-full md:w-80 h-14 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-[1.02] transition-all text-lg font-headline shadow-2xl shadow-purple-500/30 border-none group"
                   >
-                    Confirm Slot
+                    Confirm Appointment
                     <Sparkles className="ml-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
                   </Button>
+                  {!selectedSlot && selectedServices.length > 0 && (
+                    <p className="text-white/40 text-xs uppercase tracking-widest font-bold">Please select a time slot</p>
+                  )}
+                  {selectedServices.length === 0 && (
+                    <p className="text-white/40 text-xs uppercase tracking-widest font-bold">Please select at least one service</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -316,9 +408,21 @@ export default function BookingPage() {
               <span className="font-bold">{selectedSlot}</span>
             </div>
             <div className="h-px bg-white/10 w-full" />
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-white/40 uppercase tracking-widest font-bold">Location</span>
-              <span className="font-bold">{salon?.area || "Rajpur Road"}</span>
+            <div className="space-y-2">
+              <span className="text-white/40 uppercase tracking-widest font-bold text-[10px]">Services</span>
+              <div className="space-y-1">
+                {SALON_SERVICES.filter(s => selectedServices.includes(s.id)).map(s => (
+                  <div key={s.id} className="flex justify-between text-xs">
+                    <span>{s.name}</span>
+                    <span className="text-white/60">₹{s.price}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="h-px bg-white/10 w-full" />
+            <div className="flex justify-between items-center">
+              <span className="text-white/40 uppercase tracking-widest font-bold">Total Amount</span>
+              <span className="text-xl font-bold text-[#A78BFA]">₹{totalAmount}</span>
             </div>
           </div>
 

@@ -1,4 +1,3 @@
-
 {
   "entities": {
     "User": {
@@ -122,6 +121,15 @@
           "type": "string",
           "description": "Name of the salon at the time of booking."
         },
+        "selectedServices": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of services selected for this booking."
+        },
+        "totalAmount": {
+          "type": "number",
+          "description": "Total cost of the selected services."
+        },
         "date": {
           "type": "string",
           "description": "The date of the appointment in YYYY-MM-DD format."
@@ -146,7 +154,9 @@
         "date",
         "time",
         "status",
-        "createdAt"
+        "createdAt",
+        "selectedServices",
+        "totalAmount"
       ]
     }
   },

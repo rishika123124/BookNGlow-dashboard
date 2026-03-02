@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useEffect } from 'react';
@@ -18,7 +17,9 @@ import {
   CalendarCheck,
   ShoppingBag,
   Mail,
-  ShieldCheck
+  ShieldCheck,
+  Scissors,
+  IndianRupee
 } from 'lucide-react';
 import { 
   useUser, 
@@ -32,9 +33,11 @@ import { collection, query, where, orderBy, doc } from 'firebase/firestore';
 import { format } from 'date-fns';
 import { signOut } from 'firebase/auth';
 import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
 
 export default function DashboardPage() {
   const router = useRouter();
+  const { toast } = useToast();
   const { user, isUserLoading } = useUser();
   const auth = useAuth();
   const db = useFirestore();
@@ -46,8 +49,7 @@ export default function DashboardPage() {
     }
   }, [user, isUserLoading, router]);
 
-  // Fetch Firestore User Profile for Name and Role
-  // Dependency on user?.uid ensures we only query when the UID is stable
+  // Fetch Firestore User Profile
   const userProfileRef = useMemoFirebase(() => {
     if (!db || !user?.uid) return null;
     return doc(db, 'users', user.uid);
@@ -55,8 +57,7 @@ export default function DashboardPage() {
   
   const { data: profile, isLoading: profileLoading } = useDoc(userProfileRef);
 
-  // Fetch User's Bookings filtered by their customerId
-  // Ensuring we wait for auth to be fully ready
+  // Fetch User's Bookings
   const bookingsQuery = useMemoFirebase(() => {
     if (!db || !user?.uid) return null;
     return query(
@@ -71,9 +72,18 @@ export default function DashboardPage() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
+      toast({
+        title: "Logged Out",
+        description: "You have been successfully signed out.",
+      });
       router.push('/');
-    } catch (error) {
+    } catch (error: any) {
       console.error("Logout failed:", error);
+      toast({
+        variant: "destructive",
+        title: "Logout Error",
+        description: error.message || "Failed to sign out.",
+      });
     }
   };
 
@@ -88,7 +98,6 @@ export default function DashboardPage() {
     );
   }
 
-  // Final check before rendering main content to prevent flickering
   if (!user) return null;
 
   return (
@@ -213,31 +222,51 @@ export default function DashboardPage() {
                     >
                       <div className="absolute top-0 left-0 w-2 h-full bg-[#A78BFA]/20 group-hover:bg-[#A78BFA] transition-colors" />
                       
-                      <div className="flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
+                      <div className="flex flex-col md:flex-row items-center gap-8 text-center md:text-left flex-1">
                         <div className="h-20 w-20 rounded-3xl bg-[#A78BFA]/10 flex items-center justify-center border border-[#A78BFA]/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
                           <Sparkles className="h-10 w-10 text-[#A78BFA]" />
                         </div>
-                        <div className="space-y-3">
-                          <h4 className="font-headline text-3xl text-white group-hover:text-[#A78BFA] transition-colors">{booking.salonName}</h4>
+                        <div className="space-y-3 flex-1">
+                          <div className="flex items-center gap-3 justify-center md:justify-start">
+                             <h4 className="font-headline text-3xl text-white group-hover:text-[#A78BFA] transition-colors">{booking.salonName}</h4>
+                             <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 px-3 py-1 rounded-full font-bold uppercase tracking-widest text-[8px]">
+                               {booking.status}
+                             </Badge>
+                          </div>
+                          
                           <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-white/60">
-                            <span className="flex items-center gap-2 text-sm md:text-base font-bold">
+                            <span className="flex items-center gap-2 text-sm font-bold">
                               <Calendar className="h-4 w-4 text-[#A78BFA]" />
                               {format(new Date(booking.date), 'EEEE, MMM do')}
                             </span>
-                            <span className="flex items-center gap-2 text-sm md:text-base font-bold">
+                            <span className="flex items-center gap-2 text-sm font-bold">
                               <Clock className="h-4 w-4 text-[#A78BFA]" />
                               {booking.time}
                             </span>
                           </div>
+
+                          {/* Selected Services Display */}
+                          {booking.selectedServices && (
+                            <div className="flex flex-wrap gap-2 pt-2 justify-center md:justify-start">
+                              {booking.selectedServices.map((service: string, idx: number) => (
+                                <Badge key={idx} variant="outline" className="text-[10px] text-white/40 border-white/10 bg-white/5 py-0 px-2 flex items-center gap-1">
+                                  <Scissors className="h-2.5 w-2.5" />
+                                  {service}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </div>
 
-                      <div className="flex flex-col items-center md:items-end gap-4">
-                        <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 px-6 py-2 rounded-full font-bold uppercase tracking-widest text-[10px] shadow-lg shadow-emerald-500/5">
-                          {booking.status}
-                        </Badge>
-                        <Button variant="ghost" className="hidden md:flex items-center gap-2 text-white/20 hover:text-white transition-all">
-                          View Details <ChevronRight className="h-4 w-4" />
+                      <div className="flex flex-col items-center md:items-end gap-2 border-l border-white/10 pl-8 hidden md:flex">
+                        <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Amount Paid</span>
+                        <div className="flex items-center gap-1 text-2xl font-headline text-[#A78BFA]">
+                          <IndianRupee className="h-4 w-4" />
+                          {booking.totalAmount || 0}
+                        </div>
+                        <Button variant="ghost" className="items-center gap-2 text-white/20 hover:text-white transition-all p-0 h-auto text-xs mt-2">
+                          View Receipt <ChevronRight className="h-3 w-3" />
                         </Button>
                       </div>
                     </div>
