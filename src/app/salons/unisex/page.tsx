@@ -85,7 +85,7 @@ export default function UnisexSalonsPage() {
           <div className="container mx-auto flex flex-col md:flex-row gap-4 items-center justify-between">
              <div className="flex flex-wrap gap-4 items-center w-full md:w-auto">
                 <Select onValueChange={setLocation} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-[#DB2777] border-none text-white rounded-full transition-all hover:bg-[#C21E66] shadow-lg">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600 to-purple-600 border-none text-white rounded-full transition-all hover:from-blue-700 hover:to-purple-700 shadow-lg">
                     <SelectValue placeholder="📍 Location" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#FAF9F6] border-gray-200 text-[#333333]">
@@ -98,7 +98,7 @@ export default function UnisexSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setRating} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-[#DB2777] border-none text-white rounded-full transition-all hover:bg-[#C21E66] shadow-lg">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600 to-purple-600 border-none text-white rounded-full transition-all hover:from-blue-700 hover:to-purple-700 shadow-lg">
                     <SelectValue placeholder="⭐ Rating" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#FAF9F6] border-gray-200 text-[#333333]">
@@ -109,7 +109,7 @@ export default function UnisexSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setPrice} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-[#DB2777] border-none text-white rounded-full transition-all hover:bg-[#C21E66] shadow-lg">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600 to-purple-600 border-none text-white rounded-full transition-all hover:from-blue-700 hover:to-purple-700 shadow-lg">
                     <SelectValue placeholder="💰 Price Range" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#FAF9F6] border-gray-200 text-[#333333]">
@@ -176,7 +176,7 @@ export default function UnisexSalonsPage() {
                   </div>
 
                   <div className="pt-4">
-                    <Button className="w-full h-14 rounded-full bg-[#DB2777] hover:bg-[#C21E66] text-white font-headline text-xl transition-all duration-300 shadow-[0_10px_20px_rgba(219,39,119,0.2)] hover:shadow-[0_15px_30px_rgba(219,39,119,0.3)] border-none">
+                    <Button className="w-full h-14 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-headline text-xl transition-all duration-300 shadow-[0_10px_20px_rgba(139,92,246,0.2)] hover:shadow-[0_15px_30px_rgba(139,92,246,0.3)] border-none">
                       Explore Salons
                     </Button>
                   </div>
