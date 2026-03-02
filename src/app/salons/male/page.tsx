@@ -39,24 +39,6 @@ const MALE_SALONS = [
     img: PlaceHolderImages.find(img => img.id === 'salon-gents')?.imageUrl || "https://picsum.photos/seed/gents/600/400"
   },
   {
-    name: "Doon Grooming Hub",
-    area: "Jakhan",
-    rating: "4.6",
-    price: "Average",
-    startingPrice: "₹450",
-    tags: ["Beard Trim", "Haircut"],
-    img: PlaceHolderImages.find(img => img.id === 'salon-hub')?.imageUrl || "https://picsum.photos/seed/hub/600/400"
-  },
-  {
-    name: "Sharp Styles",
-    area: "Ballupur",
-    rating: "4.5",
-    price: "Average",
-    startingPrice: "₹400",
-    tags: ["Quick Style", "Shave"],
-    img: PlaceHolderImages.find(img => img.id === 'salon-sharp')?.imageUrl || "https://picsum.photos/seed/sharp/600/400"
-  },
-  {
     name: "The Doon Barbershop",
     area: "Jakhan",
     rating: "4.7",
@@ -64,15 +46,6 @@ const MALE_SALONS = [
     startingPrice: "₹299",
     tags: ["Basic Trim", "Quick Style"],
     img: PlaceHolderImages.find(img => img.id === 'category-male')?.imageUrl || "https://picsum.photos/seed/male/600/400"
-  },
-  {
-    name: "Grooming Galore",
-    area: "Jakhan",
-    rating: "4.4",
-    price: "Average",
-    startingPrice: "₹350",
-    tags: ["Classic Cut", "Beard Styling"],
-    img: PlaceHolderImages.find(img => img.id === 'salon-hub')?.imageUrl || "https://picsum.photos/seed/galore/600/400"
   },
   {
     name: "The Barber's Den",
