@@ -5,7 +5,7 @@ service cloud.firestore {
 
     /**
      * BOOKNGLOW SECURITY RULES
-     * Updated to broaden list access for bookings to allow for availability checks.
+     * Managed by App Prototyper.
      */
 
     // --- HELPER FUNCTIONS ---
@@ -55,13 +55,11 @@ service cloud.firestore {
 
     /**
      * @description Rules for salon bookings. 
-     * @allow (list) Everyone can list bookings. This is necessary for checking 
-     * availability (filtering by salon and date) so guests can see which slots are taken.
-     * @allow (get) Users can see specific booking details if they are the customer or the salon owner.
-     * @allow (create) Signed-in users can create bookings where they are the customer.
+     * @allow (list) Everyone can list bookings to check availability or fetch history.
+     * @allow (get) Users can see specific booking details if they are involved.
      */
     match /bookings/{bookingId} {
-      allow list: if true;
+      allow list: if true; 
       allow get: if isSignedIn() && (resource.data.customerId == request.auth.uid || resource.data.salonId == request.auth.uid);
       allow create: if isSignedIn() && request.resource.data.customerId == request.auth.uid;
       allow update, delete: if isSignedIn() && resource.data.customerId == request.auth.uid;

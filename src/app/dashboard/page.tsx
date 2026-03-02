@@ -16,16 +16,18 @@ import {
   Sparkles,
   LogOut,
   CalendarCheck,
-  ShoppingBag
+  ShoppingBag,
+  Mail
 } from 'lucide-react';
 import { 
   useUser, 
   useFirestore, 
   useCollection, 
+  useDoc,
   useMemoFirebase,
   useAuth
 } from '@/firebase';
-import { collection, query, where, orderBy } from 'firebase/firestore';
+import { collection, query, where, orderBy, doc } from 'firebase/firestore';
 import { format } from 'date-fns';
 import { signOut } from 'firebase/auth';
 import Link from 'next/link';
@@ -35,6 +37,14 @@ export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
   const auth = useAuth();
   const db = useFirestore();
+
+  // Fetch Firestore User Profile to get Name and Role
+  const userProfileRef = useMemoFirebase(() => {
+    if (!db || !user) return null;
+    return doc(db, 'users', user.uid);
+  }, [db, user]);
+  
+  const { data: profile, isLoading: profileLoading } = useDoc(userProfileRef);
 
   // Fetch User's Bookings
   const bookingsQuery = useMemoFirebase(() => {
@@ -53,6 +63,7 @@ export default function DashboardPage() {
     router.push('/');
   };
 
+  // Wait for Auth to resolve before making decisions
   if (isUserLoading) {
     return (
       <div className="min-h-screen bg-[#020617] flex items-center justify-center">
@@ -61,6 +72,7 @@ export default function DashboardPage() {
     );
   }
 
+  // Redirect if not logged in
   if (!user) {
     router.push('/login');
     return null;
@@ -83,10 +95,10 @@ export default function DashboardPage() {
               <div className="flex items-center gap-3">
                 <Sparkles className="h-6 w-6 text-[#A78BFA]" />
                 <h1 className="font-headline text-4xl md:text-5xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-400">
-                  User Dashboard
+                  Welcome, {profile?.fullName || "Glow Member"}
                 </h1>
               </div>
-              <p className="text-white/40 text-lg">Manage your luxury experiences in the Doon Valley.</p>
+              <p className="text-white/40 text-lg">Manage your luxury experiences and profile.</p>
             </div>
             <Button 
               variant="outline" 
@@ -102,18 +114,27 @@ export default function DashboardPage() {
             {/* Left Column: Account Profile */}
             <div className="space-y-8">
               <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 space-y-6 backdrop-blur-md">
-                <div className="flex flex-col items-center text-center space-y-4">
-                  <div className="h-24 w-24 rounded-3xl bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center shadow-2xl shadow-purple-500/20">
-                    <UserIcon className="h-12 w-12 text-white" />
+                {profileLoading ? (
+                  <div className="flex justify-center py-10">
+                    <Loader2 className="h-8 w-8 text-[#A78BFA] animate-spin" />
                   </div>
-                  <div>
-                    <h3 className="font-headline text-2xl">{user.displayName || "Glow Member"}</h3>
-                    <p className="text-white/40 text-sm truncate max-w-[200px]">{user.email}</p>
+                ) : (
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className="h-24 w-24 rounded-3xl bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center shadow-2xl shadow-purple-500/20">
+                      <UserIcon className="h-12 w-12 text-white" />
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="font-headline text-2xl">{profile?.fullName || "Glow Member"}</h3>
+                      <div className="flex items-center justify-center gap-1.5 text-white/40 text-sm">
+                        <Mail className="h-3 w-3" />
+                        <span className="truncate max-w-[180px]">{user.email}</span>
+                      </div>
+                    </div>
+                    <Badge className="bg-purple-600/20 text-[#A78BFA] border-purple-500/30 px-4 py-1 uppercase tracking-widest text-[10px] font-bold">
+                      {profile?.role || 'Customer'}
+                    </Badge>
                   </div>
-                  <Badge className="bg-purple-600/20 text-[#A78BFA] border-purple-500/30 px-4 py-1">
-                    CUSTOMER PROFILE
-                  </Badge>
-                </div>
+                )}
                 
                 <div className="pt-6 border-t border-white/10 space-y-4">
                   <div className="flex justify-between items-center text-sm">
@@ -125,17 +146,19 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-white/40">Member Since</span>
-                    <span className="font-bold">{user.metadata.creationTime ? format(new Date(user.metadata.creationTime), 'MMM yyyy') : 'N/A'}</span>
+                    <span className="font-bold">
+                      {user.metadata.creationTime ? format(new Date(user.metadata.creationTime), 'MMM yyyy') : 'N/A'}
+                    </span>
                   </div>
                 </div>
               </div>
 
               <div className="bg-gradient-to-br from-purple-600/20 to-blue-600/20 border border-purple-500/20 rounded-[2.5rem] p-8 text-center space-y-4">
                 <ShoppingBag className="h-8 w-8 text-[#A78BFA] mx-auto" />
-                <h4 className="font-headline text-xl">Need a Glow?</h4>
-                <p className="text-white/60 text-sm">Discover top-rated salons across Dehradun hotspots.</p>
+                <h4 className="font-headline text-xl">Ready for a Glow?</h4>
+                <p className="text-white/60 text-sm">Explore Dehradun's finest selection of verified salons.</p>
                 <Button asChild className="w-full rounded-full bg-[#A78BFA] hover:bg-[#9067f5] text-white border-none font-bold">
-                  <Link href="/salons/male">Discover Salons</Link>
+                  <Link href="/salons/male">Browse Salons</Link>
                 </Button>
               </div>
             </div>
@@ -144,7 +167,7 @@ export default function DashboardPage() {
             <div className="space-y-8">
               <div className="flex items-center gap-3">
                 <CalendarCheck className="h-6 w-6 text-[#A78BFA]" />
-                <h2 className="font-headline text-3xl tracking-wide">My Bookings</h2>
+                <h2 className="font-headline text-3xl tracking-wide">Appointment History</h2>
               </div>
 
               {bookingsLoading ? (
@@ -194,9 +217,9 @@ export default function DashboardPage() {
                     <Calendar className="h-12 w-12 text-white/20" />
                   </div>
                   <div className="space-y-2">
-                    <h3 className="font-headline text-2xl text-white/80">No Bookings Found</h3>
+                    <h3 className="font-headline text-2xl text-white/80">No Bookings Yet</h3>
                     <p className="text-white/40 max-w-sm mx-auto">
-                      Your schedule is looking clear. Secure your first luxury slot now to experience the elite grooming of Dehradun.
+                      Your grooming schedule is currently open. Secure your first luxury slot now and experience Dehradun's finest.
                     </p>
                   </div>
                   <Button asChild className="rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-[1.05] transition-all px-8 h-14 font-headline text-lg border-none shadow-2xl shadow-purple-500/20">
