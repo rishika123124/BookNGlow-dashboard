@@ -1,3 +1,4 @@
+
 import { Navbar } from '@/components/dashboard/Navbar'
 import Image from 'next/image'
 import { PlaceHolderImages } from '@/lib/placeholder-images'
@@ -45,6 +46,27 @@ export default function Home() {
       theme: "border-purple-500 shadow-purple-500/30",
       overlay: "bg-purple-900/40",
       btn: "bg-purple-600 hover:bg-purple-700 shadow-[0_0_15px_rgba(147,51,234,0.4)]"
+    }
+  ];
+
+  const premiumSalons = [
+    { 
+      name: "Aura Luxe Spa", 
+      area: "Jakhan", 
+      rating: "4.9", 
+      img: PlaceHolderImages.find(img => img.id === 'salon-aura')?.imageUrl || "https://picsum.photos/seed/aura/600/600" 
+    },
+    { 
+      name: "The Doon Mirror", 
+      area: "Rajpur Road", 
+      rating: "4.8", 
+      img: PlaceHolderImages.find(img => img.id === 'salon-mirror')?.imageUrl || "https://picsum.photos/seed/mirror/600/600" 
+    },
+    { 
+      name: "Velvet Grooming", 
+      area: "Rajpur Road", 
+      rating: "5.0", 
+      img: PlaceHolderImages.find(img => img.id === 'salon-velvet')?.imageUrl || "https://picsum.photos/seed/velvet/600/600" 
     }
   ];
 
@@ -138,11 +160,7 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              {[
-                { name: "Aura Luxe Spa", area: "Jakhan", rating: "4.9", img: "https://picsum.photos/seed/premium-1/600/600" },
-                { name: "The Doon Mirror", area: "Rajpur Road", rating: "4.8", img: "https://picsum.photos/seed/premium-2/600/600" },
-                { name: "Velvet Grooming", area: "Rajpur Road", rating: "5.0", img: "https://picsum.photos/seed/premium-3/600/600" }
-              ].map((salon, i) => (
+              {premiumSalons.map((salon, i) => (
                 <div 
                   key={i} 
                   className="group relative rounded-[40px] overflow-hidden bg-[#1a1b3b] shadow-[0_20px_50px_rgba(124,58,237,0.15)] hover:scale-[1.02] transition-all duration-500"
