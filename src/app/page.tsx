@@ -130,7 +130,7 @@ export default function Home() {
               Dehradun’s premier destination for elite grooming.
             </p>
             <div className="pt-4 md:pt-8">
-              <Button className="rounded-full px-8 md:px-12 h-14 md:h-16 text-lg md:text-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white border-none shadow-[0_0_30px_rgba(168,85,247,0.5)] animate-pulse transition-all duration-300">
+              <Button className="rounded-full px-8 md:px-12 h-14 md:h-16 text-lg md:text-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white border-none shadow-[0_0_30px_rgba(168,85,247,0.5)] transition-all duration-300">
                 Explore Salons
               </Button>
             </div>
@@ -312,7 +312,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 5. About Us Section (New) */}
+        {/* 5. About Us Section */}
         <section id="about-us" className="relative bg-slate-950 py-24 md:py-32 overflow-hidden">
           {/* Animated Background Mesh */}
           <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
