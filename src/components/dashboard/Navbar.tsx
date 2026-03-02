@@ -25,7 +25,7 @@ export function Navbar() {
   const [locality, setLocality] = useState(LOCALITIES[0])
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-slate-950/95 backdrop-blur-md border-b border-white/10 h-20 flex items-center">
+    <nav className="sticky top-0 z-50 w-full bg-slate-950/95 backdrop-blur-md border-b border-white/10 h-24 flex items-center shadow-2xl">
       <div className="container mx-auto px-4 flex items-center justify-between gap-4">
         
         {/* Mobile Menu & Logo Section */}
@@ -97,7 +97,7 @@ export function Navbar() {
                 <ChevronDown className="h-3 w-3" />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-48 bg-slate-900 text-white border-white/10">
+            <DropdownMenuContent align="start" className="w-48 bg-slate-900 text-white border-white/10 rounded-xl">
               {LOCALITIES.map((loc) => (
                 <DropdownMenuItem 
                   key={loc} 
@@ -132,7 +132,7 @@ export function Navbar() {
             Log In
           </Link>
           <Button 
-            className="bg-accent hover:bg-accent/90 text-white rounded-full px-6 lg:px-8 font-body font-semibold transition-all shadow-md hover:shadow-lg active:scale-95 border-none"
+            className="bg-accent hover:bg-accent/90 text-white rounded-full px-6 lg:px-8 font-body font-semibold transition-all shadow-md hover:shadow-lg active:scale-95 border-none h-12"
           >
             Sign Up
           </Button>
