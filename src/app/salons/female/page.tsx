@@ -92,7 +92,7 @@ export default function FemaleSalonsPage() {
           <div className="container mx-auto flex flex-col md:flex-row gap-4 items-center justify-between">
              <div className="flex flex-wrap gap-4 items-center w-full md:w-auto">
                 <Select onValueChange={setLocation} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-950/80 to-purple-950/80 border-white/20 text-white rounded-full transition-all hover:brightness-110 shadow-lg">
+                  <SelectTrigger className="w-full md:w-[180px] bg-[#DB2777] border-white/20 text-white rounded-full transition-all hover:bg-[#C21E66] shadow-lg border-none">
                     <SelectValue placeholder="📍 Location" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#FAF9F6] border-[#C7B1A6]/20 text-[#333333]">
@@ -104,7 +104,7 @@ export default function FemaleSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setRating} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-950/80 to-purple-950/80 border-white/20 text-white rounded-full transition-all hover:brightness-110 shadow-lg">
+                  <SelectTrigger className="w-full md:w-[180px] bg-[#DB2777] border-white/20 text-white rounded-full transition-all hover:bg-[#C21E66] shadow-lg border-none">
                     <SelectValue placeholder="⭐ Rating" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#FAF9F6] border-[#C7B1A6]/20 text-[#333333]">
@@ -115,7 +115,7 @@ export default function FemaleSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setPrice} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-950/80 to-purple-950/80 border-white/20 text-white rounded-full transition-all hover:brightness-110 shadow-lg">
+                  <SelectTrigger className="w-full md:w-[180px] bg-[#DB2777] border-white/20 text-white rounded-full transition-all hover:bg-[#C21E66] shadow-lg border-none">
                     <SelectValue placeholder="💰 Price Range" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#FAF9F6] border-[#C7B1A6]/20 text-[#333333]">

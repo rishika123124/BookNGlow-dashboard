@@ -76,7 +76,7 @@ export default function UnisexSalonsPage() {
           <div className="container mx-auto flex flex-col md:flex-row gap-4 items-center justify-between">
              <div className="flex flex-wrap gap-4 items-center w-full md:w-auto">
                 <Select onValueChange={setLocation} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-white/10 border-white/20 text-white rounded-full transition-all hover:bg-white/20 shadow-lg">
+                  <SelectTrigger className="w-full md:w-[180px] bg-[#E591B0] border-none text-white rounded-full transition-all hover:bg-[#D47FA0] shadow-lg">
                     <SelectValue placeholder="📍 Location" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#FAF9F6] border-gray-200 text-[#333333]">
@@ -88,7 +88,7 @@ export default function UnisexSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setRating} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-white/10 border-white/20 text-white rounded-full transition-all hover:bg-white/20 shadow-lg">
+                  <SelectTrigger className="w-full md:w-[180px] bg-[#E591B0] border-none text-white rounded-full transition-all hover:bg-[#D47FA0] shadow-lg">
                     <SelectValue placeholder="⭐ Rating" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#FAF9F6] border-gray-200 text-[#333333]">
@@ -99,7 +99,7 @@ export default function UnisexSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setPrice} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-white/10 border-white/20 text-white rounded-full transition-all hover:bg-white/20 shadow-lg">
+                  <SelectTrigger className="w-full md:w-[180px] bg-[#E591B0] border-none text-white rounded-full transition-all hover:bg-[#D47FA0] shadow-lg">
                     <SelectValue placeholder="💰 Price Range" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#FAF9F6] border-gray-200 text-[#333333]">
