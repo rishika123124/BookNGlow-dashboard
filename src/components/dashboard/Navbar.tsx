@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { Search, MapPin, ChevronDown, Menu, HelpCircle, Store } from 'lucide-react'
+import { Search, MapPin, ChevronDown, Menu, HelpCircle, Store, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -38,8 +38,11 @@ export function Navbar() {
             </SheetTrigger>
             <SheetContent side="left" className="bg-slate-950 border-none w-[300px] text-white">
               <SheetHeader className="text-left mb-8">
-                <SheetTitle className="font-headline text-3xl tracking-tight text-white">
-                  BookN<span className="text-accent">Glow</span>
+                <SheetTitle className="font-headline text-3xl tracking-tight text-white flex items-center gap-2">
+                  <div className="bg-gradient-to-br from-primary to-accent p-1.5 rounded-lg">
+                    <Sparkles className="h-5 w-5 text-white" />
+                  </div>
+                  <span>BookN<span className="text-accent">Glow</span></span>
                 </SheetTitle>
               </SheetHeader>
               <div className="flex flex-col gap-6 font-body text-xl">
@@ -60,8 +63,13 @@ export function Navbar() {
           </Sheet>
 
           <div className="flex-shrink-0">
-            <Link href="/" className="font-headline text-3xl tracking-tight text-white">
-              BookN<span className="text-accent">Glow</span>
+            <Link href="/" className="flex items-center gap-3 group transition-all duration-300">
+              <div className="bg-gradient-to-br from-primary to-accent p-1.5 rounded-xl shadow-lg shadow-primary/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                <Sparkles className="h-7 w-7 text-white" />
+              </div>
+              <span className="font-headline text-3xl tracking-tight text-white">
+                BookN<span className="text-accent">Glow</span>
+              </span>
             </Link>
           </div>
         </div>
@@ -80,7 +88,7 @@ export function Navbar() {
         </div>
 
         {/* Search and Location Section (Desktop) */}
-        <div className="flex-1 max-w-xl hidden md:flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1 shadow-inner">
+        <div className="flex-1 max-w-xl hidden md:flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1 shadow-inner group/search-container">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-1 text-sm font-body font-medium text-white/70 hover:text-white transition-colors min-w-[120px]">
@@ -104,8 +112,8 @@ export function Navbar() {
           
           <div className="h-6 w-px bg-white/10 mx-2" />
           
-          <div className="flex-1 relative group">
-            <Search className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40 group-focus-within:text-white transition-colors" />
+          <div className="flex-1 relative">
+            <Search className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40 group-focus-within/search-container:text-white transition-colors" />
             <Input 
               placeholder="Search services or salons..." 
               className="border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 pl-7 font-body text-white placeholder:text-white/40 cursor-pointer"
