@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { format, isBefore, startOfDay } from 'date-fns';
 import { 
-  useAuth, 
+  useUser, 
   useFirestore, 
   useCollection, 
   useDoc, 
@@ -51,7 +51,7 @@ export default function BookingPage() {
   const { salonId } = useParams();
   const router = useRouter();
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, isUserLoading } = useUser(); // Fixed: Use useUser() to get the authenticated user object
   const db = useFirestore();
   
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
@@ -64,7 +64,7 @@ export default function BookingPage() {
   const salonRef = useMemoFirebase(() => doc(db, 'salons', salonId as string), [db, salonId]);
   const { data: salon, isLoading: salonLoading } = useDoc(salonRef);
 
-  // Fetch Bookings for the selected date and salon
+  // Fetch Bookings for the selected date and salon to manage real-time availability
   const bookingsQuery = useMemoFirebase(() => {
     if (!db || !salonId || !selectedDate) return null;
     const dateStr = format(selectedDate, 'yyyy-MM-dd');
@@ -83,11 +83,12 @@ export default function BookingPage() {
   }, [existingBookings]);
 
   const handleBooking = async () => {
+    // Auth verification fix
     if (!user) {
       toast({
         variant: "destructive",
         title: "Authentication Required",
-        description: "Please log in to book a luxury slot.",
+        description: "Please log in to secure your luxury grooming slot.",
       });
       router.push('/login');
       return;
@@ -108,6 +109,7 @@ export default function BookingPage() {
 
     try {
       const bookingsRef = collection(db, 'bookings');
+      // Non-blocking write handled by internal catch and error emitter
       await addDoc(bookingsRef, bookingData).catch((e) => {
         errorEmitter.emit('permission-error', new FirestorePermissionError({
           path: 'bookings',
@@ -130,10 +132,10 @@ export default function BookingPage() {
     }
   };
 
-  if (salonLoading) {
+  if (salonLoading || isUserLoading) {
     return (
       <div className="min-h-screen bg-[#020617] flex items-center justify-center">
-        <Loader2 className="h-12 w-12 text-purple-500 animate-spin" />
+        <Loader2 className="h-12 w-12 text-[#A78BFA] animate-spin" />
       </div>
     );
   }
@@ -179,13 +181,13 @@ export default function BookingPage() {
           {/* Two-Column Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-8 items-start">
             
-            {/* Left Column: Calendar */}
+            {/* Left Column: Monthly Calendar */}
             <div className="space-y-6">
               <div className="flex items-center gap-3">
-                <CalendarIcon className="h-5 w-5 text-purple-400" />
-                <h2 className="font-headline text-2xl tracking-wide">Select Date</h2>
+                <CalendarIcon className="h-5 w-5 text-[#A78BFA]" />
+                <h2 className="font-headline text-2xl tracking-wide">Choose Date</h2>
               </div>
-              <div className="bg-[#1E1E1E] border border-white/10 rounded-[2rem] p-6 shadow-2xl">
+              <div className="bg-[#1E1E1E] border border-white/10 rounded-[2.5rem] p-6 shadow-2xl">
                 <Calendar
                   mode="single"
                   selected={selectedDate}
@@ -197,22 +199,22 @@ export default function BookingPage() {
                   className="w-full"
                   classNames={{
                     day_selected: "bg-[#A78BFA] text-white hover:bg-[#A78BFA] hover:text-white focus:bg-[#A78BFA] focus:text-white shadow-[0_0_15px_rgba(167,139,250,0.5)]",
-                    day_today: "bg-white/5 text-purple-400 font-bold border border-purple-500/20",
+                    day_today: "bg-white/5 text-[#A78BFA] font-bold border border-[#A78BFA]/20",
                     day: cn("h-10 w-10 p-0 font-normal aria-selected:opacity-100 hover:bg-white/10 rounded-xl transition-all"),
                     head_cell: "text-white/40 font-bold uppercase text-[10px] tracking-widest pb-4",
                   }}
                 />
               </div>
               <p className="text-white/40 text-xs italic px-2">
-                * Past dates are disabled for your convenience.
+                * Past dates are locked. Select any date from the monthly view.
               </p>
             </div>
 
-            {/* Right Column: Slots */}
+            {/* Right Column: Time Slots Grid */}
             <div className="space-y-6 lg:min-h-[500px] flex flex-col">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Clock className="h-5 w-5 text-purple-400" />
+                  <Clock className="h-5 w-5 text-[#A78BFA]" />
                   <h2 className="font-headline text-2xl tracking-wide">
                     Available Slots
                     {selectedDate && (
@@ -224,10 +226,10 @@ export default function BookingPage() {
                 </div>
               </div>
               
-              <div className="flex-1 bg-white/5 border border-white/10 rounded-[2.5rem] p-6 md:p-8 space-y-8">
+              <div className="flex-1 bg-white/5 border border-white/10 rounded-[2.5rem] p-6 md:p-8 space-y-8 flex flex-col">
                 {bookingsLoading ? (
                   <div className="h-64 flex items-center justify-center">
-                    <Loader2 className="h-8 w-8 text-purple-500 animate-spin" />
+                    <Loader2 className="h-8 w-8 text-[#A78BFA] animate-spin" />
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -246,7 +248,7 @@ export default function BookingPage() {
                               ? "bg-white/5 border-white/5 text-white/20 cursor-not-allowed line-through"
                               : isSelected
                               ? "bg-[#A78BFA] border-[#A78BFA] shadow-[0_0_20px_rgba(167,139,250,0.3)] text-white scale-105 z-10"
-                              : "bg-transparent border-purple-500/30 text-purple-400 hover:bg-purple-500/10 hover:border-purple-500 hover:scale-[1.02]"
+                              : "bg-transparent border-[#A78BFA]/30 text-[#A78BFA] hover:bg-[#A78BFA]/10 hover:border-[#A78BFA] hover:scale-[1.02]"
                           )}
                         >
                           {slot}
@@ -261,15 +263,15 @@ export default function BookingPage() {
                   </div>
                 )}
 
-                {/* Final Action Hub */}
-                <div className="sticky bottom-0 pt-8 border-t border-white/10 bg-gradient-to-t from-[#020617] via-[#020617] to-transparent flex flex-col items-center gap-6 mt-auto pb-4">
+                {/* Confirm Slot Button (Sticky at bottom of column) */}
+                <div className="sticky bottom-0 pt-8 border-t border-white/10 bg-gradient-to-t from-[#020617]/80 via-[#020617]/50 to-transparent flex flex-col items-center gap-6 mt-auto pb-4 backdrop-blur-sm">
                   <div className="text-center">
                     <p className="text-white/40 text-sm italic">
                       Experience the gold standard of grooming.
                     </p>
                     {selectedSlot && (
-                      <p className="text-purple-400 font-bold text-sm mt-1 animate-in fade-in slide-in-from-bottom-1">
-                        Confirming: {format(selectedDate!, 'EEE, MMM do')} @ {selectedSlot}
+                      <p className="text-[#A78BFA] font-bold text-sm mt-1 animate-in fade-in slide-in-from-bottom-1">
+                        Selected: {format(selectedDate!, 'EEE, MMM do')} @ {selectedSlot}
                       </p>
                     )}
                   </div>
@@ -293,11 +295,11 @@ export default function BookingPage() {
         <DialogContent className="bg-slate-900 border-white/10 text-white rounded-[2.5rem] p-8 md:p-10">
           <DialogHeader className="space-y-4">
             <div className="bg-purple-500/20 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-2">
-              <Clock className="h-8 w-8 text-purple-400" />
+              <Clock className="h-8 w-8 text-[#A78BFA]" />
             </div>
             <DialogTitle className="font-headline text-3xl text-center tracking-wide">Confirm Your Glow</DialogTitle>
             <DialogDescription className="text-white/60 text-center text-lg">
-              You're booking a luxury session at <span className="text-purple-400 font-bold">{salon?.name || "Velvet Grooming"}</span>.
+              You're booking a luxury session at <span className="text-[#A78BFA] font-bold">{salon?.name || "Velvet Grooming"}</span>.
             </DialogDescription>
           </DialogHeader>
           
