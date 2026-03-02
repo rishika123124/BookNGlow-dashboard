@@ -64,6 +64,33 @@ const MALE_SALONS = [
     startingPrice: "₹299",
     tags: ["Basic Trim", "Quick Style"],
     img: PlaceHolderImages.find(img => img.id === 'category-male')?.imageUrl || "https://picsum.photos/seed/male/600/400"
+  },
+  {
+    name: "Grooming Galore",
+    area: "Jakhan",
+    rating: "4.4",
+    price: "Average",
+    startingPrice: "₹350",
+    tags: ["Classic Cut", "Beard Styling"],
+    img: PlaceHolderImages.find(img => img.id === 'salon-hub')?.imageUrl || "https://picsum.photos/seed/galore/600/400"
+  },
+  {
+    name: "The Barber's Den",
+    area: "Rajpur Road",
+    rating: "4.6",
+    price: "Average",
+    startingPrice: "₹480",
+    tags: ["Premium Shave", "Face Massage"],
+    img: PlaceHolderImages.find(img => img.id === 'salon-gents')?.imageUrl || "https://picsum.photos/seed/den/600/400"
+  },
+  {
+    name: "Elite Cut",
+    area: "Ballupur",
+    rating: "4.5",
+    price: "Average",
+    startingPrice: "₹420",
+    tags: ["Modern Fade", "Hair Treatment"],
+    img: PlaceHolderImages.find(img => img.id === 'salon-classic')?.imageUrl || "https://picsum.photos/seed/elite/600/400"
   }
 ];
 
