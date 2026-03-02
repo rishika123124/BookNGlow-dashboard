@@ -39,15 +39,6 @@ const UNISEX_SALONS = [
     img: PlaceHolderImages.find(img => img.id === 'salon-lush')?.imageUrl || "https://picsum.photos/seed/lush/600/400"
   },
   {
-    name: "Aura Unisex Lounge",
-    area: "Jakhan",
-    rating: "4.9",
-    price: "Average",
-    startingPrice: "₹750",
-    tags: ["Global Color", "Hydra Facial"],
-    img: PlaceHolderImages.find(img => img.id === 'salon-aura')?.imageUrl || "https://picsum.photos/seed/aura/600/400"
-  },
-  {
     name: "Glow & Co. Unisex",
     area: "Rajpur Road",
     rating: "4.6",
