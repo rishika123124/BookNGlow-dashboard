@@ -1,4 +1,3 @@
-
 "use client"
 
 import React from 'react'
@@ -36,12 +35,12 @@ export function Footer() {
           </div>
 
           <div className="space-y-4 md:space-y-6 text-center sm:text-left">
-            <h4 className="font-headline text-lg md:text-xl">Top Services</h4>
+            <h4 className="font-headline text-lg md:text-xl">Top Salons</h4>
             <ul className="font-body text-white/60 space-y-2 md:space-y-3 text-sm md:text-base">
-              <li className="hover:text-white cursor-pointer transition-colors">Bridal Makeovers</li>
-              <li className="hover:text-white cursor-pointer transition-colors">Keratin Treatment</li>
-              <li className="hover:text-white cursor-pointer transition-colors">Deep Tissue Spa</li>
-              <li className="hover:text-white cursor-pointer transition-colors">Signature Facials</li>
+              <li className="hover:text-white cursor-pointer transition-colors">Aura Luxe Spa</li>
+              <li className="hover:text-white cursor-pointer transition-colors">The Doon Mirror</li>
+              <li className="hover:text-white cursor-pointer transition-colors">Velvet Grooming</li>
+              <li className="hover:text-white cursor-pointer transition-colors">The Lush Studio</li>
             </ul>
           </div>
 
