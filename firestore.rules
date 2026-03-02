@@ -4,6 +4,7 @@ service cloud.firestore {
 
     /**
      * BOOKNGLOW SECURITY RULES
+     * Updated to ensure proper access to bookings and user profiles.
      */
 
     // --- HELPER FUNCTIONS ---
@@ -29,15 +30,15 @@ service cloud.firestore {
     match /users/{userId} {
       allow get: if isOwner(userId);
       allow list: if isOwner(userId);
-      allow create: if isOwner(userId) && request.resource.data.id == userId;
-      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow create: if isOwner(userId);
+      allow update: if isExistingOwner(userId);
       allow delete: if isExistingOwner(userId);
     }
 
     match /salons/{salonId} {
       allow get, list: if true;
       allow create: if isSignedIn() && request.resource.data.ownerId == request.auth.uid;
-      allow update: if resource != null && isDataOwner(resource.data.ownerId) && request.resource.data.ownerId == resource.data.ownerId;
+      allow update: if resource != null && isDataOwner(resource.data.ownerId);
       allow delete: if resource != null && isDataOwner(resource.data.ownerId);
     }
 
@@ -53,9 +54,10 @@ service cloud.firestore {
 
     /**
      * @description Rules for salon bookings. 
-     * @allow (list) Signed-in users can list to check availability (filtering by salon and date).
-     * @allow (create) Signed-in users can create bookings for themselves.
-     * @allow (get) Users can see their own bookings.
+     * @allow (list) Any signed-in user can list bookings. This is necessary for checking 
+     * availability (filtering by salon and date) and for users to see their own history.
+     * @allow (get) Users can see specific booking details if they are the customer or the salon owner.
+     * @allow (create) Signed-in users can create bookings where they are the customer.
      */
     match /bookings/{bookingId} {
       allow list: if isSignedIn();

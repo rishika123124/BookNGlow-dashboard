@@ -18,9 +18,7 @@
         "role": {
           "type": "string",
           "description": "The role of the user within the platform, either 'customer' or 'salon'.",
-          "items": {
-            "type": "string"
-          }
+          "enum": ["customer", "salon"]
         },
         "fullName": {
           "type": "string",
@@ -56,7 +54,7 @@
         },
         "ownerId": {
           "type": "string",
-          "description": "Reference to the User who owns and manages this salon. (Relationship: User 1:1 Salon)"
+          "description": "Reference to the User who owns and manages this salon."
         },
         "name": {
           "type": "string",
@@ -64,7 +62,7 @@
         },
         "localityId": {
           "type": "string",
-          "description": "Reference to the Locality where the salon is physically located. (Relationship: Locality 1:N Salon)"
+          "description": "Reference to the Locality where the salon is physically located."
         },
         "contactEmail": {
           "type": "string",
@@ -99,68 +97,6 @@
         "categoryTier",
         "averagePriceRange",
         "createdAt"
-      ]
-    },
-    "ServiceCategory": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "ServiceCategory",
-      "type": "object",
-      "description": "Defines the different categories of services available at salons (e.g., Hair, Skin, Nails).",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the ServiceCategory entity."
-        },
-        "name": {
-          "type": "string",
-          "description": "The name of the service category (e.g., 'Hair', 'Skin', 'Nails')."
-        },
-        "description": {
-          "type": "string",
-          "description": "A brief description of the service category."
-        },
-        "iconUrl": {
-          "type": "string",
-          "description": "URL to an icon image representing this service category.",
-          "format": "uri"
-        }
-      },
-      "required": [
-        "id",
-        "name"
-      ]
-    },
-    "Locality": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Locality",
-      "type": "object",
-      "description": "Represents a specific geographical locality within Dehradun where salons can be found.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the Locality entity."
-        },
-        "name": {
-          "type": "string",
-          "description": "The name of the locality (e.g., 'Rajpur Road', 'Jakhan')."
-        },
-        "city": {
-          "type": "string",
-          "description": "The city to which this locality belongs (e.g., 'Dehradun')."
-        },
-        "state": {
-          "type": "string",
-          "description": "The state to which this locality belongs."
-        },
-        "country": {
-          "type": "string",
-          "description": "The country to which this locality belongs."
-        }
-      },
-      "required": [
-        "id",
-        "name",
-        "city"
       ]
     },
     "Booking": {
@@ -216,7 +152,7 @@
   "auth": {
     "providers": [
       "password",
-      "anonymous"
+      "google.com"
     ]
   },
   "firestore": {
@@ -254,45 +190,13 @@
         }
       },
       {
-        "path": "/service_categories/{serviceCategoryId}",
-        "definition": {
-          "entityName": "ServiceCategory",
-          "schema": {
-            "$ref": "#/backend/entities/ServiceCategory"
-          },
-          "description": "Global collection for service categories.",
-          "params": [
-            {
-              "name": "serviceCategoryId",
-              "description": "The unique identifier for a service category."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/localities/{localityId}",
-        "definition": {
-          "entityName": "Locality",
-          "schema": {
-            "$ref": "#/backend/entities/Locality"
-          },
-          "description": "Global collection for geographical localities.",
-          "params": [
-            {
-              "name": "localityId",
-              "description": "The unique identifier for a locality."
-            }
-          ]
-        }
-      },
-      {
         "path": "/bookings/{bookingId}",
         "definition": {
           "entityName": "Booking",
           "schema": {
             "$ref": "#/backend/entities/Booking"
           },
-          "description": "Stores service bookings. Read access for availability checks and user history, write access for booking creation.",
+          "description": "Stores service bookings. Accessible for availability checks and user history.",
           "params": [
             {
               "name": "bookingId",
@@ -302,6 +206,6 @@
         }
       }
     ],
-    "reasoning": "The Firestore structure is updated to include a 'bookings' collection. This allows for real-time availability checks and persistence of appointments. Security rules are configured to allow signed-in users to list bookings (for availability) and create their own bookings, while protecting individual privacy."
+    "reasoning": "Standard collection-based structure for users, salons, and bookings. Bookings are maintained in a global collection to facilitate cross-salon availability queries and centralized user history management."
   }
 }
