@@ -73,16 +73,16 @@ export default function MaleSalonsPage() {
   const [price, setPrice] = useState('all');
 
   return (
-    <div className="min-h-screen bg-[#0f172a] text-white selection:bg-blue-500/30 font-body relative overflow-hidden">
-      {/* Mesh Glow Blobs - Slightly lighter and more prominent to reduce pure blackness */}
-      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-500/30 rounded-full blur-[130px] pointer-events-none opacity-40" />
-      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-500/30 rounded-full blur-[130px] pointer-events-none opacity-40" />
+    <div className="min-h-screen bg-[#020617] text-white selection:bg-blue-500/30 font-body relative overflow-hidden">
+      {/* Mesh Glow Blobs - Urban Midnight Look */}
+      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-500/20 rounded-full blur-[130px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[130px] pointer-events-none" />
 
       <Navbar />
       
       <main className="relative z-10">
         {/* Sticky Filter Bar */}
-        <div className="sticky top-20 md:top-24 z-40 w-full bg-slate-950/60 backdrop-blur-md border-b border-white/10 py-4 px-4 shadow-2xl">
+        <div className="sticky top-20 md:top-24 z-40 w-full bg-[#020617]/60 backdrop-blur-md border-b border-white/10 py-4 px-4 shadow-2xl">
           <div className="container mx-auto flex flex-col md:flex-row gap-4 items-center justify-between">
              <div className="flex flex-wrap gap-4 items-center w-full md:w-auto">
                 <Select onValueChange={setLocation} defaultValue="all">
@@ -129,10 +129,10 @@ export default function MaleSalonsPage() {
         <div className="container mx-auto px-4 py-12 space-y-16">
           <div className="text-center space-y-4 max-w-4xl mx-auto">
             <h1 className="font-display text-4xl md:text-7xl text-white drop-shadow-2xl leading-tight">
-              Discover Salons for <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200 italic">Men</span>
+              Elite Grooming for <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-white italic">Men</span>
             </h1>
-            <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto font-light tracking-wide italic">
-              Experience the peak of perfection and royal grooming in the heart of Dehradun.
+            <p className="text-silver/60 text-lg md:text-xl max-w-2xl mx-auto font-light tracking-wide italic">
+              Discover Dehradun’s finest barbers and stylists in the heart of the valley.
             </p>
           </div>
 
@@ -144,7 +144,7 @@ export default function MaleSalonsPage() {
               >
                 <div className="relative h-64">
                   <Image src={salon.img} alt={salon.name} fill className="object-cover opacity-80 group-hover:opacity-100 transition-all duration-700" data-ai-hint="barber interior" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent" />
                   <Badge className="absolute top-4 left-4 bg-blue-600 text-white border-none font-bold shadow-lg">
                     {salon.price === 'High' ? 'LUXURY' : salon.price === 'Average' ? 'VALUE' : 'BUDGET'}
                   </Badge>
@@ -171,16 +171,19 @@ export default function MaleSalonsPage() {
 
                   <div className="flex flex-wrap gap-2">
                     {salon.tags.map(tag => (
-                      <span key={tag} className="text-[10px] uppercase tracking-widest border border-white/10 px-3 py-1 rounded-full text-white/60 bg-white/5">
+                      <span key={tag} className="text-[10px] uppercase tracking-widest border border-blue-500/20 px-3 py-1 rounded-full text-blue-400 bg-blue-500/5">
                         {tag}
                       </span>
                     ))}
                   </div>
 
                   <div className="pt-2">
-                    <Button className="w-full h-12 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-headline text-lg transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.3)] border-none">
-                      Check Availability
+                    <Button className="w-full h-12 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-headline text-lg transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.4)] border-none">
+                      Book Your Slot
                     </Button>
+                    <button className="w-full mt-4 text-xs text-blue-400 hover:underline transition-all">
+                      View Details
+                    </button>
                   </div>
                 </div>
               </div>
