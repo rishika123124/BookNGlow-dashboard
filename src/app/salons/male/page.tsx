@@ -72,6 +72,13 @@ export default function MaleSalonsPage() {
   const [rating, setRating] = useState('all');
   const [price, setPrice] = useState('all');
 
+  const filteredSalons = MALE_SALONS.filter(salon => {
+    if (location !== 'all' && salon.area !== location) return false;
+    if (rating !== 'all' && parseFloat(salon.rating) < parseFloat(rating)) return false;
+    if (price !== 'all' && salon.price !== price) return false;
+    return true;
+  });
+
   return (
     <div className="min-h-screen bg-[#020617] text-white selection:bg-blue-500/30 font-body relative overflow-hidden">
       {/* Mesh Glow Blobs - Urban Midnight Look */}
@@ -86,7 +93,7 @@ export default function MaleSalonsPage() {
           <div className="container mx-auto flex flex-col md:flex-row gap-4 items-center justify-between">
              <div className="flex flex-wrap gap-4 items-center w-full md:w-auto">
                 <Select onValueChange={setLocation} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-white/10 text-white rounded-full transition-all hover:from-blue-600/30 hover:to-purple-600/30">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-white/10 text-white rounded-full transition-all hover:from-blue-600/40 hover:to-purple-600/40">
                     <SelectValue placeholder="📍 Location" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -98,7 +105,7 @@ export default function MaleSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setRating} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-white/10 text-white rounded-full transition-all hover:from-blue-600/30 hover:to-purple-600/30">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-white/10 text-white rounded-full transition-all hover:from-blue-600/40 hover:to-purple-600/40">
                     <SelectValue placeholder="⭐ Rating" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -109,7 +116,7 @@ export default function MaleSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setPrice} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-white/10 text-white rounded-full transition-all hover:from-blue-600/30 hover:to-purple-600/30">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-white/10 text-white rounded-full transition-all hover:from-blue-600/40 hover:to-purple-600/40">
                     <SelectValue placeholder="💰 Price Range" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -131,13 +138,13 @@ export default function MaleSalonsPage() {
             <h1 className="font-display text-4xl md:text-7xl text-white drop-shadow-2xl leading-tight">
               Elite Grooming for <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-white italic">Men</span>
             </h1>
-            <p className="text-silver/60 text-lg md:text-xl max-w-2xl mx-auto font-light tracking-wide italic">
+            <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto font-light tracking-wide italic">
               Discover Dehradun’s finest barbers and stylists in the heart of the valley.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {MALE_SALONS.map((salon, i) => (
+            {filteredSalons.map((salon, i) => (
               <div 
                 key={i} 
                 className="group relative rounded-[2.5rem] overflow-hidden bg-slate-900/50 border border-blue-500/20 backdrop-blur-md shadow-2xl transition-all duration-500 hover:border-blue-500/50"
@@ -181,9 +188,6 @@ export default function MaleSalonsPage() {
                     <Button className="w-full h-12 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-headline text-lg transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.4)] border-none">
                       Book Your Slot
                     </Button>
-                    <button className="w-full mt-4 text-xs text-blue-400 hover:underline transition-all">
-                      View Details
-                    </button>
                   </div>
                 </div>
               </div>

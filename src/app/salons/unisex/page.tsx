@@ -45,6 +45,13 @@ export default function UnisexSalonsPage() {
   const [rating, setRating] = useState('all');
   const [price, setPrice] = useState('all');
 
+  const filteredSalons = UNISEX_SALONS.filter(salon => {
+    if (location !== 'all' && salon.area !== location) return false;
+    if (rating !== 'all' && parseFloat(salon.rating) < parseFloat(rating)) return false;
+    if (price !== 'all' && salon.price !== price) return false;
+    return true;
+  });
+
   return (
     <div className="min-h-screen bg-[#020617] text-white selection:bg-purple-500/30 font-body relative overflow-hidden">
       {/* Universal Mesh Gradient Background */}
@@ -60,7 +67,7 @@ export default function UnisexSalonsPage() {
           <div className="container mx-auto flex flex-col md:flex-row gap-4 items-center justify-between">
              <div className="flex flex-wrap gap-4 items-center w-full md:w-auto">
                 <Select onValueChange={setLocation} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-white/10 text-white rounded-full transition-all hover:from-blue-600/30 hover:to-purple-600/30">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-white/10 text-white rounded-full transition-all hover:from-blue-600/40 hover:to-purple-600/40">
                     <SelectValue placeholder="📍 Location" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -72,7 +79,7 @@ export default function UnisexSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setRating} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-white/10 text-white rounded-full transition-all hover:from-blue-600/30 hover:to-purple-600/30">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-white/10 text-white rounded-full transition-all hover:from-blue-600/40 hover:to-purple-600/40">
                     <SelectValue placeholder="⭐ Rating" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -83,7 +90,7 @@ export default function UnisexSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setPrice} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-white/10 text-white rounded-full transition-all hover:from-blue-600/30 hover:to-purple-600/30">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/30 to-purple-600/30 border-white/10 text-white rounded-full transition-all hover:from-blue-600/40 hover:to-purple-600/40">
                     <SelectValue placeholder="💰 Price Range" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -109,7 +116,7 @@ export default function UnisexSalonsPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {UNISEX_SALONS.map((salon, i) => (
+            {filteredSalons.map((salon, i) => (
               <div 
                 key={i} 
                 className="group relative rounded-[2rem] overflow-hidden bg-white/5 border border-white/20 backdrop-blur-md shadow-2xl hover:scale-[1.02] transition-all duration-300"
