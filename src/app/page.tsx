@@ -13,7 +13,11 @@ import {
   CreditCard, 
   ChevronRight,
   Quote,
-  LocateFixed
+  LocateFixed,
+  Zap,
+  Gift,
+  CheckCircle2,
+  Award
 } from 'lucide-react'
 
 export default function Home() {
@@ -96,7 +100,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-background selection:bg-primary/30 font-body">
+    <div className="min-h-screen bg-background selection:bg-primary/30 font-body scroll-smooth">
       <Navbar />
       
       <main>
@@ -126,7 +130,7 @@ export default function Home() {
               Dehradun’s premier destination for elite grooming.
             </p>
             <div className="pt-4 md:pt-8">
-              <Button className="rounded-full px-8 md:px-12 h-14 md:h-16 text-lg md:text-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white border-none shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:scale-105 transition-all duration-300">
+              <Button className="rounded-full px-8 md:px-12 h-14 md:h-16 text-lg md:text-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white border-none shadow-[0_0_30px_rgba(168,85,247,0.5)] animate-pulse transition-all duration-300">
                 Explore Salons
               </Button>
             </div>
@@ -168,7 +172,6 @@ export default function Home() {
 
         {/* 3. Premium Salons Grid */}
         <section className="relative bg-white py-12 md:py-24 overflow-hidden">
-          {/* Soft Radial Glow Background */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] md:w-[800px] h-[600px] md:h-[800px] bg-purple-500/5 rounded-full blur-[100px] md:blur-[120px] pointer-events-none" />
           
           <div className="container mx-auto px-4 relative z-10 space-y-12 md:space-y-16">
@@ -177,7 +180,6 @@ export default function Home() {
                 <h2 className="font-display text-4xl md:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-[#2563EB] via-[#DB2777] to-[#7C3AED] drop-shadow-[0_2px_10px_rgba(219,39,119,0.2)] leading-tight">
                   Dehradun’s <span className="italic">Premium</span> Salons
                 </h2>
-                {/* Tiny Animated Gradient Line */}
                 <div className="h-1 w-20 mx-auto rounded-full bg-gradient-to-r from-[#2563EB] to-[#DB2777] animate-pulse" />
               </div>
 
@@ -227,7 +229,6 @@ export default function Home() {
             <div className="grid lg:grid-cols-2">
               {/* Map Left */}
               <div className="relative h-[400px] md:h-[600px] overflow-hidden group">
-                {/* Live Status Indicator */}
                 <div className="absolute top-4 left-4 md:top-6 md:left-6 z-20 flex items-center gap-2 bg-slate-900/90 backdrop-blur-md px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10 shadow-xl">
                   <div className="h-1.5 w-1.5 md:h-2 md:w-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(52,211,153,1)]" />
                   <span className="text-[8px] md:text-[10px] font-bold text-emerald-400 uppercase tracking-widest">
@@ -235,7 +236,6 @@ export default function Home() {
                   </span>
                 </div>
 
-                {/* Map Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/20 via-purple-600/20 to-pink-600/20 pointer-events-none mix-blend-overlay z-10" />
                 
                 <iframe
@@ -246,7 +246,6 @@ export default function Home() {
                   loading="lazy"
                 />
 
-                {/* Neon Pins Overlays */}
                 <div className="absolute inset-0 z-20 pointer-events-none">
                   <div className="absolute top-1/4 left-1/3 group/pin pointer-events-auto cursor-pointer">
                     <div className="h-6 w-6 md:h-7 md:w-7 bg-purple-500 rounded-full border-2 border-white flex items-center justify-center shadow-[0_0_25px_rgba(168,85,247,0.9)] animate-bounce">
@@ -313,34 +312,97 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 5. Platform Stats & About */}
-        <section className="bg-gradient-to-r from-blue-700 via-purple-700 to-pink-700 py-16 md:py-32 text-white relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <Sparkles className="h-full w-full rotate-12 scale-150" />
+        {/* 5. About Us Section (New) */}
+        <section id="about-us" className="relative bg-slate-950 py-24 md:py-32 overflow-hidden">
+          {/* Animated Background Mesh */}
+          <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+             <div className="absolute top-0 -left-1/4 w-full h-full bg-purple-600/30 rounded-full blur-[120px] animate-[pulse_10s_infinite]" />
+             <div className="absolute bottom-0 -right-1/4 w-full h-full bg-blue-600/30 rounded-full blur-[120px] animate-[pulse_15s_infinite]" />
           </div>
-          <div className="container mx-auto px-4 relative z-10 grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
-            <div className="space-y-6 md:space-y-8">
-              <h2 className="font-headline text-3xl md:text-5xl">Our Story</h2>
-              <div className="space-y-4 md:space-y-6 font-headline text-lg md:text-2xl leading-relaxed italic opacity-90">
-                <Quote className="h-8 w-8 md:h-12 md:w-12 text-blue-200 opacity-50 mb-2 md:mb-4" />
-                <p>
-                  BookNGlow was born from a simple vision: to bring world-class beauty and grooming experiences to the heart of Dehradun. We connect you with the finest artisans who treat beauty as a refined art form.
-                </p>
-              </div>
-            </div>
 
-            <div className="grid grid-cols-2 gap-4 md:gap-8">
-              {[
-                { label: "Verified Salons", val: "50+" },
-                { label: "Happy Clients", val: "10k+" },
-                { label: "Localities", val: "20+" },
-                { label: "Glow Experts", val: "200+" }
-              ].map((stat, i) => (
-                <div key={i} className="p-6 md:p-10 bg-white/10 backdrop-blur-md rounded-[1.5rem] md:rounded-[2.5rem] border border-white/20 text-center space-y-1 md:space-y-2">
-                  <div className="text-2xl md:text-5xl font-bold">{stat.val}</div>
-                  <div className="text-white/70 text-[10px] md:text-lg">{stat.label}</div>
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="rounded-[3rem] bg-white/5 backdrop-blur-3xl border border-white/10 p-8 md:p-16 lg:p-24 shadow-[0_0_80px_rgba(124,58,237,0.1)]">
+              <div className="grid lg:grid-cols-3 gap-16 lg:gap-20 items-center">
+                
+                {/* Brand Identity */}
+                <div className="space-y-8 text-center lg:text-left">
+                  <div className="inline-flex flex-col items-center lg:items-start gap-6 group">
+                    <div className="relative">
+                      {/* Spinning Verified Border */}
+                      <div className="absolute -inset-2 rounded-full border-2 border-dashed border-purple-500/50 animate-[spin_8s_linear_infinite]" />
+                      <div className="bg-gradient-to-br from-primary to-accent p-4 rounded-2xl shadow-2xl shadow-purple-500/40 animate-[bounce_4s_infinite]">
+                        <Sparkles className="h-10 w-10 md:h-12 md:w-12 text-white" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <h2 className="font-headline text-4xl md:text-5xl text-white tracking-tight">
+                        BookN<span className="text-accent">Glow</span>
+                      </h2>
+                      <div className="flex items-center justify-center lg:justify-start gap-2 text-accent">
+                        <Award className="h-4 w-4" />
+                        <span className="text-[10px] font-bold uppercase tracking-widest">Dehradun's #1 Choice</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <p className="font-headline text-xl md:text-2xl text-white/80 leading-relaxed italic">
+                    "Dehradun’s #1 digital bridge for elite grooming. We’ve handpicked the city’s finest salons so you don’t have to."
+                  </p>
                 </div>
-              ))}
+
+                {/* Power Stats Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-6 md:gap-8">
+                  {[
+                    { label: "Premium Salons", val: "50+", desc: "Verified partners across Rajpur Road, Jakhan, and Ballupur." },
+                    { label: "Average Rating", val: "4.9/5", desc: "Rated by 5,000+ stylish Dehradun residents." },
+                    { label: "Glows Delivered", val: "15k+", desc: "Successful bookings and happy faces across the city." }
+                  ].map((stat, i) => (
+                    <div key={i} className="group p-6 md:p-10 bg-white/5 backdrop-blur-md rounded-[2.5rem] border border-white/10 text-center space-y-3 transition-all duration-500 hover:border-purple-500/50 hover:bg-white/10 hover:-translate-y-2">
+                      <div className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-blue-500 tracking-tighter">
+                        {stat.val}
+                      </div>
+                      <div className="space-y-1">
+                        <div className="text-white text-lg md:text-xl font-headline tracking-wide uppercase">{stat.label}</div>
+                        <p className="text-white/40 text-xs md:text-sm font-body">{stat.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Platform Highlights */}
+                <div className="space-y-10">
+                  <div className="space-y-4">
+                    <h2 className="font-display text-3xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-purple-400">Why Dehradun <br />Trusts BookNGlow</h2>
+                    <div className="h-1 w-16 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full" />
+                  </div>
+
+                  <div className="space-y-8">
+                    {[
+                      { icon: <Award className="h-6 w-6 text-pink-400" />, title: "Curated Selection", text: "Only salons with 4-star+ ratings and top-tier hygiene are listed." },
+                      { icon: <Zap className="h-6 w-6 text-blue-400" />, title: "Instant Confirmation", text: "No more waiting for calls. Real-time slot booking." },
+                      { icon: <Gift className="h-6 w-6 text-purple-400" />, title: "Glow Rewards", text: "Earn points on every booking at Dehradun’s top boutiques." }
+                    ].map((item, i) => (
+                      <div key={i} className="flex gap-4 md:gap-6 group">
+                        <div className="flex-shrink-0 p-3 rounded-2xl bg-white/5 border border-white/10 group-hover:scale-110 group-hover:bg-white/10 transition-all">
+                          {item.icon}
+                        </div>
+                        <div className="space-y-1">
+                          <h4 className="text-lg md:text-xl font-headline text-white tracking-wide">{item.title}</h4>
+                          <p className="text-white/50 text-sm md:text-base leading-relaxed">{item.text}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="pt-6 border-t border-white/10 flex items-center justify-center lg:justify-start gap-3">
+                    <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+                    <span className="text-white/40 text-xs md:text-sm font-body italic">
+                      Trusted by top stylists at Rajpur Road.
+                    </span>
+                  </div>
+                </div>
+
+              </div>
             </div>
           </div>
         </section>

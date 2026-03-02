@@ -101,12 +101,6 @@ export function AISearchDialog() {
           </ScrollArea>
         </div>
       </DialogContent>
-      <style jsx global>{`
-        @keyframes loading {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(300%); }
-        }
-      `}</style>
     </Dialog>
   )
 }

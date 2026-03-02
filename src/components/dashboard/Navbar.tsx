@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { Search, MapPin, ChevronDown, Menu, HelpCircle, Store, Sparkles } from 'lucide-react'
+import { Search, MapPin, ChevronDown, Menu, HelpCircle, Store, Sparkles, Info } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -68,6 +68,12 @@ export function Navbar() {
                   </DropdownMenu>
                 </div>
                 <div className="h-px bg-white/10 my-2" />
+                <Link href="/" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
+                  <Store className="h-5 w-5" /> Home
+                </Link>
+                <Link href="#about-us" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
+                  <Sparkles className="h-5 w-5 text-pink-500" /> About Us ✨
+                </Link>
                 <Link href="/salons" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
                   <Store className="h-5 w-5" /> Salons
                 </Link>
@@ -98,14 +104,25 @@ export function Navbar() {
 
         {/* Navigation Links (Desktop) */}
         <div className="hidden lg:flex items-center gap-8 font-body text-lg">
-          <Link href="/salons" className="text-white/80 hover:text-white transition-colors">
+          <Link href="/" className="text-white/80 hover:text-white transition-colors relative group">
+            Home
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 group-hover:w-full shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
+          </Link>
+          <Link href="#about-us" className="text-white/80 hover:text-white transition-colors relative group">
+            About Us
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 group-hover:w-full shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
+          </Link>
+          <Link href="/salons" className="text-white/80 hover:text-white transition-colors relative group">
             Salons
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 group-hover:w-full shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
           </Link>
-          <Link href="/offers" className="text-white/80 hover:text-white transition-colors">
+          <Link href="/offers" className="text-white/80 hover:text-white transition-colors relative group">
             Offers
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 group-hover:w-full shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
           </Link>
-          <Link href="/help" className="text-white/80 hover:text-white transition-colors">
+          <Link href="/help" className="text-white/80 hover:text-white transition-colors relative group">
             Help
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 group-hover:w-full shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
           </Link>
         </div>
 
