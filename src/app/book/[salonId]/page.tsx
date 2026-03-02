@@ -14,7 +14,9 @@ import {
   Loader2,
   Sparkles,
   MapPin,
-  Star
+  Star,
+  CheckCircle,
+  CalendarCheck
 } from 'lucide-react';
 import { format, addDays, isSameDay } from 'date-fns';
 import { 
@@ -40,10 +42,15 @@ import { FirestorePermissionError } from '@/firebase/errors';
 const TIME_SLOTS = [
   "10:00 AM",
   "11:00 AM",
+  "12:00 PM",
   "01:00 PM",
+  "02:00 PM",
   "03:00 PM",
+  "04:00 PM",
   "05:00 PM",
-  "07:00 PM"
+  "06:00 PM",
+  "07:00 PM",
+  "08:00 PM"
 ];
 
 export default function BookingPage() {
@@ -56,6 +63,7 @@ export default function BookingPage() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
 
   // Generate next 7 days
@@ -118,14 +126,8 @@ export default function BookingPage() {
         throw e;
       });
 
-      toast({
-        title: "Glow Confirmed! ✨",
-        description: `Your appointment at ${salon?.name || 'Velvet Grooming'} is secured for ${format(selectedDate, 'MMM do')} at ${selectedSlot}.`,
-      });
-      
       setIsConfirmOpen(false);
-      // Redirect to a hypothetical dashboard or home
-      router.push('/');
+      setIsSuccessOpen(true);
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -285,7 +287,7 @@ export default function BookingPage() {
         <DialogContent className="bg-slate-900 border-white/10 text-white rounded-[2.5rem] p-8 md:p-10">
           <DialogHeader className="space-y-4">
             <div className="bg-purple-500/20 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-2">
-              <CheckCircle2 className="h-8 w-8 text-purple-400" />
+              <Clock className="h-8 w-8 text-purple-400" />
             </div>
             <DialogTitle className="font-headline text-3xl text-center tracking-wide">Confirm Your Glow</DialogTitle>
             <DialogDescription className="text-white/60 text-center text-lg">
@@ -323,6 +325,51 @@ export default function BookingPage() {
               className="rounded-full h-12 bg-purple-600 hover:bg-purple-700 text-white px-8 font-bold border-none"
             >
               {isBooking ? <Loader2 className="h-4 w-4 animate-spin" /> : "Confirm Booking"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Success Modal */}
+      <Dialog open={isSuccessOpen} onOpenChange={setIsSuccessOpen}>
+        <DialogContent className="bg-[#020617] border-purple-500/20 text-white rounded-[2.5rem] p-8 md:p-12 text-center max-w-md">
+          <DialogHeader className="space-y-6">
+            <div className="mx-auto bg-emerald-500/20 w-24 h-24 rounded-full flex items-center justify-center animate-bounce shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+              <CheckCircle className="h-12 w-12 text-emerald-400" />
+            </div>
+            <div className="space-y-2">
+              <DialogTitle className="font-headline text-4xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-400">
+                Glow Confirmed!
+              </DialogTitle>
+              <DialogDescription className="text-white/60 text-lg">
+                Your appointment at <span className="text-white font-bold">{salon?.name}</span> is secured.
+              </DialogDescription>
+            </div>
+          </DialogHeader>
+
+          <div className="mt-8 space-y-4">
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4">
+              <div className="bg-purple-500/20 p-3 rounded-xl">
+                <CalendarCheck className="h-6 w-6 text-purple-400" />
+              </div>
+              <div className="text-left">
+                <p className="text-white/40 text-xs uppercase tracking-widest font-bold">Appointment</p>
+                <p className="font-bold text-sm md:text-base">
+                  {format(selectedDate, 'MMM do')} • {selectedSlot}
+                </p>
+              </div>
+            </div>
+            <p className="text-white/30 text-xs italic">
+              A confirmation has been sent to your email.
+            </p>
+          </div>
+          
+          <DialogFooter className="mt-8">
+            <Button 
+              onClick={() => router.push('/')}
+              className="w-full h-14 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-[1.02] transition-all font-headline text-lg border-none"
+            >
+              Back to Dashboard
             </Button>
           </DialogFooter>
         </DialogContent>
