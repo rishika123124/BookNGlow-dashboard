@@ -133,7 +133,7 @@ export default function FemaleSalonsPage() {
         <div className="container mx-auto px-4 py-12 md:py-20 space-y-16">
           <div className="text-center space-y-4 max-w-4xl mx-auto">
             <h1 className="font-display text-4xl md:text-7xl text-[#333333] drop-shadow-sm leading-tight">
-              Beauty & Spa Therapies for Women
+              Refined Elegance & Styling for Women
             </h1>
             <p className="text-[#333333]/60 text-lg md:text-xl max-w-2xl mx-auto font-light tracking-wide italic">
               Explore the most loved beauty and styling studios across Dehradun.
