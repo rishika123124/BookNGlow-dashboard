@@ -37,6 +37,33 @@ const FEMALE_SALONS = [
     startingPrice: "₹599",
     tags: ["Skin Care", "Massage"],
     img: PlaceHolderImages.find(img => img.id === 'salon-serene')?.imageUrl || "https://picsum.photos/seed/serene/600/400"
+  },
+  {
+    name: "Glow Up Studio",
+    area: "Rajpur Road",
+    rating: "4.6",
+    price: "Average",
+    startingPrice: "₹499",
+    tags: ["Facials", "Haircut"],
+    img: PlaceHolderImages.find(img => img.id === 'salon-mirror')?.imageUrl || "https://picsum.photos/seed/glow/600/400"
+  },
+  {
+    name: "The Beauty Hub",
+    area: "Ballupur",
+    rating: "4.5",
+    price: "Average",
+    startingPrice: "₹399",
+    tags: ["Waxing", "Threading"],
+    img: PlaceHolderImages.find(img => img.id === 'category-female')?.imageUrl || "https://picsum.photos/seed/beautyhub/600/400"
+  },
+  {
+    name: "Elegance Salon",
+    area: "Jakhan",
+    rating: "4.8",
+    price: "Average",
+    startingPrice: "₹799",
+    tags: ["Manicure", "Pedicure"],
+    img: PlaceHolderImages.find(img => img.id === 'salon-lush')?.imageUrl || "https://picsum.photos/seed/elegance/600/400"
   }
 ];
 
@@ -44,6 +71,13 @@ export default function FemaleSalonsPage() {
   const [location, setLocation] = useState('all');
   const [rating, setRating] = useState('all');
   const [price, setPrice] = useState('all');
+
+  const filteredSalons = FEMALE_SALONS.filter(salon => {
+    if (location !== 'all' && salon.area !== location) return false;
+    if (rating !== 'all' && parseFloat(salon.rating) < parseFloat(rating)) return false;
+    if (price !== 'all' && salon.price !== price) return false;
+    return true;
+  });
 
   return (
     <div className="min-h-screen bg-[#C7B1A6] text-[#333333] selection:bg-[#BCA396]/30 font-body relative overflow-hidden">
@@ -111,7 +145,7 @@ export default function FemaleSalonsPage() {
 
           {/* Salon Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-            {FEMALE_SALONS.map((salon, i) => (
+            {filteredSalons.map((salon, i) => (
               <div 
                 key={i} 
                 className="group relative rounded-[2.5rem] overflow-hidden bg-white/20 border border-white/30 backdrop-blur-lg shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:scale-[1.02] transition-all duration-500 hover:shadow-[0_20px_50px_rgba(199,177,166,0.3)]"
