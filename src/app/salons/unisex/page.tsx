@@ -63,11 +63,12 @@ export default function UnisexSalonsPage() {
 
   return (
     <div className="min-h-screen bg-[#F1F5F9] text-[#333333] selection:bg-purple-200/50 font-body relative overflow-hidden">
-      {/* Background Fusion Mesh Glows - Light Mix of Pink, Gray, and Purple */}
+      {/* Background Fusion Mesh Glows - Light Mix of Pink, Gray, Purple, and Blue */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#FDF2F8_0%,_#F1F5F9_50%,_#F3E8FF_100%)] opacity-70" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#FDF2F8_0%,_#F1F5F9_40%,_#E0F2FE_70%,_#F3E8FF_100%)] opacity-80" />
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-pink-100/30 rounded-full blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-100/30 rounded-full blur-[120px]" />
+        <div className="absolute top-[20%] right-[-5%] w-[40%] h-[40%] bg-blue-100/25 rounded-full blur-[100px]" />
       </div>
 
       <Navbar />
