@@ -1,0 +1,170 @@
+
+"use client"
+
+import React from 'react'
+import { Navbar } from '@/components/dashboard/Navbar'
+import { Footer } from '@/components/dashboard/Footer'
+import { Input } from '@/components/ui/input'
+import { Search, Calendar, CreditCard, Store, User, MessageCircle, PhoneCall, Sparkles } from 'lucide-react'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import { Button } from '@/components/ui/button'
+
+export default function HelpPage() {
+  const categories = [
+    {
+      title: 'Booking Issues',
+      desc: 'Trouble booking a salon in Dehradun? Click here.',
+      icon: <Calendar className="h-8 w-8 text-blue-400" />,
+      color: 'border-blue-500/30'
+    },
+    {
+      title: 'Payments & Refunds',
+      desc: 'Safe transactions and easy money-back guide.',
+      icon: <CreditCard className="h-8 w-8 text-pink-400" />,
+      color: 'border-pink-500/30'
+    },
+    {
+      title: 'Salon Partners',
+      desc: 'Are you a salon owner? Get help with your listing.',
+      icon: <Store className="h-8 w-8 text-purple-400" />,
+      color: 'border-purple-500/30'
+    },
+    {
+      title: 'Account Settings',
+      desc: 'Manage your profile and favorites.',
+      icon: <User className="h-8 w-8 text-indigo-400" />,
+      color: 'border-indigo-500/30'
+    }
+  ]
+
+  const faqs = [
+    {
+      q: 'How do I book a premium salon on Rajpur Road?',
+      a: 'Simply use our interactive map or salon grid on the homepage. Filter by #RajpurRoad, select your preferred salon, and choose an available slot. You will receive an instant confirmation via SMS and email.'
+    },
+    {
+      q: 'Is there a booking fee?',
+      a: 'BookNGlow provides a seamless platform for discovery at no extra cost to our users. You only pay for the services you avail at the salon.'
+    },
+    {
+      q: 'Can I reschedule my appointment?',
+      a: 'Yes, you can reschedule your appointment up to 2 hours before the scheduled time through your Account Dashboard. Changes are subject to availability at the selected salon.'
+    }
+  ]
+
+  return (
+    <div className="min-h-screen bg-background selection:bg-primary/30 font-body scroll-smooth">
+      <Navbar />
+      
+      <main>
+        {/* 1. Page Header (The Search) */}
+        <section className="relative py-20 md:py-32 bg-gradient-to-br from-purple-900 via-slate-950 to-blue-900 overflow-hidden">
+          <div className="absolute inset-0 opacity-20 pointer-events-none">
+            <div className="absolute top-0 -left-1/4 w-full h-full bg-purple-600/30 rounded-full blur-[120px]" />
+            <div className="absolute bottom-0 -right-1/4 w-full h-full bg-blue-600/30 rounded-full blur-[120px]" />
+          </div>
+
+          <div className="container mx-auto px-4 relative z-10 text-center space-y-8">
+            <h1 className="font-headline text-4xl md:text-6xl text-white tracking-tight">
+              How can we help you, <span className="text-accent italic">Doon?</span>
+            </h1>
+            <div className="max-w-2xl mx-auto relative group">
+              <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40 group-focus-within:text-white transition-colors" />
+              <Input 
+                placeholder="Search for issues (e.g., booking, refund, salons)..." 
+                className="h-14 md:h-18 rounded-full bg-white/10 border-white/20 pl-16 text-white placeholder:text-white/30 focus:ring-purple-500 focus:bg-white/15 transition-all text-sm md:text-lg backdrop-blur-md shadow-[0_0_30px_rgba(168,85,247,0.2)]"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* 2. Help Categories (The Grid) */}
+        <section className="container mx-auto px-4 -mt-10 md:-mt-16 relative z-20">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {categories.map((cat, i) => (
+              <div 
+                key={i}
+                className={`group p-8 rounded-[2rem] bg-white/5 backdrop-blur-2xl border ${cat.color} hover:bg-white/10 hover:-translate-y-2 transition-all duration-500 cursor-pointer shadow-2xl`}
+              >
+                <div className="mb-6 p-4 rounded-2xl bg-white/5 border border-white/10 w-fit group-hover:scale-110 transition-transform">
+                  {cat.icon}
+                </div>
+                <h3 className="font-headline text-xl text-white mb-2">{cat.title}</h3>
+                <p className="text-white/40 text-sm leading-relaxed">{cat.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* 3. Top FAQs (Accordions) */}
+        <section className="container mx-auto px-4 py-24 max-w-4xl">
+          <div className="text-center space-y-4 mb-16">
+            <h2 className="font-headline text-3xl md:text-5xl text-foreground">Top Frequently Asked Questions</h2>
+            <div className="h-1 w-20 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full" />
+          </div>
+
+          <Accordion type="single" collapsible className="space-y-4">
+            {faqs.map((faq, i) => (
+              <AccordionItem 
+                key={i} 
+                value={`item-${i}`}
+                className="rounded-3xl border border-gray-100 bg-white/50 backdrop-blur-sm px-6 md:px-8 data-[state=open]:border-pink-500/50 data-[state=open]:bg-white transition-all shadow-sm"
+              >
+                <AccordionTrigger className="font-headline text-lg md:text-xl text-left hover:no-underline py-6">
+                  {faq.q}
+                </AccordionTrigger>
+                <AccordionContent className="font-body text-sm md:text-base text-muted-foreground pb-8 leading-relaxed">
+                  {faq.a}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </section>
+
+        {/* 4. 'Still Need Help?' (Floating Support) */}
+        <section className="container mx-auto px-4 pb-24">
+          <div className="rounded-[3rem] bg-slate-950 p-12 md:p-20 relative overflow-hidden text-center space-y-12 shadow-[0_0_80px_rgba(124,58,237,0.1)]">
+            <div className="absolute inset-0 opacity-10 pointer-events-none">
+              <div className="absolute top-0 left-0 w-full h-full bg-emerald-500/20 blur-[100px]" />
+            </div>
+
+            <div className="space-y-4 relative z-10">
+              <h2 className="font-headline text-3xl md:text-5xl text-white">Still Need Help?</h2>
+              <p className="text-white/40 text-sm md:text-lg max-w-xl mx-auto">
+                Our luxury concierge is available 24/7 to assist with your grooming needs in the Doon Valley.
+              </p>
+            </div>
+
+            <div className="flex flex-col md:flex-row items-center justify-center gap-6 relative z-10">
+              <Button className="h-16 px-10 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-headline text-xl gap-3 shadow-[0_0_30px_rgba(16,185,129,0.4)] animate-pulse">
+                <MessageCircle className="h-6 w-6" />
+                WhatsApp Support
+              </Button>
+              <div className="flex items-center gap-4 p-4 rounded-full bg-white/5 border border-white/10 px-8">
+                <div className="bg-blue-500/20 p-2 rounded-full">
+                  <PhoneCall className="h-5 w-5 text-blue-400" />
+                </div>
+                <div className="text-left">
+                  <span className="text-[10px] uppercase tracking-widest text-white/30 font-bold">Local Call</span>
+                  <p className="text-white font-mono text-lg">+91-135-BOOK-GLOW</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center gap-2 pt-8 opacity-40">
+              <Sparkles className="h-4 w-4 text-accent" />
+              <span className="text-xs text-white uppercase tracking-[0.2em]">Dehradun HQ Verified</span>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </div>
+  )
+}
