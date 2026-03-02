@@ -8,10 +8,12 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Star, MapPin, Scissors } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const MALE_SALONS = [
   {
+    id: "velvet-grooming",
     name: "Velvet Grooming",
     area: "Rajpur Road",
     rating: "5.0",
@@ -21,6 +23,7 @@ const MALE_SALONS = [
     img: PlaceHolderImages.find(img => img.id === 'salon-velvet')?.imageUrl || "https://picsum.photos/seed/velvet/600/400"
   },
   {
+    id: "classic-cut-barbers",
     name: "Classic Cut Barbers",
     area: "Ballupur",
     rating: "4.8",
@@ -30,6 +33,7 @@ const MALE_SALONS = [
     img: PlaceHolderImages.find(img => img.id === 'salon-classic')?.imageUrl || "https://picsum.photos/seed/classic/600/400"
   },
   {
+    id: "gents-club",
     name: "The Gent's Club",
     area: "Rajpur Road",
     rating: "4.7",
@@ -39,6 +43,7 @@ const MALE_SALONS = [
     img: PlaceHolderImages.find(img => img.id === 'salon-gents')?.imageUrl || "https://picsum.photos/seed/gents/600/400"
   },
   {
+    id: "doon-barbershop",
     name: "The Doon Barbershop",
     area: "Jakhan",
     rating: "4.7",
@@ -46,24 +51,6 @@ const MALE_SALONS = [
     startingPrice: "₹299",
     tags: ["Basic Trim", "Quick Style"],
     img: PlaceHolderImages.find(img => img.id === 'category-male')?.imageUrl || "https://picsum.photos/seed/male/600/400"
-  },
-  {
-    name: "The Barber's Den",
-    area: "Rajpur Road",
-    rating: "4.6",
-    price: "Average",
-    startingPrice: "₹480",
-    tags: ["Premium Shave", "Face Massage"],
-    img: PlaceHolderImages.find(img => img.id === 'salon-gents')?.imageUrl || "https://picsum.photos/seed/den/600/400"
-  },
-  {
-    name: "Elite Cut",
-    area: "Ballupur",
-    rating: "4.5",
-    price: "Average",
-    startingPrice: "₹420",
-    tags: ["Modern Fade", "Hair Treatment"],
-    img: PlaceHolderImages.find(img => img.id === 'salon-classic')?.imageUrl || "https://picsum.photos/seed/elite/600/400"
   }
 ];
 
@@ -183,8 +170,8 @@ export default function MaleSalonsPage() {
                   </div>
 
                   <div className="pt-2">
-                    <Button className="w-full h-12 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-headline text-lg transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.4)] border-none">
-                      Book Your Slot
+                    <Button asChild className="w-full h-12 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-headline text-lg transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.4)] border-none">
+                      <Link href={`/book/${salon.id}`}>Book Your Slot</Link>
                     </Button>
                   </div>
                 </div>

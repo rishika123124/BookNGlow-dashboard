@@ -8,10 +8,12 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Star, MapPin, Sparkles } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const UNISEX_SALONS = [
   {
+    id: "doon-mirror",
     name: "The Doon Mirror",
     area: "Rajpur Road",
     rating: "4.8",
@@ -21,6 +23,7 @@ const UNISEX_SALONS = [
     img: PlaceHolderImages.find(img => img.id === 'salon-mirror')?.imageUrl || "https://picsum.photos/seed/mirror/600/400"
   },
   {
+    id: "universal-styles",
     name: "Universal Styles",
     area: "Ballupur",
     rating: "4.7",
@@ -28,33 +31,6 @@ const UNISEX_SALONS = [
     startingPrice: "₹249",
     tags: ["Family Care", "Basic Cut"],
     img: PlaceHolderImages.find(img => img.id === 'category-unisex')?.imageUrl || "https://picsum.photos/seed/unisex/600/400"
-  },
-  {
-    name: "The Lush Studio",
-    area: "Jakhan",
-    rating: "4.7",
-    price: "High",
-    startingPrice: "₹1,099",
-    tags: ["Advanced Spa", "Coloring"],
-    img: PlaceHolderImages.find(img => img.id === 'salon-lush')?.imageUrl || "https://picsum.photos/seed/lush/600/400"
-  },
-  {
-    name: "Glow & Co. Unisex",
-    area: "Rajpur Road",
-    rating: "4.6",
-    price: "Average",
-    startingPrice: "₹599",
-    tags: ["Modern Haircut", "Skin Therapy"],
-    img: PlaceHolderImages.find(img => img.id === 'category-unisex')?.imageUrl || "https://picsum.photos/seed/glowco/600/400"
-  },
-  {
-    name: "The Urban Retreat",
-    area: "Clement Town",
-    rating: "4.8",
-    price: "Average",
-    startingPrice: "₹850",
-    tags: ["Organic Spa", "Reflexology"],
-    img: PlaceHolderImages.find(img => img.id === 'salon-serene')?.imageUrl || "https://picsum.photos/seed/urbanretreat/600/400"
   }
 ];
 
@@ -72,7 +48,6 @@ export default function UnisexSalonsPage() {
 
   return (
     <div className="min-h-screen bg-[#A6969A] text-white selection:bg-white/30 font-body relative overflow-hidden">
-      {/* Background Radial Gradient for Depth */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#B8A9AD_0%,_#A6969A_100%)]" />
       </div>
@@ -80,7 +55,6 @@ export default function UnisexSalonsPage() {
       <Navbar />
       
       <main className="relative z-10">
-        {/* Glass Filter Bar */}
         <div className="sticky top-20 md:top-24 z-40 w-full bg-white/10 backdrop-blur-md border-b border-white/10 py-4 px-4 shadow-sm">
           <div className="container mx-auto flex flex-col md:flex-row gap-4 items-center justify-between">
              <div className="flex flex-wrap gap-4 items-center w-full md:w-auto">
@@ -93,7 +67,6 @@ export default function UnisexSalonsPage() {
                     <SelectItem value="Rajpur Road">Rajpur Road</SelectItem>
                     <SelectItem value="Jakhan">Jakhan</SelectItem>
                     <SelectItem value="Ballupur">Ballupur</SelectItem>
-                    <SelectItem value="Clement Town">Clement Town</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -176,8 +149,8 @@ export default function UnisexSalonsPage() {
                   </div>
 
                   <div className="pt-4">
-                    <Button className="w-full h-14 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-headline text-xl transition-all duration-300 shadow-[0_10px_20px_rgba(139,92,246,0.2)] hover:shadow-[0_15px_30px_rgba(139,92,246,0.3)] border-none">
-                      Explore Salons
+                    <Button asChild className="w-full h-14 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-headline text-xl transition-all duration-300 shadow-[0_10px_20px_rgba(139,92,246,0.2)] hover:shadow-[0_15px_30px_rgba(139,92,246,0.3)] border-none">
+                      <Link href={`/book/${salon.id}`}>Explore Salons</Link>
                     </Button>
                   </div>
                 </div>

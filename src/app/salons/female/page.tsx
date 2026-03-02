@@ -8,10 +8,12 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Star, MapPin, Heart } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const FEMALE_SALONS = [
   {
+    id: "lush-studio",
     name: "The Lush Studio",
     area: "Jakhan",
     rating: "4.7",
@@ -21,6 +23,7 @@ const FEMALE_SALONS = [
     img: PlaceHolderImages.find(img => img.id === 'salon-lush')?.imageUrl || "https://picsum.photos/seed/lush/600/400"
   },
   {
+    id: "serene-day-spa",
     name: "Serene Day Spa",
     area: "Rajpur Road",
     rating: "4.9",
@@ -28,42 +31,6 @@ const FEMALE_SALONS = [
     startingPrice: "₹599",
     tags: ["Skin Care", "Massage"],
     img: PlaceHolderImages.find(img => img.id === 'salon-serene')?.imageUrl || "https://picsum.photos/seed/serene/600/400"
-  },
-  {
-    name: "Glow Up Studio",
-    area: "Rajpur Road",
-    rating: "4.6",
-    price: "Average",
-    startingPrice: "₹499",
-    tags: ["Facials", "Haircut"],
-    img: PlaceHolderImages.find(img => img.id === 'salon-mirror')?.imageUrl || "https://picsum.photos/seed/glow/600/400"
-  },
-  {
-    name: "The Beauty Hub",
-    area: "Ballupur",
-    rating: "4.5",
-    price: "Average",
-    startingPrice: "₹399",
-    tags: ["Waxing", "Threading"],
-    img: PlaceHolderImages.find(img => img.id === 'category-female')?.imageUrl || "https://picsum.photos/seed/beautyhub/600/400"
-  },
-  {
-    name: "Elegance Salon",
-    area: "Jakhan",
-    rating: "4.8",
-    price: "Average",
-    startingPrice: "₹799",
-    tags: ["Manicure", "Pedicure"],
-    img: PlaceHolderImages.find(img => img.id === 'salon-lush')?.imageUrl || "https://picsum.photos/seed/elegance/600/400"
-  },
-  {
-    name: "Divine Beauty Lounge",
-    area: "Rajpur Road",
-    rating: "4.4",
-    price: "Average",
-    startingPrice: "₹550",
-    tags: ["Hair Spa", "Bridal"],
-    img: PlaceHolderImages.find(img => img.id === 'category-female')?.imageUrl || "https://picsum.photos/seed/divine/600/400"
   }
 ];
 
@@ -188,30 +155,14 @@ export default function FemaleSalonsPage() {
                   </div>
 
                   <div className="pt-4">
-                    <Button className="w-full h-14 rounded-full bg-[#DB2777] hover:bg-[#C21E66] text-white font-headline text-xl transition-all duration-300 shadow-[0_10px_20px_rgba(219,39,119,0.2)] hover:shadow-[0_15px_30px_rgba(219,39,119,0.3)] border-none">
-                      Book Appointment
+                    <Button asChild className="w-full h-14 rounded-full bg-[#DB2777] hover:bg-[#C21E66] text-white font-headline text-xl transition-all duration-300 shadow-[0_10px_20px_rgba(219,39,119,0.2)] hover:shadow-[0_15px_30px_rgba(219,39,119,0.3)] border-none">
+                      <Link href={`/book/${salon.id}`}>Book Appointment</Link>
                     </Button>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-
-        <div className="fixed bottom-0 right-0 p-10 opacity-[0.03] pointer-events-none select-none z-0">
-           <svg 
-             viewBox="0 0 100 100" 
-             fill="none" 
-             stroke="currentColor" 
-             strokeWidth="0.5" 
-             className="w-64 h-64 text-[#333333]"
-           >
-             <path d="M50 10C50 10 30 40 30 60C30 75 40 85 50 85C60 85 70 75 70 60C70 40 50 10 50 10Z" />
-             <path d="M50 20C50 20 35 45 35 60C35 70 42 78 50 78C58 78 65 70 65 60C65 45 50 20 50 20Z" />
-             <path d="M50 10L50 85" />
-             <path d="M30 60C40 60 50 70 50 85" />
-             <path d="M70 60C60 60 50 70 50 85" />
-           </svg>
         </div>
       </main>
 
