@@ -1,3 +1,28 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "salon-hero",
+      "description": "Luxury salon interior with warm lighting",
+      "imageUrl": "https://images.unsplash.com/photo-1662289031972-df424bb541bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxsdXh1cnklMjBzYWxvbnxlbnwwfHx8fDE3NzI0MzU0NTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "luxury salon"
+    },
+    {
+      "id": "salon-1",
+      "description": "High-end hair studio",
+      "imageUrl": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxiZWF1dHklMjBzYWxvbnxlbnwwfHx8fDE3NzI0MzU0NTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "beauty salon"
+    },
+    {
+      "id": "salon-2",
+      "description": "Premium spa massage room",
+      "imageUrl": "https://images.unsplash.com/photo-1529290130-4ca3753253ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxsdXh1cnklMjBzcGF8ZW58MHx8fHwxNzcyNDM1NDU1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "luxury spa"
+    },
+    {
+      "id": "salon-3",
+      "description": "Chic nail art studio",
+      "imageUrl": "https://images.unsplash.com/photo-1658492055212-e1acbccfca5a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxuYWlsJTIwc2Fsb258ZW58MHx8fHwxNzcyNDM1NDU1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "nail salon"
+    }
+  ]
 }
