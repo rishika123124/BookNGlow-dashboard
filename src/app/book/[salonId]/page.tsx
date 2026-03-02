@@ -6,19 +6,19 @@ import { Navbar } from '@/components/dashboard/Navbar';
 import { Footer } from '@/components/dashboard/Footer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Calendar } from '@/components/ui/calendar';
 import { 
-  Calendar as CalendarIcon, 
   Clock, 
   ChevronLeft, 
-  CheckCircle2, 
   Loader2,
   Sparkles,
   MapPin,
   Star,
   CheckCircle,
-  CalendarCheck
+  CalendarCheck,
+  Calendar as CalendarIcon
 } from 'lucide-react';
-import { format, addDays, isSameDay } from 'date-fns';
+import { format, isBefore, startOfDay } from 'date-fns';
 import { 
   useAuth, 
   useFirestore, 
@@ -38,19 +38,13 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
+import { cn } from '@/lib/utils';
 
 const TIME_SLOTS = [
-  "10:00 AM",
-  "11:00 AM",
-  "12:00 PM",
-  "01:00 PM",
-  "02:00 PM",
-  "03:00 PM",
-  "04:00 PM",
-  "05:00 PM",
-  "06:00 PM",
-  "07:00 PM",
-  "08:00 PM"
+  "10:00 AM", "11:00 AM", "12:00 PM",
+  "01:00 PM", "02:00 PM", "03:00 PM",
+  "04:00 PM", "05:00 PM", "06:00 PM",
+  "07:00 PM", "08:00 PM"
 ];
 
 export default function BookingPage() {
@@ -60,16 +54,11 @@ export default function BookingPage() {
   const { user } = useAuth();
   const db = useFirestore();
   
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
-
-  // Generate next 7 days
-  const dates = useMemo(() => {
-    return Array.from({ length: 7 }, (_, i) => addDays(new Date(), i));
-  }, []);
 
   // Fetch Salon Details
   const salonRef = useMemoFirebase(() => doc(db, 'salons', salonId as string), [db, salonId]);
@@ -77,7 +66,7 @@ export default function BookingPage() {
 
   // Fetch Bookings for the selected date and salon
   const bookingsQuery = useMemoFirebase(() => {
-    if (!db || !salonId) return null;
+    if (!db || !salonId || !selectedDate) return null;
     const dateStr = format(selectedDate, 'yyyy-MM-dd');
     return query(
       collection(db, 'bookings'),
@@ -103,6 +92,8 @@ export default function BookingPage() {
       router.push('/login');
       return;
     }
+
+    if (!selectedDate || !selectedSlot) return;
 
     setIsBooking(true);
     const bookingData = {
@@ -151,10 +142,10 @@ export default function BookingPage() {
     <div className="min-h-screen bg-[#020617] text-white font-body selection:bg-purple-500/30">
       <Navbar />
 
-      <main className="container mx-auto px-4 py-12 md:py-20 relative">
+      <main className="container mx-auto px-4 py-8 md:py-16 relative">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none" />
         
-        <div className="max-w-4xl mx-auto space-y-12 relative z-10">
+        <div className="max-w-6xl mx-auto space-y-8 relative z-10">
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
             <div className="space-y-4">
@@ -168,7 +159,7 @@ export default function BookingPage() {
               </Button>
               <div className="space-y-2">
                 <Badge className="bg-purple-600 text-white border-none px-3 py-1">PREMIUM EXPERIENCE</Badge>
-                <h1 className="font-headline text-4xl md:text-6xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-400">
+                <h1 className="font-headline text-4xl md:text-5xl lg:text-6xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-400">
                   {salon?.name || "Velvet Grooming"}
                 </h1>
                 <div className="flex items-center gap-4 text-white/60">
@@ -183,101 +174,116 @@ export default function BookingPage() {
                 </div>
               </div>
             </div>
-            <div className="hidden md:block">
-               <Sparkles className="h-12 w-12 text-purple-500/30 animate-pulse" />
-            </div>
           </div>
 
-          {/* Date Selection */}
-          <section className="space-y-6">
-            <div className="flex items-center gap-3">
-              <CalendarIcon className="h-5 w-5 text-purple-400" />
-              <h2 className="font-headline text-2xl tracking-wide">Select a Date</h2>
-            </div>
-            <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
-              {dates.map((date) => (
-                <button
-                  key={date.toISOString()}
-                  onClick={() => {
+          {/* Two-Column Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-8 items-start">
+            
+            {/* Left Column: Calendar */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-3">
+                <CalendarIcon className="h-5 w-5 text-purple-400" />
+                <h2 className="font-headline text-2xl tracking-wide">Select Date</h2>
+              </div>
+              <div className="bg-[#1E1E1E] border border-white/10 rounded-[2rem] p-6 shadow-2xl">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={(date) => {
                     setSelectedDate(date);
                     setSelectedSlot(null);
                   }}
-                  className={`flex-shrink-0 w-24 h-28 rounded-3xl border flex flex-col items-center justify-center transition-all duration-300 ${
-                    isSameDay(selectedDate, date)
-                      ? "bg-purple-600 border-purple-500 shadow-xl shadow-purple-500/30 scale-105"
-                      : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20"
-                  }`}
-                >
-                  <span className={`text-[10px] uppercase tracking-widest font-bold ${isSameDay(selectedDate, date) ? "text-white/70" : "text-white/40"}`}>
-                    {format(date, 'EEE')}
-                  </span>
-                  <span className="text-2xl font-bold mt-1">
-                    {format(date, 'd')}
-                  </span>
-                  <span className={`text-[10px] uppercase tracking-widest font-bold mt-1 ${isSameDay(selectedDate, date) ? "text-white/70" : "text-white/40"}`}>
-                    {format(date, 'MMM')}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </section>
-
-          {/* Time Selection */}
-          <section className="space-y-6">
-            <div className="flex items-center gap-3">
-              <Clock className="h-5 w-5 text-purple-400" />
-              <h2 className="font-headline text-2xl tracking-wide">Available Slots</h2>
-            </div>
-            
-            {bookingsLoading ? (
-              <div className="h-40 flex items-center justify-center bg-white/5 rounded-[2.5rem] border border-white/10">
-                <Loader2 className="h-8 w-8 text-purple-500 animate-spin" />
+                  disabled={(date) => isBefore(date, startOfDay(new Date()))}
+                  className="w-full"
+                  classNames={{
+                    day_selected: "bg-[#A78BFA] text-white hover:bg-[#A78BFA] hover:text-white focus:bg-[#A78BFA] focus:text-white shadow-[0_0_15px_rgba(167,139,250,0.5)]",
+                    day_today: "bg-white/5 text-purple-400 font-bold border border-purple-500/20",
+                    day: cn("h-10 w-10 p-0 font-normal aria-selected:opacity-100 hover:bg-white/10 rounded-xl transition-all"),
+                    head_cell: "text-white/40 font-bold uppercase text-[10px] tracking-widest pb-4",
+                  }}
+                />
               </div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                {TIME_SLOTS.map((slot) => {
-                  const isBooked = bookedSlots.includes(slot);
-                  const isSelected = selectedSlot === slot;
+              <p className="text-white/40 text-xs italic px-2">
+                * Past dates are disabled for your convenience.
+              </p>
+            </div>
 
-                  return (
-                    <button
-                      key={slot}
-                      disabled={isBooked}
-                      onClick={() => setSelectedSlot(slot)}
-                      className={`relative h-16 rounded-2xl border font-bold transition-all duration-300 ${
-                        isBooked
-                          ? "bg-white/5 border-white/5 text-white/20 cursor-not-allowed line-through"
-                          : isSelected
-                          ? "bg-purple-600 border-purple-500 shadow-lg shadow-purple-500/20 text-white"
-                          : "bg-transparent border-purple-500/30 text-purple-400 hover:bg-purple-500/10 hover:border-purple-500"
-                      }`}
-                    >
-                      {slot}
-                      {isBooked && (
-                        <span className="absolute -top-2 -right-2 bg-slate-800 text-[8px] px-2 py-0.5 rounded-full text-white/40 uppercase tracking-tighter">
-                          Booked
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
+            {/* Right Column: Slots */}
+            <div className="space-y-6 lg:min-h-[500px] flex flex-col">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Clock className="h-5 w-5 text-purple-400" />
+                  <h2 className="font-headline text-2xl tracking-wide">
+                    Available Slots
+                    {selectedDate && (
+                      <span className="text-sm font-body text-white/40 ml-3 lowercase">
+                        for {format(selectedDate, 'MMM do')}
+                      </span>
+                    )}
+                  </h2>
+                </div>
               </div>
-            )}
-          </section>
+              
+              <div className="flex-1 bg-white/5 border border-white/10 rounded-[2.5rem] p-6 md:p-8 space-y-8">
+                {bookingsLoading ? (
+                  <div className="h-64 flex items-center justify-center">
+                    <Loader2 className="h-8 w-8 text-purple-500 animate-spin" />
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {TIME_SLOTS.map((slot) => {
+                      const isBooked = bookedSlots.includes(slot);
+                      const isSelected = selectedSlot === slot;
 
-          {/* Final Action */}
-          <div className="pt-8 border-t border-white/10 flex flex-col items-center gap-6">
-            <p className="text-white/40 text-sm italic">
-              Experience the gold standard of grooming in Dehradun.
-            </p>
-            <Button 
-              disabled={!selectedSlot}
-              onClick={() => setIsConfirmOpen(true)}
-              className="w-full md:w-80 h-16 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-[1.02] transition-all text-xl font-headline shadow-2xl shadow-purple-500/30 border-none group"
-            >
-              Secure My Slot
-              <Sparkles className="ml-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
-            </Button>
+                      return (
+                        <button
+                          key={slot}
+                          disabled={isBooked}
+                          onClick={() => setSelectedSlot(slot)}
+                          className={cn(
+                            "relative h-14 md:h-16 rounded-2xl border font-bold transition-all duration-300 transform",
+                            isBooked
+                              ? "bg-white/5 border-white/5 text-white/20 cursor-not-allowed line-through"
+                              : isSelected
+                              ? "bg-[#A78BFA] border-[#A78BFA] shadow-[0_0_20px_rgba(167,139,250,0.3)] text-white scale-105 z-10"
+                              : "bg-transparent border-purple-500/30 text-purple-400 hover:bg-purple-500/10 hover:border-purple-500 hover:scale-[1.02]"
+                          )}
+                        >
+                          {slot}
+                          {isBooked && (
+                            <span className="absolute -top-2 -right-2 bg-slate-800 text-[8px] px-2 py-0.5 rounded-full text-white/40 uppercase tracking-tighter">
+                              Booked
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Final Action Hub */}
+                <div className="sticky bottom-0 pt-8 border-t border-white/10 bg-gradient-to-t from-[#020617] via-[#020617] to-transparent flex flex-col items-center gap-6 mt-auto pb-4">
+                  <div className="text-center">
+                    <p className="text-white/40 text-sm italic">
+                      Experience the gold standard of grooming.
+                    </p>
+                    {selectedSlot && (
+                      <p className="text-purple-400 font-bold text-sm mt-1 animate-in fade-in slide-in-from-bottom-1">
+                        Confirming: {format(selectedDate!, 'EEE, MMM do')} @ {selectedSlot}
+                      </p>
+                    )}
+                  </div>
+                  <Button 
+                    disabled={!selectedSlot}
+                    onClick={() => setIsConfirmOpen(true)}
+                    className="w-full md:w-80 h-14 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-[1.02] transition-all text-lg font-headline shadow-2xl shadow-purple-500/30 border-none group"
+                  >
+                    Confirm Slot
+                    <Sparkles className="ml-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </main>
@@ -298,7 +304,7 @@ export default function BookingPage() {
           <div className="bg-white/5 rounded-3xl p-6 space-y-4 border border-white/10 my-6">
             <div className="flex justify-between items-center text-sm">
               <span className="text-white/40 uppercase tracking-widest font-bold">Selected Date</span>
-              <span className="font-bold">{format(selectedDate, 'EEEE, MMMM do')}</span>
+              <span className="font-bold">{selectedDate ? format(selectedDate, 'EEEE, MMMM do') : ''}</span>
             </div>
             <div className="flex justify-between items-center text-sm">
               <span className="text-white/40 uppercase tracking-widest font-bold">Appointment Time</span>
@@ -355,7 +361,7 @@ export default function BookingPage() {
               <div className="text-left">
                 <p className="text-white/40 text-xs uppercase tracking-widest font-bold">Appointment</p>
                 <p className="font-bold text-sm md:text-base">
-                  {format(selectedDate, 'MMM do')} • {selectedSlot}
+                  {selectedDate ? format(selectedDate, 'MMM do') : ''} • {selectedSlot}
                 </p>
               </div>
             </div>
