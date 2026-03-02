@@ -19,20 +19,20 @@ export default function HelpPage() {
     {
       title: 'Booking Issues',
       desc: 'Facing trouble selecting a slot or salon in Dehradun? Learn how to book in 3 easy steps.',
-      icon: <Calendar className="h-8 w-8 text-blue-400" />,
-      color: 'border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.2)]'
+      icon: <Calendar className="h-8 w-8 text-cyan-400" />,
+      color: 'border-cyan-500/60 shadow-[0_0_30px_rgba(6,182,212,0.3)]'
     },
     {
       title: 'Cancel or Reschedule',
       desc: 'Plans changed? See how to easily cancel or move your appointment at no extra cost.',
-      icon: <RefreshCw className="h-8 w-8 text-pink-400" />,
-      color: 'border-pink-500/50 shadow-[0_0_20px_rgba(236,72,153,0.2)]'
+      icon: <RefreshCw className="h-8 w-8 text-rose-400" />,
+      color: 'border-rose-500/60 shadow-[0_0_30px_rgba(244,63,94,0.3)]'
     },
     {
       title: 'Locate Your Salon',
       desc: "Can't find the salon on the map? Get direct directions and contact details for your visit.",
-      icon: <MapPin className="h-8 w-8 text-purple-400" />,
-      color: 'border-purple-500/50 shadow-[0_0_20px_rgba(168,85,247,0.2)]'
+      icon: <MapPin className="h-8 w-8 text-violet-400" />,
+      color: 'border-violet-500/60 shadow-[0_0_30px_rgba(139,92,246,0.3)]'
     }
   ]
 
@@ -83,7 +83,7 @@ export default function HelpPage() {
             {categories.map((cat, i) => (
               <div 
                 key={i}
-                className={`group p-8 rounded-[2rem] bg-white/10 backdrop-blur-md border ${cat.color} hover:bg-white/15 hover:scale-105 transition-all duration-500 cursor-pointer shadow-2xl flex flex-col items-center text-center`}
+                className={`group p-8 rounded-[2rem] bg-white/10 backdrop-blur-md border ${cat.color} hover:bg-white/15 hover:scale-105 transition-all duration-500 cursor-pointer flex flex-col items-center text-center`}
               >
                 <div className="mb-6 p-4 rounded-2xl bg-white/5 border border-white/10 w-fit group-hover:scale-110 transition-transform">
                   {cat.icon}
