@@ -1,0 +1,242 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user of the BookNGlow platform, which can be either a customer or a salon owner.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the User entity."
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's email address, used for authentication and contact.",
+          "format": "email"
+        },
+        "role": {
+          "type": "string",
+          "description": "The role of the user within the platform, either 'customer' or 'salon'.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fullName": {
+          "type": "string",
+          "description": "The full name of the customer, only applicable if the user's role is 'customer'."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the user account was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the user account was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "role",
+        "createdAt"
+      ]
+    },
+    "Salon": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Salon",
+      "type": "object",
+      "description": "Represents a salon registered on the BookNGlow platform, managed by a salon owner.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Salon entity."
+        },
+        "ownerId": {
+          "type": "string",
+          "description": "Reference to the User who owns and manages this salon. (Relationship: User 1:1 Salon)"
+        },
+        "name": {
+          "type": "string",
+          "description": "The official name of the salon."
+        },
+        "localityId": {
+          "type": "string",
+          "description": "Reference to the Locality where the salon is physically located. (Relationship: Locality 1:N Salon)"
+        },
+        "contactEmail": {
+          "type": "string",
+          "description": "The primary contact email address for the salon.",
+          "format": "email"
+        },
+        "categoryTier": {
+          "type": "string",
+          "description": "The category or tier level of the salon (e.g., Standard, Premium, Elite)."
+        },
+        "averagePriceRange": {
+          "type": "number",
+          "description": "An indicator of the average price range for services offered by the salon."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the salon record was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the salon record was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "name",
+        "localityId",
+        "contactEmail",
+        "categoryTier",
+        "averagePriceRange",
+        "createdAt"
+      ]
+    },
+    "ServiceCategory": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ServiceCategory",
+      "type": "object",
+      "description": "Defines the different categories of services available at salons (e.g., Hair, Skin, Nails).",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the ServiceCategory entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the service category (e.g., 'Hair', 'Skin', 'Nails')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description of the service category."
+        },
+        "iconUrl": {
+          "type": "string",
+          "description": "URL to an icon image representing this service category.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Locality": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Locality",
+      "type": "object",
+      "description": "Represents a specific geographical locality within Dehradun where salons can be found.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Locality entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the locality (e.g., 'Rajpur Road', 'Jakhan')."
+        },
+        "city": {
+          "type": "string",
+          "description": "The city to which this locality belongs (e.g., 'Dehradun')."
+        },
+        "state": {
+          "type": "string",
+          "description": "The state to which this locality belongs."
+        },
+        "country": {
+          "type": "string",
+          "description": "The country to which this locality belongs."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "city"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores individual user profiles, including their role (customer or salon owner). This collection is private, with documents accessible only by the respective user's UID. Includes denormalized 'role' field for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique Firebase Authentication UID of the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/salons/{salonId}",
+        "definition": {
+          "entityName": "Salon",
+          "schema": {
+            "$ref": "#/backend/entities/Salon"
+          },
+          "description": "Stores public profiles and details for each salon registered on the platform. These documents are publicly readable for exploration but writeable only by the salon's registered owner. Includes denormalized 'ownerId' for authorization independence.",
+          "params": [
+            {
+              "name": "salonId",
+              "description": "The unique identifier for the salon."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/service_categories/{serviceCategoryId}",
+        "definition": {
+          "entityName": "ServiceCategory",
+          "schema": {
+            "$ref": "#/backend/entities/ServiceCategory"
+          },
+          "description": "A global collection storing static data for various service categories (e.g., Hair, Skin). This data is read-only for all users and supports efficient listing for navigation.",
+          "params": [
+            {
+              "name": "serviceCategoryId",
+              "description": "The unique identifier for a service category."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/localities/{localityId}",
+        "definition": {
+          "entityName": "Locality",
+          "schema": {
+            "$ref": "#/backend/entities/Locality"
+          },
+          "description": "A global collection storing static data for predefined geographical localities in Dehradun. This data is read-only for all users and supports efficient listing for location filtering.",
+          "params": [
+            {
+              "name": "localityId",
+              "description": "The unique identifier for a locality."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The proposed Firestore structure prioritizes robust security, scalability, and debuggability in line with the core design principles.\n\n1.  Authorization Independence via Denormalization:\n    *   For User documents in /users/{userId}, the 'role' field (either \"customer\" or \"salon\") is stored directly within the user's document. This eliminates the need for security rules to perform get() operations on other collections to determine a user's role, making authorization checks atomic, fast, and easy to debug (e.g., allow read, write: if request.auth.uid == userId && resource.data.role == 'customer';).\n    *   For Salon documents in /salons/{salonId}, the 'ownerId' field is explicitly stored within each salon document. This denormalizes the ownership information, allowing security rules to verify salon ownership directly (e.g., allow write: if request.auth.uid == resource.data.ownerId;) without relying on get() calls to the parent users collection. This structure simplifies atomic updates for salon owners and ensures security rule clarity.\n\n2.  Structural Segregation (Homogeneous Security Posture):\n    *   /users/{userId}: This collection is dedicated to private user profiles. Access is restricted to the owner of the document, ensuring data privacy and simplifying rules to request.auth.uid == userId.\n    *   /salons/{salonId}: This collection stores publicly discoverable salon data, accessible to all users for reading (QAP for exploration). Write access is strictly limited to the ownerId associated with the salon. This clear segregation of read/write permissions reduces rule complexity.\n    *   /service_categories/{serviceCategoryId} and /localities/{localityId}: These collections store global, static, read-only lookup data. Their security posture is uniform (public read-only), enabling simple and efficient list operations for UI components like the 'Quick Category' bar and 'Regional Locality Selector' without needing complex filtering logic in rules (QAPs).\n\n3.  QAPs (Rules are not Filters):\n    *   The structure supports efficient list operations for publicly browsable entities. Customers can list /salons (potentially with queries on localityId) and /service_categories, and /localities without rules attempting to filter results after the fact. Rules will primarily ensure that the queries themselves are valid and that resource.data fields are present for filtering if needed. For example, a list on /salons can be permitted as long as the requesting user is authenticated, and the rule can ensure only \"published\" or \"active\" salons are visible if a status field were added.\n    *   User-specific data (/users/{userId}) is accessed directly by ID, making list operations on the entire users collection largely unnecessary for non-admin users, thus enforcing QAPs.\n\n4.  Access Modeling & Consistency:\n    *   Private Data: The /users/{userId} path uses path-based ownership for customer profiles, ensuring direct and explicit control for individual users over their data.\n    *   User-Owned Collaborative Data: For salons, the ownerId field within /salons/{salonId} documents clearly defines ownership, aligning with the User 1:1 Salon relationship. This is a form of denormalized ownership for discoverable entities.\n    *   Global Data: /service_categories and /localities serve as global read-only lookup tables, consistent with storing static reference data.\n    *   All path parameters are explicitly named (e.g., {userId}, {salonId}) for clarity and maintainability.\n\nThis design strategy ensures a highly secure and performant Firestore backend for BookNGlow, making security rules straightforward to write, test, and maintain."
+  }
+}

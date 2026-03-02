@@ -1,0 +1,107 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * BOOKNGLOW SECURITY RULES - PROTOTYPING MODE
+     *
+     * Core Philosophy: 
+     * This ruleset enforces a strict user-ownership model for private profiles and a 
+     * public-discovery model for salon listings. Security is driven by denormalized 
+     * ownership fields to ensure high performance and low cost.
+     *
+     * Data Structure:
+     * - /users/{userId}: Private user profiles (Customers and Salon Owners).
+     * - /salons/{salonId}: Publicly browseable salon profiles.
+     * - /service_categories/{id}: Read-only global metadata for UI categorization.
+     * - /localities/{id}: Read-only global metadata for geographical filtering in Dehradun.
+     *
+     * Key Security Decisions:
+     * 1. Denormalization for Authorization: The 'ownerId' is stored directly on Salon documents 
+     *    and the 'role' is stored on User documents. This allows rules to verify access 
+     *    without expensive 'get()' lookups.
+     * 2. Structural Segregation: Private user data is separated from public salon data.
+     * 3. Immutability: Critical relational fields like 'ownerId' and 'id' are locked after creation.
+     * 4. Prototyping Flexibility: Rules strictly enforce WHO can write, but NOT the exact 
+     *    shape of the data (schema-agnostic), allowing for rapid frontend iteration.
+     */
+
+    // --- HELPER FUNCTIONS ---
+
+    /** @description Checks if the request is from an authenticated user. */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /** @description Checks if the authenticated user's UID matches the provided userId. */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /** @description Combines ownership check with existence check for updates and deletes. */
+    function isExistingOwner(userId) {
+      return resource != null && isOwner(userId);
+    }
+
+    /** @description Validates ownership based on a field within the document data. */
+    function isDataOwner(ownerId) {
+      return isSignedIn() && request.auth.uid == ownerId;
+    }
+
+    // --- COLLECTION RULES ---
+
+    /**
+     * @description Rules for individual user profiles. Access is restricted to the owner.
+     * @path /users/{userId}
+     * @allow (get) If the user is requesting their own document.
+     * @deny (list) If a user tries to list the entire users collection.
+     * @principle Restricts access to a user's own data tree and enforces path consistency.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Rules for public salon profiles. Publicly readable, but only writeable by the owner.
+     * @path /salons/{salonId}
+     * @allow (create) If the authenticated user sets themselves as the ownerId.
+     * @deny (update) If the user is not the owner or is trying to change the ownerId.
+     * @principle Public Read with Owner-Only Writes using denormalized ownership.
+     */
+    match /salons/{salonId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && request.resource.data.ownerId == request.auth.uid;
+      allow update: if resource != null && isDataOwner(resource.data.ownerId) && request.resource.data.ownerId == resource.data.ownerId;
+      allow delete: if resource != null && isDataOwner(resource.data.ownerId);
+    }
+
+    /**
+     * @description Rules for global service categories. Static lookup data.
+     * @path /service_categories/{serviceCategoryId}
+     * @allow (list) Any user (including anonymous) to populate UI dropdowns.
+     * @deny (write) Any client-side write operation.
+     * @principle Global read-only lookup data.
+     */
+    match /service_categories/{serviceCategoryId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Rules for geographical localities. Static lookup data for Dehradun.
+     * @path /localities/{localityId}
+     * @allow (get) Publicly accessible for location filtering.
+     * @deny (create) Client-side creation of new localities.
+     * @principle Global read-only lookup data.
+     */
+    match /localities/{localityId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+  }
+}
