@@ -30,6 +30,33 @@ const MALE_SALONS = [
     img: PlaceHolderImages.find(img => img.id === 'salon-classic')?.imageUrl || "https://picsum.photos/seed/classic/600/400"
   },
   {
+    name: "The Gent's Club",
+    area: "Rajpur Road",
+    rating: "4.7",
+    price: "Average",
+    startingPrice: "₹599",
+    tags: ["Hair Styling", "Face Care"],
+    img: "https://picsum.photos/seed/gents/600/400"
+  },
+  {
+    name: "Doon Grooming Hub",
+    area: "Jakhan",
+    rating: "4.6",
+    price: "Average",
+    startingPrice: "₹450",
+    tags: ["Beard Trim", "Haircut"],
+    img: "https://picsum.photos/seed/hub/600/400"
+  },
+  {
+    name: "Sharp Styles",
+    area: "Ballupur",
+    rating: "4.5",
+    price: "Average",
+    startingPrice: "₹400",
+    tags: ["Quick Style", "Shave"],
+    img: "https://picsum.photos/seed/sharp/600/400"
+  },
+  {
     name: "The Doon Barbershop",
     area: "Jakhan",
     rating: "4.7",
@@ -116,7 +143,7 @@ export default function MaleSalonsPage() {
                 className="group relative rounded-[2.5rem] overflow-hidden bg-slate-900/50 border border-blue-500/20 backdrop-blur-md shadow-2xl transition-all duration-500 hover:border-blue-500/50"
               >
                 <div className="relative h-64">
-                  <Image src={salon.img} alt={salon.name} fill className="object-cover opacity-80 group-hover:opacity-100 transition-all duration-700" />
+                  <Image src={salon.img} alt={salon.name} fill className="object-cover opacity-80 group-hover:opacity-100 transition-all duration-700" data-ai-hint="barber interior" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent" />
                   <Badge className="absolute top-4 left-4 bg-blue-600 text-white border-none font-bold shadow-lg">
                     {salon.price === 'High' ? 'LUXURY' : salon.price === 'Average' ? 'VALUE' : 'BUDGET'}
