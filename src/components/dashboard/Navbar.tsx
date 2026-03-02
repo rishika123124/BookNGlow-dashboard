@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { Search, MapPin, ChevronDown, Menu, HelpCircle, Store, Sparkles, Info } from 'lucide-react'
+import { Search, MapPin, ChevronDown, Menu, HelpCircle, Store, Sparkles, Info, Scissors, Heart, Users, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -46,7 +46,7 @@ export function Navbar() {
                   <span>BookN<span className="text-accent">Glow</span></span>
                 </SheetTitle>
               </SheetHeader>
-              <div className="flex flex-col gap-5 sm:gap-6 font-body text-lg sm:text-xl">
+              <div className="flex flex-col gap-5 sm:gap-6 font-body text-lg sm:text-xl overflow-y-auto max-h-[80vh] pb-10">
                 <div className="flex flex-col gap-2">
                   <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Location</span>
                   <DropdownMenu>
@@ -72,11 +72,23 @@ export function Navbar() {
                 <Link href="/" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
                   <Store className="h-5 w-5" /> Home
                 </Link>
-                <Link href="#about-us" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
+                <div className="flex flex-col gap-3">
+                   <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Our Salons</span>
+                   <Link href="/salons/male" className="flex items-center gap-3 text-white/60 hover:text-white pl-4">
+                     <Scissors className="h-4 w-4 text-blue-400" /> For Men
+                   </Link>
+                   <Link href="/salons/female" className="flex items-center gap-3 text-white/60 hover:text-white pl-4">
+                     <Heart className="h-4 w-4 text-pink-500" /> For Women
+                   </Link>
+                   <Link href="/salons/unisex" className="flex items-center gap-3 text-white/60 hover:text-white pl-4">
+                     <Users className="h-4 w-4 text-purple-400" /> Unisex
+                   </Link>
+                   <Link href="/#premium-salons" className="flex items-center gap-3 text-white/60 hover:text-white pl-4">
+                     <Star className="h-4 w-4 text-amber-400" /> Premium Collection
+                   </Link>
+                </div>
+                <Link href="/#about-us" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
                   <Sparkles className="h-5 w-5 text-pink-500" /> About Us ✨
-                </Link>
-                <Link href="/salons" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
-                  <Store className="h-5 w-5" /> Salons
                 </Link>
                 <Link href="/offers" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
                   <Search className="h-5 w-5" /> Offers
@@ -109,14 +121,44 @@ export function Navbar() {
             Home
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 group-hover:w-full shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
           </Link>
-          <Link href="#about-us" className="text-white/80 hover:text-white transition-colors relative group">
+          <Link href="/#about-us" className="text-white/80 hover:text-white transition-colors relative group">
             About Us
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 group-hover:w-full shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
           </Link>
-          <Link href="/salons" className="text-white/80 hover:text-white transition-colors relative group">
-            Salons
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 group-hover:w-full shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
-          </Link>
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="text-white/80 hover:text-white transition-colors relative group flex items-center gap-1 outline-none">
+                Salons
+                <ChevronDown className="h-4 w-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 group-hover:w-full shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56 bg-slate-900/95 backdrop-blur-xl border-white/10 text-white rounded-2xl shadow-2xl p-2">
+              <DropdownMenuItem asChild className="focus:bg-white/10 rounded-xl cursor-pointer py-3 px-4">
+                <Link href="/salons/male" className="flex items-center gap-3">
+                  <Scissors className="h-4 w-4 text-blue-400" /> For Men
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="focus:bg-white/10 rounded-xl cursor-pointer py-3 px-4">
+                <Link href="/salons/female" className="flex items-center gap-3">
+                  <Heart className="h-4 w-4 text-pink-500" /> For Women
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="focus:bg-white/10 rounded-xl cursor-pointer py-3 px-4">
+                <Link href="/salons/unisex" className="flex items-center gap-3">
+                  <Users className="h-4 w-4 text-purple-400" /> Unisex
+                </Link>
+              </DropdownMenuItem>
+              <div className="h-px bg-white/10 my-1 mx-2" />
+              <DropdownMenuItem asChild className="focus:bg-white/10 rounded-xl cursor-pointer py-3 px-4">
+                <Link href="/#premium-salons" className="flex items-center gap-3">
+                  <Star className="h-4 w-4 text-amber-400" /> Premium Collection
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <Link href="/offers" className="text-white/80 hover:text-white transition-colors relative group">
             Offers
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 group-hover:w-full shadow-[0_0_8px_rgba(236,72,153,0.8)]" />

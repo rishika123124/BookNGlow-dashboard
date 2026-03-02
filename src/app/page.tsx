@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Navbar } from '@/components/dashboard/Navbar';
@@ -134,15 +135,15 @@ export default function Home() {
               Dehradun’s premier destination for elite grooming.
             </p>
             <div className="pt-4 md:pt-8">
-              <Button className="rounded-full px-8 md:px-12 h-14 md:h-16 text-lg md:text-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white border-none shadow-[0_0_30px_rgba(168,85,247,0.5)] transition-all duration-300">
-                Explore Salons
+              <Button asChild className="rounded-full px-8 md:px-12 h-14 md:h-16 text-lg md:text-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white border-none shadow-[0_0_30px_rgba(168,85,247,0.5)] transition-all duration-300">
+                <Link href="/#tailored-salons">Explore Salons</Link>
               </Button>
             </div>
           </div>
         </section>
 
         {/* 2. Tailored For You - Gender Based Category Cards */}
-        <section className="container mx-auto px-4 py-12 md:py-20 space-y-8 md:space-y-12">
+        <section id="tailored-salons" className="container mx-auto px-4 py-12 md:py-20 space-y-8 md:space-y-12 scroll-mt-24">
           <div className="text-center space-y-4">
             <h2 className="font-headline text-3xl md:text-5xl text-foreground">Tailored For You</h2>
             <div className="h-1 w-16 md:w-24 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 mx-auto rounded-full" />
@@ -175,7 +176,7 @@ export default function Home() {
         </section>
 
         {/* 3. Premium Salons Grid */}
-        <section className="relative bg-white py-12 md:py-24 overflow-hidden">
+        <section id="premium-salons" className="relative bg-white py-12 md:py-24 overflow-hidden scroll-mt-24">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] md:w-[800px] h-[600px] md:h-[800px] bg-purple-500/5 rounded-full blur-[100px] md:blur-[120px] pointer-events-none" />
           
           <div className="container mx-auto px-4 relative z-10 space-y-12 md:space-y-16">
@@ -317,7 +318,7 @@ export default function Home() {
         </section>
 
         {/* 5. About Us Section */}
-        <section id="about-us" className="relative bg-slate-950 py-24 md:py-32 overflow-hidden">
+        <section id="about-us" className="relative bg-slate-950 py-24 md:py-32 overflow-hidden scroll-mt-24">
           {/* Animated Background Mesh */}
           <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
              <div className="absolute top-0 -left-1/4 w-full h-full bg-purple-600/30 rounded-full blur-[120px] animate-[pulse_10s_infinite]" />
