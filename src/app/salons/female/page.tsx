@@ -12,15 +12,6 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const FEMALE_SALONS = [
   {
-    name: "Aura Luxe Spa",
-    area: "Jakhan",
-    rating: "4.9",
-    price: "High",
-    startingPrice: "₹1,299",
-    tags: ["Bridal", "Hair Spa"],
-    img: PlaceHolderImages.find(img => img.id === 'salon-aura')?.imageUrl || "https://picsum.photos/seed/aura/600/400"
-  },
-  {
     name: "The Lush Studio",
     area: "Jakhan",
     rating: "4.7",
