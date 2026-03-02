@@ -1,11 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Navbar } from '@/components/dashboard/Navbar';
 import { Footer } from '@/components/dashboard/Footer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Star, MapPin, Scissors, Zap, ShieldCheck } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Star, MapPin, Scissors, Info } from 'lucide-react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -14,13 +15,17 @@ const MALE_SALONS = [
     name: "Velvet Grooming",
     area: "Rajpur Road",
     rating: "5.0",
-    tags: ["Sharp Cut", "Luxury Beard", "Male Facial"],
+    price: "High",
+    startingPrice: "₹899",
+    tags: ["Sharp Cut", "Luxury Beard"],
     img: PlaceHolderImages.find(img => img.id === 'salon-velvet')?.imageUrl || "https://picsum.photos/seed/velvet/600/400"
   },
   {
     name: "Classic Cut Barbers",
     area: "Ballupur",
     rating: "4.8",
+    price: "Average",
+    startingPrice: "₹499",
     tags: ["Sharp Cut", "Male Facial"],
     img: PlaceHolderImages.find(img => img.id === 'salon-classic')?.imageUrl || "https://picsum.photos/seed/classic/600/400"
   },
@@ -28,91 +33,126 @@ const MALE_SALONS = [
     name: "The Doon Barbershop",
     area: "Jakhan",
     rating: "4.7",
-    tags: ["Luxury Beard", "Sharp Cut"],
+    price: "Low",
+    startingPrice: "₹299",
+    tags: ["Basic Trim", "Quick Style"],
     img: PlaceHolderImages.find(img => img.id === 'category-male')?.imageUrl || "https://picsum.photos/seed/male/600/400"
   }
 ];
 
 export default function MaleSalonsPage() {
+  const [location, setLocation] = useState('all');
+  const [rating, setRating] = useState('all');
+  const [price, setPrice] = useState('all');
+
   return (
     <div className="min-h-screen bg-[#020617] text-white selection:bg-blue-500/30 font-body relative overflow-hidden">
-      {/* Subtle Watermark Background */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03] flex items-center justify-center overflow-hidden">
-        <Scissors className="w-[800px] h-[800px] -rotate-12" />
+      {/* Universal Mesh Gradient Background */}
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
+        <div className="absolute inset-0 bg-gradient-to-br from-pink-500/20 via-blue-500/20 to-purple-500/20 blur-[100px]" />
       </div>
-
-      {/* Blue Gradient Highlight */}
-      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-br from-blue-600/20 via-transparent to-transparent pointer-events-none" />
 
       <Navbar />
       
-      <main className="relative z-10 py-16 md:py-28">
-        <div className="container mx-auto px-4 space-y-16 md:space-y-24">
-          <div className="text-center space-y-6 max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 mb-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
-               <ShieldCheck className="h-4 w-4 text-blue-400" />
-               <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-blue-400">Verified Elite Partners</span>
-            </div>
-            <h1 className="font-display text-5xl md:text-8xl bg-clip-text text-transparent bg-gradient-to-r from-[#2563EB] to-white drop-shadow-sm leading-tight">
-              Elite Grooming <br /> for Men
+      <main className="relative z-10">
+        {/* Sticky Filter Bar */}
+        <div className="sticky top-20 md:top-24 z-40 w-full bg-white/5 backdrop-blur-md border-b border-white/10 py-4 px-4 shadow-xl">
+          <div className="container mx-auto flex flex-col md:flex-row gap-4 items-center justify-between">
+             <div className="flex flex-wrap gap-4 items-center w-full md:w-auto">
+                <Select onValueChange={setLocation} defaultValue="all">
+                  <SelectTrigger className="w-full md:w-[180px] bg-white/10 border-white/20 text-white rounded-full">
+                    <SelectValue placeholder="📍 Location" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-900 border-white/10 text-white">
+                    <SelectItem value="all">All Dehradun</SelectItem>
+                    <SelectItem value="Rajpur Road">Rajpur Road</SelectItem>
+                    <SelectItem value="Jakhan">Jakhan</SelectItem>
+                    <SelectItem value="Ballupur">Ballupur</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select onValueChange={setRating} defaultValue="all">
+                  <SelectTrigger className="w-full md:w-[180px] bg-white/10 border-white/20 text-white rounded-full">
+                    <SelectValue placeholder="⭐ Rating" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-900 border-white/10 text-white">
+                    <SelectItem value="all">All Ratings</SelectItem>
+                    <SelectItem value="4.5">Top Rated (4.5+)</SelectItem>
+                    <SelectItem value="4.0">Highly Recommended (4.0+)</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select onValueChange={setPrice} defaultValue="all">
+                  <SelectTrigger className="w-full md:w-[180px] bg-white/10 border-white/20 text-white rounded-full">
+                    <SelectValue placeholder="💰 Price Range" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-900 border-white/10 text-white">
+                    <SelectItem value="all">All Prices</SelectItem>
+                    <SelectItem value="Low">Budget Friendly (Low)</SelectItem>
+                    <SelectItem value="Average">Value for Money (Average)</SelectItem>
+                    <SelectItem value="High">Luxury Treatment (High)</SelectItem>
+                  </SelectContent>
+                </Select>
+             </div>
+             <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold hidden lg:block">Showing Discoverable Salons in Doon</span>
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 py-12 space-y-16">
+          <div className="text-center space-y-4 max-w-4xl mx-auto">
+            <h1 className="font-display text-4xl md:text-7xl text-white drop-shadow-sm leading-tight">
+              Discover Salons for Men
             </h1>
-            <p className="text-white/60 text-lg md:text-2xl max-w-2xl mx-auto font-light tracking-wide italic">
-              Discover Dehradun’s finest barbers and stylists crafted for the modern man.
+            <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto font-light tracking-wide italic">
+              Find top rated spots for your next cut or shave in the heart of Dehradun.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {MALE_SALONS.map((salon, i) => (
               <div 
                 key={i} 
-                className="group relative rounded-[2.5rem] overflow-hidden bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl hover:scale-[1.02] transition-all duration-500"
+                className="group relative rounded-[2rem] overflow-hidden bg-white/5 border border-white/20 backdrop-blur-md shadow-2xl hover:scale-[1.02] transition-all duration-300"
               >
-                <div className="relative h-72">
-                  <Image 
-                    src={salon.img} 
-                    alt={salon.name} 
-                    fill 
-                    className="object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-700" 
-                  />
+                <div className="relative h-64">
+                  <Image src={salon.img} alt={salon.name} fill className="object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent" />
-                  <Badge className="absolute top-6 left-6 bg-[#2563EB] text-white border-none font-bold shadow-lg shadow-blue-500/20">
-                    URBAN PREMIUM
+                  <Badge className="absolute top-4 left-4 bg-blue-600 text-white border-none font-bold shadow-lg">
+                    {salon.price === 'High' ? 'LUXURY' : salon.price === 'Average' ? 'VALUE' : 'BUDGET'}
                   </Badge>
+                  <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white flex items-center gap-1">
+                    <Scissors className="h-3 w-3 text-blue-400" />
+                    Starts at {salon.startingPrice}
+                  </div>
                 </div>
                 
-                <div className="p-10 space-y-8">
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-start">
-                      <h3 className="font-headline text-3xl text-white">{salon.name}</h3>
-                      <div className="flex items-center gap-1 text-blue-400 font-bold bg-blue-400/10 px-2 py-1 rounded-lg">
+                <div className="p-8 space-y-6">
+                  <div className="space-y-1">
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-headline text-2xl text-white">{salon.name}</h3>
+                      <div className="flex items-center gap-1 text-amber-400 font-bold">
                         <Star className="h-4 w-4 fill-current" />
                         <span>{salon.rating}</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 text-white/40 text-sm">
-                      <MapPin className="h-4 w-4 text-blue-500/50" />
+                      <MapPin className="h-3 w-3 text-blue-500/50" />
                       <span>{salon.area}, Dehradun</span>
                     </div>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
                     {salon.tags.map(tag => (
-                      <span 
-                        key={tag} 
-                        className="text-[9px] md:text-[10px] uppercase tracking-widest border border-blue-500/30 px-4 py-1.5 rounded-full text-blue-300 font-bold bg-blue-500/5"
-                      >
+                      <span key={tag} className="text-[10px] uppercase tracking-widest border border-white/10 px-3 py-1 rounded-full text-white/60">
                         {tag}
                       </span>
                     ))}
                   </div>
 
-                  <div className="space-y-4 pt-4">
-                    <Button className="w-full h-14 rounded-full bg-[#2563EB] hover:bg-blue-700 text-white font-headline text-xl shadow-[0_0_30px_rgba(37,99,235,0.4)] transition-all duration-300 border-none group-hover:scale-[1.02]">
-                      Book Your Slot
+                  <div className="pt-2">
+                    <Button className="w-full h-12 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-headline text-lg transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.3)]">
+                      Check Availability
                     </Button>
-                    <button className="w-full text-blue-400 text-sm font-semibold hover:underline transition-all">
-                      View Details
-                    </button>
                   </div>
                 </div>
               </div>
