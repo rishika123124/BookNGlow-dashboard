@@ -5,7 +5,7 @@ import React from 'react'
 import { Navbar } from '@/components/dashboard/Navbar'
 import { Footer } from '@/components/dashboard/Footer'
 import { Input } from '@/components/ui/input'
-import { Search, Calendar, CreditCard, Store, User, MessageCircle, PhoneCall, Sparkles } from 'lucide-react'
+import { Search, Calendar, RefreshCw, MapPin, MessageCircle, PhoneCall, Sparkles } from 'lucide-react'
 import {
   Accordion,
   AccordionContent,
@@ -18,27 +18,21 @@ export default function HelpPage() {
   const categories = [
     {
       title: 'Booking Issues',
-      desc: 'Trouble booking a salon in Dehradun? Click here.',
+      desc: 'Facing trouble selecting a slot or salon in Dehradun? Learn how to book in 3 easy steps.',
       icon: <Calendar className="h-8 w-8 text-blue-400" />,
-      color: 'border-blue-500/30'
+      color: 'border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.2)]'
     },
     {
-      title: 'Payments & Refunds',
-      desc: 'Safe transactions and easy money-back guide.',
-      icon: <CreditCard className="h-8 w-8 text-pink-400" />,
-      color: 'border-pink-500/30'
+      title: 'Cancel or Reschedule',
+      desc: 'Plans changed? See how to easily cancel or move your appointment at no extra cost.',
+      icon: <RefreshCw className="h-8 w-8 text-pink-400" />,
+      color: 'border-pink-500/50 shadow-[0_0_20px_rgba(236,72,153,0.2)]'
     },
     {
-      title: 'Salon Partners',
-      desc: 'Are you a salon owner? Get help with your listing.',
-      icon: <Store className="h-8 w-8 text-purple-400" />,
-      color: 'border-purple-500/30'
-    },
-    {
-      title: 'Account Settings',
-      desc: 'Manage your profile and favorites.',
-      icon: <User className="h-8 w-8 text-indigo-400" />,
-      color: 'border-indigo-500/30'
+      title: 'Locate Your Salon',
+      desc: "Can't find the salon on the map? Get direct directions and contact details for your visit.",
+      icon: <MapPin className="h-8 w-8 text-purple-400" />,
+      color: 'border-purple-500/50 shadow-[0_0_20px_rgba(168,85,247,0.2)]'
     }
   ]
 
@@ -85,17 +79,17 @@ export default function HelpPage() {
 
         {/* 2. Help Categories (The Grid) */}
         <section className="container mx-auto px-4 -mt-10 md:-mt-16 relative z-20">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {categories.map((cat, i) => (
               <div 
                 key={i}
-                className={`group p-8 rounded-[2rem] bg-white/5 backdrop-blur-2xl border ${cat.color} hover:bg-white/10 hover:-translate-y-2 transition-all duration-500 cursor-pointer shadow-2xl`}
+                className={`group p-8 rounded-[2rem] bg-white/10 backdrop-blur-md border ${cat.color} hover:bg-white/15 hover:scale-105 transition-all duration-500 cursor-pointer shadow-2xl flex flex-col items-center text-center`}
               >
                 <div className="mb-6 p-4 rounded-2xl bg-white/5 border border-white/10 w-fit group-hover:scale-110 transition-transform">
                   {cat.icon}
                 </div>
-                <h3 className="font-headline text-xl text-white mb-2">{cat.title}</h3>
-                <p className="text-white/40 text-sm leading-relaxed">{cat.desc}</p>
+                <h3 className="font-headline text-2xl text-white mb-3">{cat.title}</h3>
+                <p className="text-white/60 text-sm md:text-base leading-relaxed">{cat.desc}</p>
               </div>
             ))}
           </div>
