@@ -165,14 +165,16 @@ export default function Home() {
         </section>
 
         {/* 3. Premium Salons Grid */}
-        <section className="bg-slate-50/50 py-24">
-          <div className="container mx-auto px-4 space-y-12">
-            <div className="flex flex-col md:flex-row justify-between items-end gap-6">
-              <div className="space-y-4">
-                <h2 className="font-headline text-5xl text-foreground">The Premium Collection</h2>
-                <p className="text-muted-foreground text-xl">Handpicked elite salons across Rajpur Road and Jakhan.</p>
+        <section className="bg-white py-24">
+          <div className="container mx-auto px-4 space-y-16">
+            <div className="flex flex-col lg:flex-row justify-between items-end gap-10">
+              <div className="space-y-6 max-w-4xl">
+                <h2 className="font-headline text-5xl text-foreground">Dehradun’s Premium Salons</h2>
+                <p className="text-muted-foreground text-xl leading-relaxed">
+                  Discover the gold standard of grooming in the heart of the Doon Valley. Explore Dehradun’s most exclusive premium salons—from the upscale vibes of Rajpur Road to the elite studios of Jakhan. Whether you’re looking for a signature glow or expert styling, check out our handpicked collection of verified partners dedicated to luxury, hygiene, and perfection.
+                </p>
               </div>
-              <Button variant="link" className="text-purple-600 font-bold text-lg group">
+              <Button variant="link" className="text-primary font-bold text-lg group h-auto p-0">
                 View All Elite <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
