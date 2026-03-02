@@ -13,7 +13,8 @@ import {
   ShieldCheck, 
   CreditCard, 
   ChevronRight,
-  Quote
+  Quote,
+  LocateFixed
 } from 'lucide-react'
 
 export default function Home() {
@@ -88,6 +89,13 @@ export default function Home() {
     }
   ];
 
+  const localities = [
+    { name: "#RajpurRoad", coords: "30.3600,78.0700" },
+    { name: "#Jakhan", coords: "30.3667,78.0667" },
+    { name: "#Ballupur", coords: "30.3392,78.0161" },
+    { name: "#ClementTown", coords: "30.2678,78.0067" }
+  ];
+
   return (
     <div className="min-h-screen bg-background selection:bg-primary/30 font-body">
       <Navbar />
@@ -139,7 +147,6 @@ export default function Home() {
                 key={cat.id}
                 className={`group relative h-[600px] rounded-[40px] overflow-hidden border-2 transition-all duration-500 hover:scale-105 hover:shadow-2xl ${cat.theme}`}
               >
-                {/* Background Image with Zoom */}
                 <Image 
                   src={cat.img} 
                   alt={cat.title} 
@@ -147,11 +154,7 @@ export default function Home() {
                   className="object-cover transition-transform duration-[2000ms] group-hover:scale-110" 
                   data-ai-hint={cat.id === 'male' ? 'barbershop luxury' : cat.id === 'female' ? 'spa beauty' : 'salon interior'}
                 />
-                
-                {/* Colored Overlay */}
                 <div className={`absolute inset-0 transition-opacity duration-500 group-hover:opacity-60 ${cat.overlay}`} />
-
-                {/* Glassmorphic Content Box */}
                 <div className="absolute inset-x-6 bottom-6 p-8 rounded-[30px] bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl flex flex-col gap-4 transform transition-all duration-500 group-hover:-translate-y-2">
                   <h3 className="font-headline text-4xl text-white drop-shadow-md">{cat.title}</h3>
                   <p className="text-white/80 text-lg leading-snug drop-shadow-sm">{cat.desc}</p>
@@ -208,7 +211,6 @@ export default function Home() {
                       View Profile
                     </Button>
                   </div>
-                  <div className="absolute inset-0 pointer-events-none border-2 border-transparent group-hover:border-pink-500/20 shadow-[0_0_40px_rgba(236,72,153,0)] group-hover:shadow-[0_0_40px_rgba(236,72,153,0.3)] transition-all duration-500 rounded-[40px]" />
                 </div>
               ))}
             </div>
@@ -217,35 +219,71 @@ export default function Home() {
 
         {/* 4. Interactive 'Doon-Map' Feature */}
         <section className="container mx-auto px-4 py-24">
-          <div className="rounded-[2.5rem] bg-slate-950 overflow-hidden shadow-2xl border border-white/5">
+          <div className="rounded-[3rem] bg-slate-950 overflow-hidden shadow-[0_0_50px_rgba(124,58,237,0.2)] border-2 border-purple-500/20">
             <div className="grid lg:grid-cols-2">
               {/* Map Left */}
-              <div className="relative h-[500px] bg-[#0f172a] p-8 flex items-center justify-center">
-                <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:30px_30px]" />
-                <div className="relative w-full h-full border border-white/10 rounded-2xl overflow-hidden bg-slate-900/50">
-                   <div className="absolute top-1/4 left-1/3 group">
-                      <div className="h-4 w-4 bg-purple-500 rounded-full animate-ping absolute" />
-                      <div className="h-4 w-4 bg-purple-500 rounded-full border-2 border-white relative z-10 shadow-[0_0_15px_rgba(168,85,247,1)]" />
-                   </div>
-                   <div className="absolute top-1/2 right-1/4 group">
-                      <div className="h-4 w-4 bg-blue-500 rounded-full animate-ping absolute" />
-                      <div className="h-4 w-4 bg-blue-500 rounded-full border-2 border-white relative z-10 shadow-[0_0_15px_rgba(59,130,246,1)]" />
-                   </div>
-                   <div className="absolute bottom-1/3 left-1/2 group">
-                      <div className="h-4 w-4 bg-purple-500 rounded-full animate-ping absolute" />
-                      <div className="h-4 w-4 bg-purple-500 rounded-full border-2 border-white relative z-10 shadow-[0_0_15px_rgba(168,85,247,1)]" />
-                   </div>
-                   <div className="absolute bottom-8 left-8 text-white/40 text-xs font-headline uppercase tracking-widest">Minimalist Doon View</div>
+              <div className="relative h-[600px] overflow-hidden group">
+                {/* Live Status Indicator */}
+                <div className="absolute top-6 left-6 z-20 flex items-center gap-2 bg-slate-900/90 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 shadow-xl">
+                  <div className="h-2 w-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(52,211,153,1)]" />
+                  <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">
+                    Showing 50+ available salons in Dehradun
+                  </span>
+                </div>
+
+                {/* Google Maps Embed with Dark Filter */}
+                <iframe
+                  title="Dehradun Map"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55110.42835848529!2d78.016629983411!3d30.325515321590483!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390929c356c888af%3A0x4c3562c03251d499!2sDehradun%2C%20Uttarakhand!5e0!3m2!1sen!2sin!4v1711200000000!5m2!1sen!2sin"
+                  className="w-full h-full grayscale invert opacity-70 contrast-125 brightness-75 scale-110 transition-transform duration-700 group-hover:scale-105"
+                  style={{ filter: 'invert(90%) hue-rotate(180deg) brightness(95%) contrast(90%)' }}
+                  loading="lazy"
+                />
+
+                {/* Neon Pins Overlays (Mockups for prototype) */}
+                <div className="absolute inset-0 pointer-events-none">
+                  {/* Purple Pin (Unisex) */}
+                  <div className="absolute top-1/4 left-1/3 group/pin pointer-events-auto cursor-pointer">
+                    <div className="h-6 w-6 bg-purple-500 rounded-full border-2 border-white flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.8)] animate-bounce">
+                      <div className="h-2 w-2 bg-white rounded-full" />
+                    </div>
+                    <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 hidden group-hover/pin:block bg-white text-slate-900 text-[10px] font-bold px-2 py-1 rounded shadow-xl whitespace-nowrap">
+                      Aura Luxe Spa (Unisex)
+                    </div>
+                  </div>
+
+                  {/* Pink Pin (Female) */}
+                  <div className="absolute top-1/2 right-1/3 group/pin pointer-events-auto cursor-pointer">
+                    <div className="h-6 w-6 bg-pink-500 rounded-full border-2 border-white flex items-center justify-center shadow-[0_0_20px_rgba(236,72,153,0.8)] animate-bounce" style={{ animationDelay: '0.2s' }}>
+                      <div className="h-2 w-2 bg-white rounded-full" />
+                    </div>
+                    <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 hidden group-hover/pin:block bg-white text-slate-900 text-[10px] font-bold px-2 py-1 rounded shadow-xl whitespace-nowrap">
+                      Serene Day Spa (Female)
+                    </div>
+                  </div>
+
+                  {/* Blue Pin (Male) */}
+                  <div className="absolute bottom-1/3 left-1/2 group/pin pointer-events-auto cursor-pointer">
+                    <div className="h-6 w-6 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.8)] animate-bounce" style={{ animationDelay: '0.4s' }}>
+                      <div className="h-2 w-2 bg-white rounded-full" />
+                    </div>
+                    <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 hidden group-hover/pin:block bg-white text-slate-900 text-[10px] font-bold px-2 py-1 rounded shadow-xl whitespace-nowrap">
+                      Velvet Grooming (Male)
+                    </div>
+                  </div>
                 </div>
               </div>
               
               {/* Content Right */}
               <div className="p-12 md:p-16 space-y-10 flex flex-col justify-center bg-gradient-to-br from-slate-900 to-slate-950 text-white">
                 <div className="space-y-4">
-                  <Badge className="bg-blue-600/20 text-blue-400 border-blue-600/30 px-4 py-1">LIVE VIEW</Badge>
-                  <h2 className="font-headline text-5xl">Locate Your Nearest Glow</h2>
+                  <Badge className="bg-purple-600/20 text-purple-400 border-purple-600/30 px-4 py-1 flex items-center gap-2 w-fit">
+                    <LocateFixed className="h-3 w-3" />
+                    LIVE VIEW
+                  </Badge>
+                  <h2 className="font-headline text-5xl leading-tight">Locate Your <br /><span className="text-accent">Nearest Glow</span></h2>
                   <p className="text-white/60 text-lg leading-relaxed">
-                    Instantly find top-rated salons across Dehradun's prime hotspots. Our map tracks real-time availability.
+                    Instantly find top-rated salons across Dehradun's prime hotspots. Our interactive map tracks real-time availability in your neighborhood.
                   </p>
                 </div>
                 
@@ -254,15 +292,33 @@ export default function Home() {
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/30 group-focus-within:text-purple-400 transition-colors" />
                     <Input 
                       placeholder="Search locality..." 
-                      className="h-16 rounded-full bg-white/5 border-white/10 pl-14 text-white placeholder:text-white/20 focus:ring-purple-500"
+                      className="h-16 rounded-full bg-white/5 border-white/10 pl-14 text-white placeholder:text-white/20 focus:ring-purple-500 focus:bg-white/10 transition-all"
                     />
                   </div>
                   <div className="flex flex-wrap gap-3">
-                    {["#RajpurRoad", "#Jakhan", "#Ballupur", "#Sahastradhara"].map((chip) => (
-                      <button key={chip} className="px-5 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-purple-500/50 transition-all text-sm font-medium">
-                        {chip}
+                    {localities.map((loc) => (
+                      <button 
+                        key={loc.name} 
+                        className="px-6 py-2.5 rounded-full border border-white/10 bg-white/5 hover:bg-purple-600 hover:text-white hover:border-purple-500/50 transition-all text-sm font-semibold tracking-wide shadow-lg active:scale-95"
+                      >
+                        {loc.name}
                       </button>
                     ))}
+                  </div>
+                </div>
+
+                <div className="pt-8 grid grid-cols-3 gap-4 border-t border-white/5">
+                  <div className="flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-pink-500 shadow-[0_0_8px_rgba(236,72,153,0.5)]" />
+                    <span className="text-[10px] uppercase text-white/40 tracking-widest font-bold">Female</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
+                    <span className="text-[10px] uppercase text-white/40 tracking-widest font-bold">Male</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]" />
+                    <span className="text-[10px] uppercase text-white/40 tracking-widest font-bold">Unisex</span>
                   </div>
                 </div>
               </div>
