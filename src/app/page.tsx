@@ -12,21 +12,47 @@ import {
   ShieldCheck, 
   CreditCard, 
   ChevronRight,
-  Users,
-  User,
-  UserCheck,
-  Map as MapIcon,
   Quote
 } from 'lucide-react'
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(img => img.id === 'salon-hero')?.imageUrl || "https://picsum.photos/seed/salon-hero/1200/800";
   
+  const categories = [
+    { 
+      id: 'male',
+      title: "Male", 
+      desc: "Premium Grooming for Men in Dehradun", 
+      img: PlaceHolderImages.find(img => img.id === 'category-male')?.imageUrl || "https://picsum.photos/seed/male/600/800",
+      theme: "border-blue-500 shadow-blue-500/30",
+      overlay: "bg-blue-900/40",
+      btn: "bg-blue-600 hover:bg-blue-700 shadow-[0_0_15px_rgba(37,99,235,0.4)]"
+    },
+    { 
+      id: 'female',
+      title: "Female", 
+      desc: "Luxury Beauty & Spa Therapies for Women", 
+      img: PlaceHolderImages.find(img => img.id === 'category-female')?.imageUrl || "https://picsum.photos/seed/female/600/800",
+      theme: "border-pink-500 shadow-pink-500/30",
+      overlay: "bg-pink-900/40",
+      btn: "bg-pink-600 hover:bg-pink-700 shadow-[0_0_15px_rgba(219,39,119,0.4)]"
+    },
+    { 
+      id: 'unisex',
+      title: "Unisex", 
+      desc: "The Finest Inclusive Styling & Care", 
+      img: PlaceHolderImages.find(img => img.id === 'category-unisex')?.imageUrl || "https://picsum.photos/seed/unisex/600/800",
+      theme: "border-purple-500 shadow-purple-500/30",
+      overlay: "bg-purple-900/40",
+      btn: "bg-purple-600 hover:bg-purple-700 shadow-[0_0_15px_rgba(147,51,234,0.4)]"
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-background selection:bg-primary/30 font-body">
       <Navbar />
       
-      <main className="space-y-16">
+      <main>
         
         {/* 1. Centered Hero Section */}
         <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
@@ -43,7 +69,7 @@ export default function Home() {
           </div>
           
           <div className="relative z-10 text-center space-y-8 px-4 max-w-4xl">
-            <h1 className="font-headline text-6xl md:text-8xl leading-tight">
+            <h1 className="font-headline text-6xl md:text-8xl leading-tight text-white">
               Welcome to <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 font-bold drop-shadow-sm">
                 BookNGlow
@@ -53,38 +79,46 @@ export default function Home() {
               Dehradun’s premier destination for elite grooming.
             </p>
             <div className="pt-8">
-              <Button className="rounded-full px-12 h-16 text-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white border-none shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:scale-105 transition-all duration-300 animate-pulse-slow">
+              <Button className="rounded-full px-12 h-16 text-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white border-none shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:scale-105 transition-all duration-300">
                 Explore Salons
               </Button>
             </div>
           </div>
         </section>
 
-        {/* 2. Smart Category Filter */}
-        <section className="container mx-auto px-4 py-24 space-y-12">
+        {/* 2. Tailored For You - Gender Based Category Cards */}
+        <section className="container mx-auto px-4 py-20 space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="font-headline text-5xl text-foreground">Tailored for You</h2>
-            <div className="h-1 w-24 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full" />
+            <h2 className="font-headline text-5xl text-foreground">Tailored For You</h2>
+            <div className="h-1 w-24 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 mx-auto rounded-full" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { label: "Unisex", icon: Users, color: "border-blue-500/50 shadow-blue-500/20", desc: "Premium styling for everyone." },
-              { label: "Male", icon: User, color: "border-purple-500/50 shadow-purple-500/20", desc: "Top-tier men's grooming." },
-              { label: "Female", icon: UserCheck, color: "border-pink-500/50 shadow-pink-500/20", desc: "Elegant beauty solutions." }
-            ].map((cat, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {categories.map((cat) => (
               <div 
-                key={i}
-                className={`group relative overflow-hidden rounded-[2.5rem] p-10 bg-white/5 backdrop-blur-lg border-2 ${cat.color} hover:shadow-[0_20px_50px_rgba(124,58,237,0.15)] transition-all duration-500 cursor-pointer`}
+                key={cat.id}
+                className={`group relative h-[600px] rounded-[40px] overflow-hidden border-2 transition-all duration-500 hover:scale-105 hover:shadow-2xl ${cat.theme}`}
               >
-                <div className="space-y-6 text-center relative z-10">
-                  <div className="inline-flex p-5 rounded-3xl bg-white/10 group-hover:scale-110 transition-transform duration-500">
-                    <cat.icon className="h-10 w-10 text-foreground" />
-                  </div>
-                  <h3 className="font-headline text-3xl">{cat.label}</h3>
-                  <p className="text-muted-foreground">{cat.desc}</p>
+                {/* Background Image with Zoom */}
+                <Image 
+                  src={cat.img} 
+                  alt={cat.title} 
+                  fill 
+                  className="object-cover transition-transform duration-[2000ms] group-hover:scale-110" 
+                  data-ai-hint={cat.id === 'male' ? 'barbershop luxury' : cat.id === 'female' ? 'spa beauty' : 'salon interior'}
+                />
+                
+                {/* Colored Overlay */}
+                <div className={`absolute inset-0 transition-opacity duration-500 group-hover:opacity-60 ${cat.overlay}`} />
+
+                {/* Glassmorphic Content Box */}
+                <div className="absolute inset-x-6 bottom-6 p-8 rounded-[30px] bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl flex flex-col gap-4 transform transition-all duration-500 group-hover:-translate-y-2">
+                  <h3 className="font-headline text-4xl text-white drop-shadow-md">{cat.title}</h3>
+                  <p className="text-white/80 text-lg leading-snug drop-shadow-sm">{cat.desc}</p>
+                  <Button className={`w-full rounded-full h-12 text-white font-semibold transition-all duration-300 border-none mt-2 ${cat.btn}`}>
+                    Explore Salons
+                  </Button>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
             ))}
           </div>
@@ -136,7 +170,6 @@ export default function Home() {
                       View Profile
                     </Button>
                   </div>
-                  {/* Pink Glow on Hover */}
                   <div className="absolute inset-0 pointer-events-none border-2 border-transparent group-hover:border-pink-500/20 shadow-[0_0_40px_rgba(236,72,153,0)] group-hover:shadow-[0_0_40px_rgba(236,72,153,0.3)] transition-all duration-500 rounded-[40px]" />
                 </div>
               ))}
@@ -151,7 +184,6 @@ export default function Home() {
               {/* Map Left */}
               <div className="relative h-[500px] bg-[#0f172a] p-8 flex items-center justify-center">
                 <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:30px_30px]" />
-                {/* Minimalist Map Markers */}
                 <div className="relative w-full h-full border border-white/10 rounded-2xl overflow-hidden bg-slate-900/50">
                    <div className="absolute top-1/4 left-1/3 group">
                       <div className="h-4 w-4 bg-purple-500 rounded-full animate-ping absolute" />
@@ -234,7 +266,6 @@ export default function Home() {
 
       </main>
 
-      {/* 5. Professional Footer (Preserved) */}
       <footer className="bg-slate-950 text-white pt-24 pb-12 mt-24">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
