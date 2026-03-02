@@ -73,16 +73,16 @@ export default function MaleSalonsPage() {
   const [price, setPrice] = useState('all');
 
   return (
-    <div className="min-h-screen bg-[#020617] text-white selection:bg-blue-500/30 font-body relative overflow-hidden">
-      {/* Mesh Glow Blobs */}
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[120px] pointer-events-none opacity-20" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[120px] pointer-events-none opacity-20" />
+    <div className="min-h-screen bg-[#0f172a] text-white selection:bg-blue-500/30 font-body relative overflow-hidden">
+      {/* Mesh Glow Blobs - Slightly lighter and more prominent to reduce pure blackness */}
+      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-500/30 rounded-full blur-[130px] pointer-events-none opacity-40" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-purple-500/30 rounded-full blur-[130px] pointer-events-none opacity-40" />
 
       <Navbar />
       
       <main className="relative z-10">
         {/* Sticky Filter Bar */}
-        <div className="sticky top-20 md:top-24 z-40 w-full bg-slate-950/50 backdrop-blur-md border-b border-white/10 py-4 px-4 shadow-2xl">
+        <div className="sticky top-20 md:top-24 z-40 w-full bg-slate-950/60 backdrop-blur-md border-b border-white/10 py-4 px-4 shadow-2xl">
           <div className="container mx-auto flex flex-col md:flex-row gap-4 items-center justify-between">
              <div className="flex flex-wrap gap-4 items-center w-full md:w-auto">
                 <Select onValueChange={setLocation} defaultValue="all">
@@ -144,7 +144,7 @@ export default function MaleSalonsPage() {
               >
                 <div className="relative h-64">
                   <Image src={salon.img} alt={salon.name} fill className="object-cover opacity-80 group-hover:opacity-100 transition-all duration-700" data-ai-hint="barber interior" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-transparent" />
                   <Badge className="absolute top-4 left-4 bg-blue-600 text-white border-none font-bold shadow-lg">
                     {salon.price === 'High' ? 'LUXURY' : salon.price === 'Average' ? 'VALUE' : 'BUDGET'}
                   </Badge>
