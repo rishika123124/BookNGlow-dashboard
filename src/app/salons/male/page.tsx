@@ -46,16 +46,16 @@ export default function MaleSalonsPage() {
   const [price, setPrice] = useState('all');
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white selection:bg-blue-500/30 font-body relative overflow-hidden">
-      {/* Dynamic Pink-Blue-Purple Background Layers */}
+    <div className="min-h-screen bg-slate-950 text-white selection:bg-pink-500/30 font-body relative overflow-hidden">
+      {/* Pink & Purple Mixture Background Layers */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {/* Vibrant Gradient Blobs */}
-        <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-pink-500/30 rounded-full blur-[140px] animate-pulse" />
-        <div className="absolute top-[10%] right-[-10%] w-[50%] h-[50%] bg-blue-600/30 rounded-full blur-[140px] animate-pulse" style={{ animationDelay: '2s' }} />
-        <div className="absolute bottom-[-15%] left-[20%] w-[55%] h-[55%] bg-purple-600/30 rounded-full blur-[140px] animate-pulse" style={{ animationDelay: '4s' }} />
+        {/* Soft Pink & Purple Blurs */}
+        <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-pink-500/20 rounded-full blur-[140px] animate-pulse" />
+        <div className="absolute top-[20%] right-[-10%] w-[60%] h-[60%] bg-purple-600/20 rounded-full blur-[140px] animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-[-10%] left-[10%] w-[65%] h-[65%] bg-pink-600/20 rounded-full blur-[140px] animate-pulse" style={{ animationDelay: '4s' }} />
         
-        {/* Dark overlay to ensure readability */}
-        <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-[2px]" />
+        {/* Deep overlay to maintain readability and luxury feel */}
+        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-[4px]" />
       </div>
 
       <Navbar />
@@ -100,7 +100,7 @@ export default function MaleSalonsPage() {
                   </SelectContent>
                 </Select>
              </div>
-             <span className="text-[10px] uppercase tracking-widest text-blue-400 font-bold hidden lg:block animate-pulse">
+             <span className="text-[10px] uppercase tracking-widest text-pink-400 font-bold hidden lg:block animate-pulse">
                Discover Top Rated Grooming Spots
              </span>
           </div>
@@ -109,10 +109,10 @@ export default function MaleSalonsPage() {
         <div className="container mx-auto px-4 py-12 space-y-16">
           <div className="text-center space-y-4 max-w-4xl mx-auto">
             <h1 className="font-display text-4xl md:text-7xl text-white drop-shadow-2xl leading-tight">
-              Discover Salons for <span className="text-blue-400 italic">Men</span>
+              Discover Salons for <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400 italic">Men</span>
             </h1>
             <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto font-light tracking-wide italic">
-              Find the perfect spot for your next cut or shave in the heart of Dehradun.
+              Experience the pink of perfection and royal grooming in the heart of Dehradun.
             </p>
           </div>
 
@@ -120,16 +120,16 @@ export default function MaleSalonsPage() {
             {MALE_SALONS.map((salon, i) => (
               <div 
                 key={i} 
-                className="group relative rounded-[2.5rem] overflow-hidden bg-white/5 border border-white/20 backdrop-blur-md shadow-2xl hover:scale-[1.02] transition-all duration-500 hover:border-blue-500/50"
+                className="group relative rounded-[2.5rem] overflow-hidden bg-white/5 border border-white/20 backdrop-blur-md shadow-2xl hover:scale-[1.02] transition-all duration-500 hover:border-pink-500/50"
               >
                 <div className="relative h-64">
                   <Image src={salon.img} alt={salon.name} fill className="object-cover opacity-80 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent" />
-                  <Badge className="absolute top-4 left-4 bg-blue-600 text-white border-none font-bold shadow-lg">
+                  <Badge className="absolute top-4 left-4 bg-pink-600 text-white border-none font-bold shadow-lg">
                     {salon.price === 'High' ? 'LUXURY' : salon.price === 'Average' ? 'VALUE' : 'BUDGET'}
                   </Badge>
                   <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white flex items-center gap-1 border border-white/10">
-                    <Scissors className="h-3 w-3 text-blue-400" />
+                    <Scissors className="h-3 w-3 text-purple-400" />
                     Starts at {salon.startingPrice}
                   </div>
                 </div>
@@ -137,14 +137,14 @@ export default function MaleSalonsPage() {
                 <div className="p-8 space-y-6">
                   <div className="space-y-1">
                     <div className="flex justify-between items-center">
-                      <h3 className="font-headline text-2xl text-white group-hover:text-blue-400 transition-colors">{salon.name}</h3>
+                      <h3 className="font-headline text-2xl text-white group-hover:text-pink-400 transition-colors">{salon.name}</h3>
                       <div className="flex items-center gap-1 text-amber-400 font-bold">
                         <Star className="h-4 w-4 fill-current" />
                         <span>{salon.rating}</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 text-white/40 text-sm">
-                      <MapPin className="h-3 w-3 text-blue-500/50" />
+                      <MapPin className="h-3 w-3 text-purple-500/50" />
                       <span>{salon.area}, Dehradun</span>
                     </div>
                   </div>
@@ -158,7 +158,7 @@ export default function MaleSalonsPage() {
                   </div>
 
                   <div className="pt-2">
-                    <Button className="w-full h-12 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-headline text-lg transition-all duration-300 shadow-[0_0_25px_rgba(37,99,235,0.4)] hover:shadow-blue-500/60 active:scale-95 border-none">
+                    <Button className="w-full h-12 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-headline text-lg transition-all duration-300 shadow-[0_0_25px_rgba(236,72,153,0.4)] hover:shadow-purple-500/60 active:scale-95 border-none">
                       Check Availability
                     </Button>
                   </div>
