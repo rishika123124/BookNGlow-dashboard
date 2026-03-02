@@ -1,3 +1,4 @@
+
 import { Navbar } from '@/components/dashboard/Navbar'
 import { CategoryBar } from '@/components/dashboard/CategoryBar'
 import Image from 'next/image'
@@ -16,7 +17,11 @@ import {
   ChevronRight,
   Gem,
   Zap,
-  Crown
+  Crown,
+  Scissors,
+  Flower2,
+  Brush,
+  Smile
 } from 'lucide-react'
 
 export default function Home() {
@@ -33,13 +38,13 @@ export default function Home() {
         <section className="relative flex flex-col lg:flex-row items-center gap-12 pt-8">
           <div className="flex-1 space-y-8 text-center lg:text-left">
             <h1 className="font-headline text-5xl md:text-7xl text-foreground leading-tight">
-              Elegance in Every <br />
+              Dehradun's Finest <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent font-bold">
-                Radiant Detail
+                Salon Experience
               </span>
             </h1>
             <p className="font-body text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0">
-              Discover and book Dehradun's most refined beauty experiences with our intelligent luxury concierge.
+              From Rajpur Road to Jakhan, discover and book every type of beauty service—from premium hair studios to local grooming experts.
             </p>
             
             {/* Quick Book Pill */}
@@ -47,24 +52,27 @@ export default function Home() {
               <div className="flex-1 flex items-center gap-2 px-6 py-2 border-b md:border-b-0 md:border-r border-gray-100 w-full">
                 <MapPin className="h-5 w-5 text-primary" />
                 <select className="bg-transparent border-none focus:ring-0 font-body text-sm w-full outline-none">
-                  <option>Select Area</option>
+                  <option>Select Locality</option>
                   <option>Rajpur Road</option>
                   <option>Jakhan</option>
                   <option>Sahastradhara</option>
+                  <option>Ballupur</option>
                 </select>
               </div>
               <div className="flex-1 flex items-center gap-2 px-6 py-2 border-b md:border-b-0 md:border-r border-gray-100 w-full">
                 <Crown className="h-5 w-5 text-accent" />
                 <select className="bg-transparent border-none focus:ring-0 font-body text-sm w-full outline-none">
-                  <option>Choose Service</option>
+                  <option>Any Service</option>
+                  <option>Hair Styling</option>
                   <option>Bridal Makeup</option>
                   <option>Luxury Facial</option>
-                  <option>Signature Grooming</option>
+                  <option>Nail Art</option>
+                  <option>Men's Grooming</option>
                 </select>
               </div>
               <div className="flex-1 flex items-center gap-2 px-6 py-2 w-full">
                 <Clock className="h-5 w-5 text-primary/60" />
-                <span className="font-body text-sm text-muted-foreground">Find Slots</span>
+                <span className="font-body text-sm text-muted-foreground">Check Slots</span>
               </div>
               <Button className="rounded-full bg-primary hover:bg-primary/90 text-white px-8 h-12 shadow-[0_0_20px_rgba(168,85,247,0.4)] group transition-all shrink-0">
                 <Search className="h-4 w-4 mr-2" />
@@ -78,20 +86,19 @@ export default function Home() {
             <div className="relative h-full w-full rounded-[2.5rem] overflow-hidden shadow-2xl group border-4 border-white">
               <Image 
                 src={heroImage} 
-                alt="Luxury Salon Experience" 
+                alt="Luxury Salon Experience in Dehradun" 
                 fill 
                 className="object-cover transition-transform duration-1000 group-hover:scale-105"
                 data-ai-hint="luxury salon"
               />
-              {/* Floating Service Card Animation */}
               <div className="absolute bottom-8 right-8 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-white/50 animate-bounce duration-[3000ms] hover:animate-none">
                 <div className="flex items-center gap-4">
                   <div className="relative h-12 w-12 rounded-full overflow-hidden border-2 border-accent">
-                    <Image src={serviceImage} alt="Stylist" fill className="object-cover" />
+                    <Image src={serviceImage} alt="Stylist at work" fill className="object-cover" />
                   </div>
                   <div>
-                    <p className="font-headline text-sm font-bold">Signature Glow</p>
-                    <p className="text-xs text-muted-foreground font-body">Stylist: Elena V.</p>
+                    <p className="font-headline text-sm font-bold">Doon Signature Glow</p>
+                    <p className="text-xs text-muted-foreground font-body">Expert: Elena V.</p>
                   </div>
                 </div>
               </div>
@@ -102,9 +109,9 @@ export default function Home() {
         {/* 2. Interactive Service Hotspots */}
         <section className="space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="font-headline text-4xl text-foreground">Explore by Category</h2>
+            <h2 className="font-headline text-4xl text-foreground">Explore Every Service</h2>
             <p className="font-body text-muted-foreground max-w-2xl mx-auto">
-              Curated luxury treatments designed for the discerning individual.
+              Whether it's a quick trim or an elaborate bridal makeover, find Dehradun's best-rated salons.
             </p>
           </div>
 
@@ -112,19 +119,19 @@ export default function Home() {
             {[
               { 
                 title: "Bridal Suites", 
-                desc: "Exclusive for Dehradun weddings. Premium vanity and privacy.", 
+                desc: "Exclusive for Doon weddings. Premium vanity and total privacy for your big day.", 
                 icon: Crown,
                 img: "https://picsum.photos/seed/bridal/600/400"
               },
               { 
                 title: "Signature Grooming", 
-                desc: "The ultimate men's grooming experience in a relaxed setting.", 
+                desc: "The ultimate men's grooming experience in a relaxed, high-end setting.", 
                 icon: Gem,
                 img: "https://picsum.photos/seed/grooming/600/400"
               },
               { 
                 title: "Luxury Skin Therapies", 
-                desc: "Advanced dermatological care meets spa-level comfort.", 
+                desc: "Advanced dermatological care meets spa-level comfort for that Doon glow.", 
                 icon: Sparkles,
                 img: "https://picsum.photos/seed/skin/600/400"
               }
@@ -161,16 +168,16 @@ export default function Home() {
               </div>
               <h2 className="font-headline text-4xl text-foreground leading-tight">
                 Instantly Locate <br />
-                <span className="text-primary">Premium Partners</span>
+                <span className="text-primary">Salons Across Dehradun</span>
               </h2>
               <p className="font-body text-muted-foreground text-lg">
-                Our real-time network tracks the best stylists available now across Rajpur Road, Jakhan, and beyond.
+                Our real-time network tracks the best stylists available now across Rajpur Road, Jakhan, and Sahastradhara.
               </p>
               <div className="flex flex-col gap-4">
                 {[
                   { name: "Jakhan", color: "text-accent", status: "8 Active Salons" },
                   { name: "Rajpur Road", color: "text-primary", status: "Premium Partner Zone" },
-                  { name: "Ballupur", color: "text-accent", status: "3 Available Now" }
+                  { name: "Sahastradhara", color: "text-accent", status: "4 Available Now" }
                 ].map((loc, i) => (
                   <div key={i} className="flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
                     <div className="flex items-center gap-3">
@@ -215,15 +222,15 @@ export default function Home() {
              <h2 className="font-headline text-5xl text-foreground">Book. Glow. Repeat.</h2>
           </div>
           <p className="font-body text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Earn <span className="text-primary font-bold">Glow Points</span> on every booking in Dehradun salons. Redeem your brilliance for free head massages, luxury upgrades, or exclusive discounts.
+            Earn <span className="text-primary font-bold">Glow Points</span> on every booking across all Dehradun salons. Redeem your brilliance for free head massages, luxury upgrades, or exclusive discounts.
           </p>
           <div className="flex flex-wrap justify-center gap-8">
             <div className="flex flex-col items-center gap-2 max-w-[200px]">
-               <div className="text-3xl font-headline text-primary">100+</div>
-               <p className="font-body text-sm text-muted-foreground">Premium Salons Enrolled</p>
+               <div className="text-3xl font-headline text-primary">150+</div>
+               <p className="font-body text-sm text-muted-foreground">Partner Salons in Doon</p>
             </div>
             <div className="flex flex-col items-center gap-2 max-w-[200px]">
-               <div className="text-3xl font-headline text-accent">50K+</div>
+               <div className="text-3xl font-headline text-accent">75K+</div>
                <p className="font-body text-sm text-muted-foreground">Glow Points Redeemed</p>
             </div>
             <div className="flex flex-col items-center gap-2 max-w-[200px]">
@@ -269,8 +276,8 @@ export default function Home() {
               <ul className="font-body text-white/60 space-y-3">
                 <li className="hover:text-white cursor-pointer transition-colors">Rajpur Road</li>
                 <li className="hover:text-white cursor-pointer transition-colors">Jakhan</li>
-                <li className="hover:text-white cursor-pointer transition-colors">Ballupur</li>
                 <li className="hover:text-white cursor-pointer transition-colors">Sahastradhara Road</li>
+                <li className="hover:text-white cursor-pointer transition-colors">Ballupur</li>
               </ul>
             </div>
 
@@ -286,7 +293,7 @@ export default function Home() {
 
             <div className="space-y-6">
               <h4 className="font-headline text-xl">Newsletter</h4>
-              <p className="font-body text-sm text-white/60">Subscribe for exclusive offers and glow tips.</p>
+              <p className="font-body text-sm text-white/60">Subscribe for exclusive Doon offers.</p>
               <div className="flex flex-col gap-2">
                 <Input placeholder="Your email" className="bg-white/5 border-white/10 text-white rounded-xl h-12" />
                 <Button className="w-full bg-primary hover:bg-primary/90 text-white rounded-xl h-12">Subscribe</Button>
@@ -295,7 +302,6 @@ export default function Home() {
           </div>
 
           <div className="border-t border-white/10 pt-12 flex flex-col md:flex-row justify-between items-center gap-8">
-             {/* Metallic Trust Badges */}
             <div className="flex gap-8">
               <div className="flex items-center gap-2 grayscale hover:grayscale-0 transition-all">
                 <ShieldCheck className="h-6 w-6 text-primary" />
@@ -308,7 +314,7 @@ export default function Home() {
             </div>
             
             <p className="text-xs text-white/40 font-body">
-              © 2024 BookNGlow Luxury. Crafted for the radiant.
+              © 2024 BookNGlow Dehradun. Crafted for the radiant.
             </p>
             
             <div className="flex gap-8 font-body text-xs text-white/40">

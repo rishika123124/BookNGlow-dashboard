@@ -1,5 +1,7 @@
+
+
 import React from 'react'
-import { Scissors, Sparkles, Flower2, Brush, Hand } from 'lucide-react'
+import { Scissors, Sparkles, Flower2, Brush, Hand, Smile } from 'lucide-react'
 
 const CATEGORIES = [
   { name: 'Hair', icon: Scissors },
@@ -7,6 +9,7 @@ const CATEGORIES = [
   { name: 'Nails', icon: Hand },
   { name: 'Makeup', icon: Brush },
   { name: 'Spa', icon: Flower2 },
+  { name: 'Grooming', icon: Smile },
 ]
 
 export function CategoryBar() {
@@ -32,3 +35,5 @@ export function CategoryBar() {
     </div>
   )
 }
+
+    
