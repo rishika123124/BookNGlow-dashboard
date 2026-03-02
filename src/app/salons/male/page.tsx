@@ -36,7 +36,7 @@ const MALE_SALONS = [
     price: "Average",
     startingPrice: "₹599",
     tags: ["Hair Styling", "Face Care"],
-    img: "https://picsum.photos/seed/gents/600/400"
+    img: PlaceHolderImages.find(img => img.id === 'salon-gents')?.imageUrl || "https://picsum.photos/seed/gents/600/400"
   },
   {
     name: "Doon Grooming Hub",
@@ -45,7 +45,7 @@ const MALE_SALONS = [
     price: "Average",
     startingPrice: "₹450",
     tags: ["Beard Trim", "Haircut"],
-    img: "https://picsum.photos/seed/hub/600/400"
+    img: PlaceHolderImages.find(img => img.id === 'salon-hub')?.imageUrl || "https://picsum.photos/seed/hub/600/400"
   },
   {
     name: "Sharp Styles",
@@ -54,7 +54,7 @@ const MALE_SALONS = [
     price: "Average",
     startingPrice: "₹400",
     tags: ["Quick Style", "Shave"],
-    img: "https://picsum.photos/seed/sharp/600/400"
+    img: PlaceHolderImages.find(img => img.id === 'salon-sharp')?.imageUrl || "https://picsum.photos/seed/sharp/600/400"
   },
   {
     name: "The Doon Barbershop",

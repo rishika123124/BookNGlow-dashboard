@@ -61,6 +61,24 @@
       "imageHint": "modern barber"
     },
     {
+      "id": "salon-gents",
+      "description": "Professional barbershop for The Gent's Club",
+      "imageUrl": "https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?q=80&w=1080&auto=format&fit=crop",
+      "imageHint": "barber work"
+    },
+    {
+      "id": "salon-hub",
+      "description": "Industrial style barbershop for Doon Grooming Hub",
+      "imageUrl": "https://images.unsplash.com/photo-1512690118265-10549663e756?q=80&w=1080&auto=format&fit=crop",
+      "imageHint": "barber chair"
+    },
+    {
+      "id": "salon-sharp",
+      "description": "Clean barber tools for Sharp Styles",
+      "imageUrl": "https://images.unsplash.com/photo-1599351431247-f10b21ce760a?q=80&w=1080&auto=format&fit=crop",
+      "imageHint": "barber tools"
+    },
+    {
       "id": "help-booking",
       "description": "Smartphone app for luxury salon booking",
       "imageUrl": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1080&auto=format&fit=crop",
