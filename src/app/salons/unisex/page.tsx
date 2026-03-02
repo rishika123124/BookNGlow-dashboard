@@ -46,6 +46,24 @@ const UNISEX_SALONS = [
     startingPrice: "₹750",
     tags: ["Global Color", "Hydra Facial"],
     img: PlaceHolderImages.find(img => img.id === 'salon-aura')?.imageUrl || "https://picsum.photos/seed/aura/600/400"
+  },
+  {
+    name: "Glow & Co. Unisex",
+    area: "Rajpur Road",
+    rating: "4.6",
+    price: "Average",
+    startingPrice: "₹599",
+    tags: ["Modern Haircut", "Skin Therapy"],
+    img: PlaceHolderImages.find(img => img.id === 'category-unisex')?.imageUrl || "https://picsum.photos/seed/glowco/600/400"
+  },
+  {
+    name: "The Urban Retreat",
+    area: "Clement Town",
+    rating: "4.8",
+    price: "Average",
+    startingPrice: "₹850",
+    tags: ["Organic Spa", "Reflexology"],
+    img: PlaceHolderImages.find(img => img.id === 'salon-serene')?.imageUrl || "https://picsum.photos/seed/urbanretreat/600/400"
   }
 ];
 
@@ -84,6 +102,7 @@ export default function UnisexSalonsPage() {
                     <SelectItem value="Rajpur Road">Rajpur Road</SelectItem>
                     <SelectItem value="Jakhan">Jakhan</SelectItem>
                     <SelectItem value="Ballupur">Ballupur</SelectItem>
+                    <SelectItem value="Clement Town">Clement Town</SelectItem>
                   </SelectContent>
                 </Select>
 
