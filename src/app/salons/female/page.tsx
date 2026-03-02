@@ -56,11 +56,11 @@ export default function FemaleSalonsPage() {
       
       <main className="relative z-10">
         {/* Sticky Filter Bar */}
-        <div className="sticky top-20 md:top-24 z-40 w-full bg-white/5 backdrop-blur-md border-b border-white/10 py-4 px-4 shadow-xl">
+        <div className="sticky top-20 md:top-24 z-40 w-full bg-slate-950/50 backdrop-blur-md border-b border-white/10 py-4 px-4 shadow-xl">
           <div className="container mx-auto flex flex-col md:flex-row gap-4 items-center justify-between">
              <div className="flex flex-wrap gap-4 items-center w-full md:w-auto">
                 <Select onValueChange={setLocation} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-white/10 border-white/20 text-white rounded-full">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-white/10 text-white rounded-full transition-all hover:from-blue-600/30 hover:to-purple-600/30">
                     <SelectValue placeholder="📍 Location" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -72,7 +72,7 @@ export default function FemaleSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setRating} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-white/10 border-white/20 text-white rounded-full">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-white/10 text-white rounded-full transition-all hover:from-blue-600/30 hover:to-purple-600/30">
                     <SelectValue placeholder="⭐ Rating" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-white/10 text-white">
@@ -83,7 +83,7 @@ export default function FemaleSalonsPage() {
                 </Select>
 
                 <Select onValueChange={setPrice} defaultValue="all">
-                  <SelectTrigger className="w-full md:w-[180px] bg-white/10 border-white/20 text-white rounded-full">
+                  <SelectTrigger className="w-full md:w-[180px] bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-white/10 text-white rounded-full transition-all hover:from-blue-600/30 hover:to-purple-600/30">
                     <SelectValue placeholder="💰 Price Range" />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-900 border-white/10 text-white">
