@@ -43,14 +43,6 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
-
   async function handleRoleRedirection(uid: string) {
     setIsRedirecting(true);
     try {
@@ -60,7 +52,7 @@ export default function LoginPage() {
         toast({
           variant: "destructive",
           title: "Account Incomplete",
-          description: "No profile found. Please sign up first.",
+          description: "No profile found. Please contact support or sign up again.",
         });
         setIsRedirecting(false);
         return;
@@ -76,6 +68,11 @@ export default function LoginPage() {
       }
     } catch (error) {
       console.error("Redirection error:", error);
+      toast({
+        variant: "destructive",
+        title: "Navigation Error",
+        description: "Could not verify your role. Please try again.",
+      });
       setIsRedirecting(false);
     }
   }
@@ -89,6 +86,7 @@ export default function LoginPage() {
       let message = "Failed to log in. Please check your credentials.";
       if (error.code === 'auth/user-not-found') message = "No account found with this email.";
       if (error.code === 'auth/wrong-password') message = "Incorrect password.";
+      if (error.code === 'auth/invalid-credential') message = "Invalid credentials provided.";
       
       toast({
         variant: "destructive",
@@ -121,7 +119,7 @@ export default function LoginPage() {
       toast({
         variant: "destructive",
         title: "Email Required",
-        description: "Please enter your email address first.",
+        description: "Please enter your email address first to reset password.",
       });
       return;
     }
@@ -141,12 +139,20 @@ export default function LoginPage() {
     }
   }
 
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
   if (isRedirecting) {
     return (
       <div className="min-h-screen bg-[#020617] flex items-center justify-center">
         <div className="text-center space-y-4">
           <Loader2 className="h-12 w-12 text-purple-500 animate-spin mx-auto" />
-          <p className="text-white/60 font-headline text-xl">Entering the luxury lounge...</p>
+          <p className="text-white/60 font-headline text-xl animate-pulse">Entering the luxury lounge...</p>
         </div>
       </div>
     );
@@ -163,7 +169,7 @@ export default function LoginPage() {
 
         <div className="w-full max-w-md space-y-8 relative z-10">
           <div className="text-center space-y-2">
-            <div className="inline-flex p-3 rounded-2xl bg-white/5 border border-white/10 mb-4 animate-pulse">
+            <div className="inline-flex p-3 rounded-2xl bg-white/5 border border-white/10 mb-4 transition-transform hover:scale-110">
               <LogIn className="h-8 w-8 text-purple-400" />
             </div>
             <h1 className="font-headline text-4xl md:text-5xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-amber-400">
@@ -184,11 +190,11 @@ export default function LoginPage() {
                     <FormItem>
                       <FormLabel className="text-white/60 text-xs uppercase tracking-widest font-bold">Email Address</FormLabel>
                       <FormControl>
-                        <div className="relative">
-                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/20" />
+                        <div className="relative group">
+                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/20 group-focus-within:text-purple-400 transition-colors" />
                           <Input 
                             placeholder="you@example.com" 
-                            className="bg-white/5 border-white/10 rounded-xl h-12 pl-10 focus:ring-purple-500 transition-all" 
+                            className="bg-white/5 border-white/10 rounded-xl h-12 pl-10 focus:ring-purple-500 transition-all text-white placeholder:text-white/20" 
                             {...field} 
                           />
                         </div>
@@ -214,12 +220,12 @@ export default function LoginPage() {
                         </button>
                       </div>
                       <FormControl>
-                        <div className="relative">
-                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/20" />
+                        <div className="relative group">
+                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/20 group-focus-within:text-purple-400 transition-colors" />
                           <Input 
                             type="password" 
                             placeholder="••••••••" 
-                            className="bg-white/5 border-white/10 rounded-xl h-12 pl-10 focus:ring-purple-500 transition-all" 
+                            className="bg-white/5 border-white/10 rounded-xl h-12 pl-10 focus:ring-purple-500 transition-all text-white placeholder:text-white/20" 
                             {...field} 
                           />
                         </div>
@@ -232,14 +238,14 @@ export default function LoginPage() {
                 <Button 
                   type="submit" 
                   disabled={isLoading}
-                  className="w-full h-14 rounded-full text-lg font-headline transition-all duration-300 bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-[1.02] shadow-xl shadow-purple-500/20 border-none"
+                  className="w-full h-14 rounded-full text-lg font-headline transition-all duration-300 bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-[1.02] shadow-xl shadow-purple-500/20 border-none group"
                 >
                   {isLoading ? (
                     <Loader2 className="h-5 w-5 animate-spin" />
                   ) : (
                     <>
                       Sign In
-                      <ChevronRight className="ml-2 h-5 w-5" />
+                      <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                     </>
                   )}
                 </Button>
@@ -288,7 +294,7 @@ export default function LoginPage() {
             New to BookNGlow?{' '}
             <button 
               onClick={() => router.push('/signup')}
-              className="text-purple-400 hover:underline font-bold"
+              className="text-purple-400 hover:underline font-bold transition-colors hover:text-purple-300"
             >
               Create an account
             </button>
