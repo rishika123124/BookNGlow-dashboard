@@ -1,11 +1,10 @@
-
 "use client"
 
 import React from 'react'
 import { Navbar } from '@/components/dashboard/Navbar'
 import { Footer } from '@/components/dashboard/Footer'
 import { Input } from '@/components/ui/input'
-import { Search, Calendar, RefreshCw, MapPin, MessageCircle, PhoneCall, Sparkles } from 'lucide-react'
+import { Search, Calendar, RefreshCw, MapPin, MessageCircle, PhoneCall, Sparkles, ChevronRight } from 'lucide-react'
 import {
   Accordion,
   AccordionContent,
@@ -13,26 +12,34 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Button } from '@/components/ui/button'
+import Image from 'next/image'
+import { PlaceHolderImages } from '@/lib/placeholder-images'
 
 export default function HelpPage() {
   const categories = [
     {
       title: 'Booking Issues',
-      desc: 'Facing trouble selecting a slot or salon in Dehradun? Learn how to book in 3 easy steps.',
-      icon: <Calendar className="h-8 w-8 text-cyan-400" />,
-      color: 'border-cyan-500/60 shadow-[0_0_30px_rgba(6,182,212,0.3)]'
+      desc: 'Facing trouble selecting a slot or salon in Dehradun? Learn how to book in 3 easy steps and secure your luxury experience.',
+      icon: <Calendar className="h-6 w-6 text-cyan-400" />,
+      img: PlaceHolderImages.find(img => img.id === 'help-booking')?.imageUrl || "https://picsum.photos/seed/booking/600/400",
+      color: 'border-cyan-500/60 shadow-[0_0_30px_rgba(6,182,212,0.3)]',
+      accent: 'text-cyan-400'
     },
     {
       title: 'Cancel or Reschedule',
-      desc: 'Plans changed? See how to easily cancel or move your appointment at no extra cost.',
-      icon: <RefreshCw className="h-8 w-8 text-rose-400" />,
-      color: 'border-rose-500/60 shadow-[0_0_30px_rgba(244,63,94,0.3)]'
+      desc: 'Plans changed? Our flexible policy allows you to easily cancel or move your appointment to a better time at no extra cost.',
+      icon: <RefreshCw className="h-6 w-6 text-rose-400" />,
+      img: PlaceHolderImages.find(img => img.id === 'help-cancel')?.imageUrl || "https://picsum.photos/seed/cancel/600/400",
+      color: 'border-rose-500/60 shadow-[0_0_30px_rgba(244,63,94,0.3)]',
+      accent: 'text-rose-400'
     },
     {
       title: 'Locate Your Salon',
-      desc: "Can't find the salon on the map? Get direct directions and contact details for your visit.",
-      icon: <MapPin className="h-8 w-8 text-violet-400" />,
-      color: 'border-violet-500/60 shadow-[0_0_30px_rgba(139,92,246,0.3)]'
+      desc: "Can't find the salon on the map? Get direct directions, floor details, and contact person details for a smooth arrival.",
+      icon: <MapPin className="h-6 w-6 text-violet-400" />,
+      img: PlaceHolderImages.find(img => img.id === 'help-locate')?.imageUrl || "https://picsum.photos/seed/locate/600/400",
+      color: 'border-violet-500/60 shadow-[0_0_30px_rgba(139,92,246,0.3)]',
+      accent: 'text-violet-400'
     }
   ]
 
@@ -83,13 +90,34 @@ export default function HelpPage() {
             {categories.map((cat, i) => (
               <div 
                 key={i}
-                className={`group p-8 rounded-[2rem] bg-white/10 backdrop-blur-md border ${cat.color} hover:bg-white/15 hover:scale-105 transition-all duration-500 cursor-pointer flex flex-col items-center text-center`}
+                className={`group rounded-[2.5rem] bg-slate-900/50 backdrop-blur-xl border ${cat.color} overflow-hidden hover:scale-[1.02] transition-all duration-500 cursor-pointer flex flex-col`}
               >
-                <div className="mb-6 p-4 rounded-2xl bg-white/5 border border-white/10 w-fit group-hover:scale-110 transition-transform">
-                  {cat.icon}
+                <div className="relative h-48 w-full">
+                  <Image 
+                    src={cat.img} 
+                    alt={cat.title} 
+                    fill 
+                    className="object-cover opacity-60 group-hover:opacity-80 transition-opacity" 
+                    data-ai-hint="help center category"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
+                  <div className="absolute top-6 left-6 p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 group-hover:scale-110 transition-transform">
+                    {cat.icon}
+                  </div>
                 </div>
-                <h3 className="font-headline text-2xl text-white mb-3">{cat.title}</h3>
-                <p className="text-white/60 text-sm md:text-base leading-relaxed">{cat.desc}</p>
+                
+                <div className="p-8 space-y-4">
+                  <h3 className="font-headline text-2xl text-white flex items-center gap-2">
+                    {cat.title}
+                    <ChevronRight className={`h-5 w-5 ${cat.accent} opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all`} />
+                  </h3>
+                  <p className="text-white/60 text-sm md:text-base leading-relaxed">
+                    {cat.desc}
+                  </p>
+                  <Button variant="link" className={`p-0 h-auto ${cat.accent} font-bold text-xs uppercase tracking-[0.2em]`}>
+                    Learn More
+                  </Button>
+                </div>
               </div>
             ))}
           </div>
@@ -135,7 +163,7 @@ export default function HelpPage() {
             </div>
 
             <div className="flex flex-col md:flex-row items-center justify-center gap-6 relative z-10">
-              <Button className="h-16 px-10 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-headline text-xl gap-3 shadow-[0_0_30px_rgba(16,185,129,0.4)] animate-pulse">
+              <Button className="h-16 px-10 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-headline text-xl gap-3 shadow-[0_0_30px_rgba(16,185,129,0.4)]">
                 <MessageCircle className="h-6 w-6" />
                 WhatsApp Support
               </Button>
