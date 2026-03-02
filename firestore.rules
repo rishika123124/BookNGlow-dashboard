@@ -55,12 +55,10 @@ service cloud.firestore {
 
     /**
      * @description Rules for salon bookings. 
-     * @allow (list) Everyone can list bookings to check availability or fetch history.
-     * @allow (get) Users can see specific booking details if they are involved.
+     * @allow (read) Authenticated users can list and get bookings to manage their history and check availability.
      */
     match /bookings/{bookingId} {
-      allow list: if true; 
-      allow get: if isSignedIn() && (resource.data.customerId == request.auth.uid || resource.data.salonId == request.auth.uid);
+      allow read: if isSignedIn();
       allow create: if isSignedIn() && request.resource.data.customerId == request.auth.uid;
       allow update, delete: if isSignedIn() && resource.data.customerId == request.auth.uid;
     }

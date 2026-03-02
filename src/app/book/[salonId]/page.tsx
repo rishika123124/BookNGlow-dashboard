@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useMemo } from 'react';
@@ -51,7 +52,7 @@ export default function BookingPage() {
   const { salonId } = useParams();
   const router = useRouter();
   const { toast } = useToast();
-  const { user, isUserLoading } = useUser(); // Fixed: Use useUser() to get the authenticated user object
+  const { user, isUserLoading } = useUser();
   const db = useFirestore();
   
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
@@ -83,7 +84,8 @@ export default function BookingPage() {
   }, [existingBookings]);
 
   const handleBooking = async () => {
-    // Auth verification fix
+    if (isUserLoading) return; // Prevent action while auth is resolving
+
     if (!user) {
       toast({
         variant: "destructive",
@@ -109,7 +111,6 @@ export default function BookingPage() {
 
     try {
       const bookingsRef = collection(db, 'bookings');
-      // Non-blocking write handled by internal catch and error emitter
       await addDoc(bookingsRef, bookingData).catch((e) => {
         errorEmitter.emit('permission-error', new FirestorePermissionError({
           path: 'bookings',
@@ -192,8 +193,10 @@ export default function BookingPage() {
                   mode="single"
                   selected={selectedDate}
                   onSelect={(date) => {
-                    setSelectedDate(date);
-                    setSelectedSlot(null);
+                    if (date) {
+                      setSelectedDate(date);
+                      setSelectedSlot(null);
+                    }
                   }}
                   disabled={(date) => isBefore(date, startOfDay(new Date()))}
                   className="w-full"
@@ -269,9 +272,9 @@ export default function BookingPage() {
                     <p className="text-white/40 text-sm italic">
                       Experience the gold standard of grooming.
                     </p>
-                    {selectedSlot && (
+                    {selectedSlot && selectedDate && (
                       <p className="text-[#A78BFA] font-bold text-sm mt-1 animate-in fade-in slide-in-from-bottom-1">
-                        Selected: {format(selectedDate!, 'EEE, MMM do')} @ {selectedSlot}
+                        Selected: {format(selectedDate, 'EEE, MMM do')} @ {selectedSlot}
                       </p>
                     )}
                   </div>
@@ -374,7 +377,7 @@ export default function BookingPage() {
           
           <DialogFooter className="mt-8">
             <Button 
-              onClick={() => router.push('/')}
+              onClick={() => router.push('/dashboard')}
               className="w-full h-14 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-[1.02] transition-all font-headline text-lg border-none"
             >
               Back to Dashboard

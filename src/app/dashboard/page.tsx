@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect } from 'react';
@@ -46,22 +47,24 @@ export default function DashboardPage() {
   }, [user, isUserLoading, router]);
 
   // Fetch Firestore User Profile for Name and Role
+  // Dependency on user?.uid ensures we only query when the UID is stable
   const userProfileRef = useMemoFirebase(() => {
-    if (!db || !user) return null;
+    if (!db || !user?.uid) return null;
     return doc(db, 'users', user.uid);
-  }, [db, user]);
+  }, [db, user?.uid]);
   
   const { data: profile, isLoading: profileLoading } = useDoc(userProfileRef);
 
   // Fetch User's Bookings filtered by their customerId
+  // Ensuring we wait for auth to be fully ready
   const bookingsQuery = useMemoFirebase(() => {
-    if (!db || !user) return null;
+    if (!db || !user?.uid) return null;
     return query(
       collection(db, 'bookings'),
       where('customerId', '==', user.uid),
       orderBy('createdAt', 'desc')
     );
-  }, [db, user]);
+  }, [db, user?.uid]);
 
   const { data: bookings, isLoading: bookingsLoading } = useCollection(bookingsQuery);
 
@@ -85,7 +88,7 @@ export default function DashboardPage() {
     );
   }
 
-  // Final check before rendering main content
+  // Final check before rendering main content to prevent flickering
   if (!user) return null;
 
   return (
