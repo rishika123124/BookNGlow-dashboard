@@ -62,9 +62,9 @@
     },
     {
       "id": "help-booking",
-      "description": "Booking assistance illustration",
-      "imageUrl": "https://images.unsplash.com/photo-1512418490979-92798ccc13a0?q=80&w=1080&auto=format&fit=crop",
-      "imageHint": "booking help"
+      "description": "Smartphone app for luxury salon booking",
+      "imageUrl": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1080&auto=format&fit=crop",
+      "imageHint": "mobile booking"
     },
     {
       "id": "help-cancel",
