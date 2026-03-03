@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -9,12 +8,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Sparkles, ArrowRight, Loader2, Mail, Lock, User, Store, MapPin, Briefcase } from 'lucide-react';
+import { Sparkles, ArrowRight, Loader2, Mail, Lock, User, Store, MapPin } from 'lucide-react';
 import { useAuth, useUser, useFirestore } from '@/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const DEHRADUN_LOCALITIES = [
@@ -147,10 +145,10 @@ export default function LoginPage() {
               {authMode === 'signup' && (
                 <TabsList className="grid w-full grid-cols-2 bg-white/5 rounded-2xl p-1 mb-8 border border-white/10">
                   <TabsTrigger value="customer" className="rounded-xl data-[state=active]:bg-purple-600 data-[state=active]:text-white">
-                    I am a Customer
+                    Customer
                   </TabsTrigger>
                   <TabsTrigger value="salon" className="rounded-xl data-[state=active]:bg-purple-600 data-[state=active]:text-white">
-                    I am a Salon Partner
+                    Salon
                   </TabsTrigger>
                 </TabsList>
               )}
