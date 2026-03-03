@@ -2,13 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Navbar } from '@/components/dashboard/Navbar';
 import { Footer } from '@/components/dashboard/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Sparkles, ArrowRight, Loader2, Mail, Lock, User, Store, MapPin } from 'lucide-react';
+import { Sparkles, ArrowRight, Loader2, Mail, Lock, User, Store, MapPin, HelpCircle } from 'lucide-react';
 import { useAuth, useUser, useFirestore } from '@/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
@@ -284,7 +285,7 @@ export default function LoginPage() {
               </form>
             </Tabs>
 
-            <div className="mt-8 pt-8 border-t border-white/10 text-center">
+            <div className="mt-8 pt-8 border-t border-white/10 flex flex-col items-center gap-4">
               <button 
                 onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')}
                 className="text-white/40 hover:text-white transition-colors text-sm"
@@ -293,6 +294,13 @@ export default function LoginPage() {
                   ? "Don't have an account? Join the glow" 
                   : "Already a member? Sign in instead"}
               </button>
+              <Link 
+                href="/support" 
+                className="flex items-center gap-2 text-purple-400/60 hover:text-purple-400 transition-colors text-xs"
+              >
+                <HelpCircle className="h-3 w-3" />
+                Need help with your account?
+              </Link>
             </div>
           </div>
         </div>
