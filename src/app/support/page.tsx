@@ -38,7 +38,7 @@ const AUTH_SUPPORT_ITEMS = [
 
 const BOOKING_SUPPORT_ITEMS = [
   { icon: CheckCircle, label: 'Booking Status' },
-  { icon: XCircle, label: 'Cancellation & Refunds' },
+  { icon: XCircle, label: 'Cancellation' },
   { icon: Clock, label: 'Rescheduling' },
 ];
 
