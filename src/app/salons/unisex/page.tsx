@@ -149,7 +149,7 @@ export default function UnisexSalonsPage() {
                   </div>
 
                   <div className="pt-4 grid grid-cols-1 gap-3">
-                    <Button asChild variant="outline" className="w-full h-12 rounded-full border-white/20 hover:bg-white/10 text-white font-headline text-lg transition-all duration-300">
+                    <Button asChild variant="outline" className="w-full h-12 rounded-full border-white/20 hover:bg-white/10 text-purple-400 font-headline text-lg transition-all duration-300">
                       <Link href={`/salons/${salon.id}`}>
                         <Info className="mr-2 h-4 w-4" />
                         View Detail

@@ -170,7 +170,7 @@ export default function MaleSalonsPage() {
                   </div>
 
                   <div className="pt-2 grid grid-cols-1 gap-3">
-                    <Button asChild variant="outline" className="w-full h-12 rounded-full border-blue-500/20 hover:bg-blue-500/10 text-white font-headline text-lg transition-all duration-300">
+                    <Button asChild variant="outline" className="w-full h-12 rounded-full border-blue-500/20 hover:bg-blue-500/10 text-blue-400 font-headline text-lg transition-all duration-300">
                       <Link href={`/salons/${salon.id}`}>
                         <Info className="mr-2 h-4 w-4" />
                         View Detail
