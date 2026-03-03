@@ -119,10 +119,6 @@ export default function UnisexSalonsPage() {
                   <Badge className="absolute top-6 left-6 bg-white/20 text-white border-white/10 backdrop-blur-md font-bold shadow-lg">
                     {salon.price === 'High' ? 'MODERN LUXE' : 'INCLUSIVE'}
                   </Badge>
-                  <div className="absolute bottom-6 right-6 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold text-white flex items-center gap-2 border border-white/20">
-                    <Sparkles className="h-3.5 w-3.5 text-white" />
-                    Starts at {salon.startingPrice}
-                  </div>
                 </div>
                 
                 <div className="p-8 md:p-10 space-y-6">

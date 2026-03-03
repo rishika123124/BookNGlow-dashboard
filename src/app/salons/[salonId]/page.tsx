@@ -223,11 +223,6 @@ export default function SalonDetailPage() {
           <aside className="relative">
             <div className="sticky top-32 space-y-8">
               <div className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-8 space-y-8 shadow-2xl">
-                <div className="space-y-2">
-                  <p className="text-[10px] uppercase tracking-widest font-bold text-purple-400">Services starting from</p>
-                  <p className="text-4xl font-bold">₹499</p>
-                </div>
-                
                 <div className="space-y-4">
                   <div className="flex justify-between text-sm">
                     <span className="text-white/40">Initial Consultation</span>

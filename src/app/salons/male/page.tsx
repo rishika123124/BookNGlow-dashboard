@@ -140,10 +140,6 @@ export default function MaleSalonsPage() {
                   <Badge className="absolute top-4 left-4 bg-blue-600 text-white border-none font-bold shadow-lg">
                     {salon.price === 'High' ? 'LUXURY' : salon.price === 'Average' ? 'VALUE' : 'BUDGET'}
                   </Badge>
-                  <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white flex items-center gap-1 border border-white/10">
-                    <Scissors className="h-3 w-3 text-blue-400" />
-                    Starts at {salon.startingPrice}
-                  </div>
                 </div>
                 
                 <div className="p-8 space-y-6">

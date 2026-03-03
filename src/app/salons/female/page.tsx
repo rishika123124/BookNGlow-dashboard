@@ -47,7 +47,7 @@ export default function FemaleSalonsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#C7B1A6] text-[#333333] selection:bg-[#BCA396]/30 font-body relative">
+    <div className="min-h-screen bg-[#D6C4BC] text-[#333333] selection:bg-[#BCA396]/30 font-body relative">
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#D6C4BC_0%,_#C7B1A6_100%)]" />
       </div>
@@ -127,10 +127,6 @@ export default function FemaleSalonsPage() {
                       PREMIUM
                     </Badge>
                   )}
-                  <div className="absolute bottom-6 right-6 bg-[#FAF9F6]/80 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold text-[#333333] flex items-center gap-2 border border-white/20">
-                    <Heart className="h-3.5 w-3.5 text-[#BCA396]" />
-                    Starts at {salon.startingPrice}
-                  </div>
                 </div>
                 
                 <div className="p-8 md:p-10 space-y-6">
