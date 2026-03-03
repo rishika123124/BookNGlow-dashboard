@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -29,6 +28,7 @@ import {
   Sparkles,
   Phone,
   Loader2,
+  ChevronRight,
 } from 'lucide-react';
 import { useUser, useFirestore } from '@/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -38,9 +38,9 @@ import { FirestorePermissionError } from '@/firebase/errors';
 import { cn } from '@/lib/utils';
 
 const AUTH_SUPPORT_ITEMS = [
-  { icon: UserPlus, label: 'Registration Issues', category: 'auth' },
-  { icon: LogIn, label: 'Login Trouble', category: 'auth' },
-  { icon: Key, label: 'Account Recovery', category: 'auth' },
+  { icon: UserPlus, label: 'Registration', category: 'auth' },
+  { icon: LogIn, label: 'Login', category: 'auth' },
+  { icon: Key, label: 'Recovery', category: 'auth' },
   { icon: UserCog, label: 'Role Switching', category: 'auth' },
 ];
 
@@ -92,7 +92,7 @@ export default function SupportPage() {
     
     toast({
       title: `${subCategory} selected`,
-      description: "We've updated the inquiry category for you.",
+      description: "We've pre-filled the inquiry details for you.",
     });
   };
 
@@ -165,7 +165,7 @@ export default function SupportPage() {
         <div className="max-w-5xl mx-auto space-y-16">
           
           {/* Header */}
-          <div className="text-center space-y-4">
+          <div className="text-center space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-bold uppercase tracking-widest">
               <Sparkles className="h-3 w-3" />
               Concierge Desk
@@ -173,8 +173,8 @@ export default function SupportPage() {
             <h1 className="font-headline text-5xl md:text-7xl tracking-tight text-white">
               Support
             </h1>
-            <p className="text-white/40 text-lg md:text-xl max-w-2xl mx-auto">
-              How can our luxury concierge assist you today?
+            <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+              We’re here to help. Select a category below to resolve your issue.
             </p>
           </div>
 
@@ -183,26 +183,32 @@ export default function SupportPage() {
             {/* Left: Quick Categories */}
             <div className="space-y-12">
               
-              {/* Authentication Support */}
+              {/* Account & Login Section */}
               <div className="space-y-6">
-                <h2 className="font-headline text-2xl tracking-wide flex items-center gap-3">
-                  <Key className="h-5 w-5 text-[#A78BFA]" />
-                  Authentication Support
-                </h2>
+                <div className="space-y-2">
+                  <h2 className="font-headline text-2xl tracking-wide flex items-center gap-3">
+                    <Key className="h-6 w-6 text-[#A78BFA]" />
+                    Account & Login
+                  </h2>
+                  <p className="text-white/40 text-sm">Get help with registration, logging in, or managing your account settings.</p>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {AUTH_SUPPORT_ITEMS.map((item) => (
                     <div 
                       key={item.label}
                       onClick={() => handleCardClick(item.category, item.label)}
                       className={cn(
-                        "group p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-purple-500/30 transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]",
-                        formData.subCategory === item.label && "border-purple-500/50 bg-purple-500/5 shadow-[0_0_20px_rgba(168,85,247,0.1)]"
+                        "group p-5 rounded-2xl bg-white/5 border border-white/10 transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98] hover:bg-white/10 hover:border-purple-500/40",
+                        formData.subCategory === item.label && "border-purple-500/50 bg-purple-500/10 shadow-[0_0_25px_rgba(168,85,247,0.15)]"
                       )}
                     >
-                      <item.icon className={cn(
-                        "h-6 w-6 mb-3 transition-transform group-hover:scale-110",
-                        formData.subCategory === item.label ? "text-purple-400" : "text-white/40"
-                      )} />
+                      <div className="flex items-center justify-between mb-3">
+                        <item.icon className={cn(
+                          "h-6 w-6 transition-transform group-hover:scale-110",
+                          formData.subCategory === item.label ? "text-purple-400" : "text-white/40"
+                        )} />
+                        <ChevronRight className="h-4 w-4 text-white/10 group-hover:text-white/40 transition-colors" />
+                      </div>
                       <span className={cn(
                         "text-sm font-medium transition-colors",
                         formData.subCategory === item.label ? "text-white" : "text-white/80 group-hover:text-white"
@@ -212,26 +218,32 @@ export default function SupportPage() {
                 </div>
               </div>
 
-              {/* Booking Support */}
+              {/* Bookings & Appointments Section */}
               <div className="space-y-6">
-                <h2 className="font-headline text-2xl tracking-wide flex items-center gap-3">
-                  <CheckCircle className="h-5 w-5 text-[#DB2777]" />
-                  Booking Support
-                </h2>
+                <div className="space-y-2">
+                  <h2 className="font-headline text-2xl tracking-wide flex items-center gap-3">
+                    <CheckCircle className="h-6 w-6 text-[#DB2777]" />
+                    Bookings & Appointments
+                  </h2>
+                  <p className="text-white/40 text-sm">Manage your current bookings, check status, or handle cancellations.</p>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {BOOKING_SUPPORT_ITEMS.map((item) => (
                     <div 
                       key={item.label}
                       onClick={() => handleCardClick(item.category, item.label)}
                       className={cn(
-                        "group p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-pink-500/30 transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]",
-                        formData.subCategory === item.label && "border-pink-500/50 bg-pink-500/5 shadow-[0_0_20px_rgba(219,39,119,0.1)]"
+                        "group p-5 rounded-2xl bg-white/5 border border-white/10 transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98] hover:bg-white/10 hover:border-pink-500/40",
+                        formData.subCategory === item.label && "border-pink-500/50 bg-pink-500/10 shadow-[0_0_25px_rgba(219,39,119,0.15)]"
                       )}
                     >
-                      <item.icon className={cn(
-                        "h-6 w-6 mb-3 transition-transform group-hover:scale-110",
-                        formData.subCategory === item.label ? "text-pink-500" : "text-white/40"
-                      )} />
+                      <div className="flex items-center justify-between mb-3">
+                        <item.icon className={cn(
+                          "h-6 w-6 transition-transform group-hover:scale-110",
+                          formData.subCategory === item.label ? "text-pink-500" : "text-white/40"
+                        )} />
+                        <ChevronRight className="h-4 w-4 text-white/10 group-hover:text-white/40 transition-colors" />
+                      </div>
                       <span className={cn(
                         "text-sm font-medium transition-colors",
                         formData.subCategory === item.label ? "text-white" : "text-white/80 group-hover:text-white"
@@ -242,34 +254,34 @@ export default function SupportPage() {
               </div>
 
               {/* Contact Info */}
-              <div className="p-8 rounded-[2rem] bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-white/10 space-y-6">
-                <h3 className="font-headline text-xl text-white">Office Contact</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-4 text-white/60">
-                    <div className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center">
-                      <Mail className="h-5 w-5 text-purple-400" />
+              <div className="p-8 rounded-[2.5rem] bg-gradient-to-br from-purple-900/10 to-pink-900/10 border border-white/10 space-y-8">
+                <h3 className="font-headline text-2xl text-white">Direct Reach</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
+                  <div className="flex items-center gap-4 text-white/60 group">
+                    <div className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-purple-500/40 transition-colors">
+                      <Mail className="h-6 w-6 text-purple-400" />
                     </div>
                     <div>
-                      <p className="text-[10px] uppercase tracking-widest font-bold">Email Us</p>
+                      <p className="text-[10px] uppercase tracking-widest font-bold text-white/30">Office Email</p>
                       <p className="text-white font-medium">support@booknglow.com</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4 text-white/60">
-                    <div className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center">
-                      <MapPin className="h-5 w-5 text-pink-500" />
+                  <div className="flex items-center gap-4 text-white/60 group">
+                    <div className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-blue-500/40 transition-colors">
+                      <Phone className="h-6 w-6 text-blue-400" />
                     </div>
                     <div>
-                      <p className="text-[10px] uppercase tracking-widest font-bold">Our Location</p>
-                      <p className="text-white font-medium">Rajpur Road, Dehradun</p>
+                      <p className="text-[10px] uppercase tracking-widest font-bold text-white/30">Call Desk</p>
+                      <p className="text-white font-medium">+91-135-BOOK-GLOW</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4 text-white/60">
-                    <div className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center">
-                      <Phone className="h-5 w-5 text-blue-400" />
+                  <div className="flex items-center gap-4 text-white/60 group">
+                    <div className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-pink-500/40 transition-colors">
+                      <MapPin className="h-6 w-6 text-pink-500" />
                     </div>
                     <div>
-                      <p className="text-[10px] uppercase tracking-widest font-bold">Call Us</p>
-                      <p className="text-white font-medium">+91-135-BOOK-GLOW</p>
+                      <p className="text-[10px] uppercase tracking-widest font-bold text-white/30">HQ Location</p>
+                      <p className="text-white font-medium">Rajpur Road, Dehradun</p>
                     </div>
                   </div>
                 </div>
@@ -277,20 +289,22 @@ export default function SupportPage() {
             </div>
 
             {/* Right: Support Form */}
-            <div ref={formRef} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8 md:p-10 shadow-2xl space-y-8 scroll-mt-24">
-              <div className="space-y-2">
-                <h3 className="font-headline text-3xl text-white tracking-wide">Submit an Inquiry</h3>
-                <p className="text-white/40 text-sm italic">Expect a response within 2 business hours.</p>
+            <div ref={formRef} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[3rem] p-8 md:p-12 shadow-2xl space-y-8 scroll-mt-24 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl" />
+              
+              <div className="space-y-3 relative z-10">
+                <h3 className="font-headline text-3xl md:text-4xl text-white tracking-wide">Inquiry Concierge</h3>
+                <p className="text-white/40 text-sm md:text-base italic">Provide your details below and we will resolve your query within 2 hours.</p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
                 <div className="space-y-2">
                   <Label className="text-white/60">Full Name</Label>
                   <Input 
                     value={formData.fullName}
                     onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
-                    placeholder="Enter your full name" 
-                    className="bg-white/5 border-white/10 rounded-xl h-12 text-white focus:ring-purple-500" 
+                    placeholder="e.g. Rahul Sharma" 
+                    className="bg-white/5 border-white/10 rounded-2xl h-14 text-white focus:ring-purple-500 focus:bg-white/10 transition-all" 
                     required
                   />
                 </div>
@@ -301,46 +315,47 @@ export default function SupportPage() {
                     value={formData.contactInfo}
                     onChange={(e) => setFormData(prev => ({ ...prev, contactInfo: e.target.value }))}
                     placeholder="name@example.com or +91..." 
-                    className="bg-white/5 border-white/10 rounded-xl h-12 text-white focus:ring-purple-500" 
+                    className="bg-white/5 border-white/10 rounded-2xl h-14 text-white focus:ring-purple-500 focus:bg-white/10 transition-all" 
                     required
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label className="text-white/60">Issue Category</Label>
-                  <Select 
-                    value={formData.category} 
-                    onValueChange={(val) => setFormData(prev => ({ ...prev, category: val }))}
-                  >
-                    <SelectTrigger className="bg-white/5 border-white/10 rounded-xl h-12 text-white focus:ring-purple-500">
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-slate-900 border-white/10 text-white">
-                      <SelectItem value="auth">Account & Login</SelectItem>
-                      <SelectItem value="booking">Booking & Cancellation</SelectItem>
-                      <SelectItem value="salon">Salon Partnership</SelectItem>
-                      <SelectItem value="other">Other Inquiry</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label className="text-white/60">Issue Category</Label>
+                    <Select 
+                      value={formData.category} 
+                      onValueChange={(val) => setFormData(prev => ({ ...prev, category: val }))}
+                    >
+                      <SelectTrigger className="bg-white/5 border-white/10 rounded-2xl h-14 text-white focus:ring-purple-500">
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-slate-900 border-white/10 text-white rounded-2xl">
+                        <SelectItem value="auth">Account & Login</SelectItem>
+                        <SelectItem value="booking">Bookings & Appointments</SelectItem>
+                        <SelectItem value="salon">Salon Partnership</SelectItem>
+                        <SelectItem value="other">Other Inquiry</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-white/60">Booking ID (Optional)</Label>
+                    <Input 
+                      value={formData.bookingId}
+                      onChange={(e) => setFormData(prev => ({ ...prev, bookingId: e.target.value }))}
+                      placeholder="#BNG-XXXXX" 
+                      className="bg-white/5 border-white/10 rounded-2xl h-14 text-white focus:ring-purple-500 transition-all" 
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-white/60">Booking ID (Optional)</Label>
-                  <Input 
-                    value={formData.bookingId}
-                    onChange={(e) => setFormData(prev => ({ ...prev, bookingId: e.target.value }))}
-                    placeholder="e.g. #BNG-12345" 
-                    className="bg-white/5 border-white/10 rounded-xl h-12 text-white focus:ring-purple-500" 
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-white/60">Describe the Issue</Label>
+                  <Label className="text-white/60">Describe your inquiry</Label>
                   <Textarea 
                     value={formData.description}
                     onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                    placeholder="Provide details about your inquiry..." 
-                    className="bg-white/5 border-white/10 rounded-xl min-h-[120px] text-white focus:ring-purple-500" 
+                    placeholder="Tell us how we can help you today..." 
+                    className="bg-white/5 border-white/10 rounded-2xl min-h-[140px] text-white focus:ring-purple-500 focus:bg-white/10 transition-all resize-none" 
                     required
                   />
                 </div>
@@ -348,12 +363,12 @@ export default function SupportPage() {
                 <Button 
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-14 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:scale-[1.02] transition-all text-lg font-headline border-none shadow-xl shadow-purple-500/20"
+                  className="w-full h-16 rounded-[2rem] bg-gradient-to-r from-purple-600 to-pink-600 hover:scale-[1.02] active:scale-[0.98] transition-all text-xl font-headline border-none shadow-2xl shadow-purple-500/30"
                 >
-                  {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : (
+                  {isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : (
                     <>
-                      Send Inquiry
-                      <Send className="ml-2 h-5 w-5" />
+                      Submit Inquiry
+                      <Send className="ml-3 h-5 w-5" />
                     </>
                   )}
                 </Button>
