@@ -222,15 +222,13 @@ export default function SalonDetailPage() {
       </main>
 
       {/* Primary Sticky CTA */}
-      <div className="fixed bottom-0 left-0 w-full p-6 bg-white/80 backdrop-blur-xl border-t border-black/5 z-50">
-        <div className="container mx-auto">
-          <Button asChild className="w-full h-16 rounded-full bg-[#E57373] hover:bg-[#D46262] text-white text-xl font-semibold shadow-xl shadow-[#E57373]/20 border-none">
-            <Link href={`/book/${salonId}`}>
-              Book Appointment Now
-              <Sparkles className="ml-2 h-6 w-6" />
-            </Link>
-          </Button>
-        </div>
+      <div className="fixed bottom-0 left-0 w-full p-4 bg-white/90 backdrop-blur-xl border-t border-black/5 z-50 flex justify-center">
+        <Button asChild size="lg" className="rounded-full bg-[#E57373] hover:bg-[#D46262] text-white font-semibold shadow-lg shadow-[#E57373]/20 border-none transition-all hover:scale-105 px-10">
+          <Link href={`/book/${salonId}`} className="flex items-center gap-2">
+            Book Appointment Now
+            <Sparkles className="h-5 w-5" />
+          </Link>
+        </Button>
       </div>
 
       <Footer />
