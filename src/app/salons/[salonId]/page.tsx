@@ -21,7 +21,8 @@ import {
   Zap,
   Phone,
   Mail,
-  Calendar
+  Calendar,
+  ArrowRight
 } from 'lucide-react';
 import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
@@ -153,16 +154,22 @@ export default function SalonDetailPage() {
               </div>
               <div className="grid grid-cols-1 gap-4">
                 {services.map((service, i) => (
-                  <div key={i} className="group p-6 rounded-3xl bg-white/5 border border-white/10 hover:border-purple-500/40 transition-all hover:bg-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="space-y-1">
+                  <div key={i} className="group p-6 rounded-3xl bg-white/5 border border-white/10 hover:border-purple-500/40 transition-all hover:bg-white/10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div className="space-y-1 flex-1">
                       <div className="flex items-center gap-3">
                         <h4 className="font-headline text-xl text-white group-hover:text-purple-400 transition-colors">{service.name}</h4>
                         <Badge variant="outline" className="text-[8px] border-white/10 text-white/40">{service.time}</Badge>
                       </div>
                       <p className="text-white/40 text-sm font-light">{service.desc}</p>
                     </div>
-                    <div className="text-right">
-                      <span className="font-bold text-2xl text-purple-400 font-headline">{service.price}</span>
+                    <div className="flex items-center gap-6">
+                      <span className="font-bold text-2xl text-purple-400 font-headline min-w-[80px] text-right">{service.price}</span>
+                      <Button asChild className="rounded-full bg-purple-600 hover:bg-purple-700 text-white font-bold h-10 px-6 group/btn">
+                        <Link href={`/book/${salonId}`}>
+                          Book Now
+                          <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                        </Link>
+                      </Button>
                     </div>
                   </div>
                 ))}
@@ -223,20 +230,14 @@ export default function SalonDetailPage() {
           <aside className="relative">
             <div className="sticky top-32 space-y-8">
               <div className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-8 space-y-8 shadow-2xl">
-                <div className="space-y-4">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-white/40">Initial Consultation</span>
-                    <span className="text-emerald-400 font-bold uppercase text-[10px] tracking-widest">Free</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-white/40">Member Exclusive Rewards</span>
-                    <span className="text-blue-400 font-bold uppercase text-[10px] tracking-widest">Available</span>
-                  </div>
+                <div className="space-y-2 text-center">
+                  <h3 className="font-headline text-2xl">Elite Experience</h3>
+                  <p className="text-white/40 text-xs font-light">Secure your luxury session at {salon?.name || "BookNGlow"}.</p>
                 </div>
 
                 <Button asChild className="w-full h-16 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-[1.02] transition-all text-xl font-headline border-none shadow-2xl shadow-purple-500/30">
                   <Link href={`/book/${salonId}`}>
-                    Book Now
+                    Book Session
                     <Sparkles className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
