@@ -122,9 +122,11 @@ export default function FemaleSalonsPage() {
                     data-ai-hint="luxury spa interior"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#C7B1A6]/40 via-transparent to-transparent" />
-                  <Badge className="absolute top-6 left-6 bg-[#BCA396] text-[#FAF9F6] border-none font-bold shadow-lg">
-                    {salon.price === 'High' ? 'PREMIUM' : 'CHIC'}
-                  </Badge>
+                  {salon.price === 'High' && (
+                    <Badge className="absolute top-6 left-6 bg-[#BCA396] text-[#FAF9F6] border-none font-bold shadow-lg">
+                      PREMIUM
+                    </Badge>
+                  )}
                   <div className="absolute bottom-6 right-6 bg-[#FAF9F6]/80 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold text-[#333333] flex items-center gap-2 border border-white/20">
                     <Heart className="h-3.5 w-3.5 text-[#BCA396]" />
                     Starts at {salon.startingPrice}
