@@ -88,25 +88,6 @@ export function Navbar() {
                 <Link href="/help" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
                   <HelpCircle className="h-5 w-5" /> Help
                 </Link>
-                <div className="h-px bg-white/10 my-4" />
-                {!user ? (
-                  <>
-                    <Link href="/login" className="text-white/80 hover:text-white py-2">Log In</Link>
-                    <Button asChild className="bg-accent hover:bg-accent/90 text-white rounded-full w-full h-12 text-lg">
-                      <Link href="/signup">Sign Up</Link>
-                    </Button>
-                  </>
-                ) : (
-                  <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10">
-                    <div className="h-10 w-10 rounded-full bg-[#A78BFA]/20 flex items-center justify-center">
-                      <UserIcon className="h-5 w-5 text-[#A78BFA]" />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-xs text-white font-bold truncate max-w-[150px]">{user.displayName || "Member"}</span>
-                      <span className="text-[10px] text-white/40 truncate max-w-[150px]">{user.email}</span>
-                    </div>
-                  </div>
-                )}
               </div>
             </SheetContent>
           </Sheet>
@@ -199,34 +180,12 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Auth Section */}
-        <div className="flex items-center gap-2 md:gap-4 lg:gap-6">
-          {!user ? (
-            <>
-              <Link 
-                href="/login" 
-                className="hidden sm:block text-white/80 hover:text-white font-body font-medium text-sm md:text-lg transition-colors"
-              >
-                Log In
-              </Link>
-              <Button asChild
-                className="bg-accent hover:bg-accent/90 text-white rounded-full px-4 md:px-8 font-body font-semibold transition-all shadow-md active:scale-95 border-none h-9 md:h-12 text-xs md:text-base"
-              >
-                <Link href="/signup">Sign Up</Link>
-              </Button>
-            </>
-          ) : (
-            <div className="flex items-center gap-3">
-              <div className="hidden md:flex flex-col items-end">
-                <span className="text-xs text-white font-bold truncate max-w-[100px]">{user.displayName || "Glow User"}</span>
-                <span className="text-[10px] text-white/40">Member</span>
-              </div>
-              <div className="h-10 w-10 md:h-12 md:w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
-                <UserIcon className="h-5 w-5 md:h-6 md:w-6 text-white/60" />
-              </div>
-            </div>
-          )}
+        {/* Branding Info (Replacing Auth) */}
+        <div className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10">
+          <Sparkles className="h-4 w-4 text-accent animate-pulse" />
+          <span className="text-[10px] uppercase tracking-widest font-bold text-white/60">Elite Grooming</span>
         </div>
+
       </div>
       <AISearchDialog />
     </nav>

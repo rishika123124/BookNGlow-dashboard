@@ -9,11 +9,11 @@ service cloud.firestore {
 
     // Booking rules
     match /bookings/{bookingId} {
-      // Authenticated users can read bookings (for listing availability or viewing history)
-      allow read: if request.auth != null;
-      // Authenticated users can create bookings
-      allow create: if request.auth != null;
-      // Users can only update or delete their own bookings
+      // Allow everyone (including anonymous guests) to list bookings to check availability
+      allow read: if true;
+      // Allow everyone to create a booking (guest or authenticated)
+      allow create: if true;
+      // Only the person who created the booking can update or delete it
       allow update, delete: if request.auth != null && request.auth.uid == resource.data.customerId;
     }
     

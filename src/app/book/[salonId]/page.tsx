@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Navbar } from '@/components/dashboard/Navbar';
 import { Footer } from '@/components/dashboard/Footer';
@@ -24,11 +24,13 @@ import { format, isBefore, startOfDay } from 'date-fns';
 import { 
   useUser, 
   useFirestore, 
+  useAuth,
   useCollection, 
   useDoc, 
   useMemoFirebase 
 } from '@/firebase';
 import { collection, query, where, addDoc, serverTimestamp, doc } from 'firebase/firestore';
+import { signInAnonymously } from 'firebase/auth';
 import {
   Dialog,
   DialogContent,
@@ -63,6 +65,7 @@ export default function BookingPage() {
   const { toast } = useToast();
   const { user, isUserLoading } = useUser();
   const db = useFirestore();
+  const auth = useAuth();
   
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
@@ -70,6 +73,15 @@ export default function BookingPage() {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
+
+  // Auto-login anonymously to ensure a guest has a valid ID for Firestore
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      signInAnonymously(auth).catch(err => {
+        console.error("Anonymous auth failed", err);
+      });
+    }
+  }, [user, isUserLoading, auth]);
 
   // Fetch Salon Details
   const salonRef = useMemoFirebase(() => doc(db, 'salons', salonId as string), [db, salonId]);
@@ -108,15 +120,12 @@ export default function BookingPage() {
   };
 
   const handleBooking = async () => {
-    if (isUserLoading) return;
-
-    if (!user) {
+    // If auth is still loading, wait
+    if (isUserLoading || !user) {
       toast({
-        variant: "destructive",
-        title: "Authentication Required",
-        description: "Please log in to secure your luxury grooming slot.",
+        title: "Preparing Session",
+        description: "Setting up your guest session...",
       });
-      router.push('/login');
       return;
     }
 
@@ -163,7 +172,7 @@ export default function BookingPage() {
     }
   };
 
-  if (salonLoading || isUserLoading) {
+  if (salonLoading || (isUserLoading && !user)) {
     return (
       <div className="min-h-screen bg-[#020617] flex items-center justify-center">
         <Loader2 className="h-12 w-12 text-[#A78BFA] animate-spin" />
@@ -475,7 +484,7 @@ export default function BookingPage() {
               </div>
             </div>
             <p className="text-white/30 text-xs italic">
-              A confirmation has been sent to your email.
+              Your luxury session has been reserved.
             </p>
           </div>
           
