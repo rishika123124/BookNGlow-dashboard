@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { Search, MapPin, ChevronDown, Menu, HelpCircle, Store, Sparkles, Scissors, Heart, Users, Star, LayoutDashboard, User as UserIcon } from 'lucide-react'
+import { Search, MapPin, ChevronDown, Menu, HelpCircle, Store, Sparkles, Scissors, Heart, Users, User as UserIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -73,11 +73,6 @@ export function Navbar() {
                 <Link href="/" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
                   <Store className="h-5 w-5" /> Home
                 </Link>
-                {user && (
-                  <Link href="/dashboard" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
-                    <LayoutDashboard className="h-5 w-5 text-[#A78BFA]" /> Dashboard
-                  </Link>
-                )}
                 <div className="flex flex-col gap-3">
                    <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Our Salons</span>
                    <Link href="/salons/male" className="flex items-center gap-3 text-white/60 hover:text-white pl-4">
@@ -162,14 +157,6 @@ export function Navbar() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {user && (
-            <Link href="/dashboard" className="text-white/80 hover:text-[#A78BFA] transition-colors relative group flex items-center gap-2">
-              <LayoutDashboard className="h-4 w-4" />
-              Dashboard
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#A78BFA] transition-all duration-300 group-hover:w-full" />
-            </Link>
-          )}
-
           <Link href="/help" className="text-white/80 hover:text-white transition-colors relative group">
             Help
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 group-hover:w-full shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
@@ -234,9 +221,9 @@ export function Navbar() {
                 <span className="text-xs text-white font-bold truncate max-w-[100px]">{user.displayName || "Glow User"}</span>
                 <span className="text-[10px] text-white/40">Member</span>
               </div>
-              <Link href="/dashboard" className="h-10 w-10 md:h-12 md:w-12 rounded-2xl bg-white/5 border border-white/10 hover:border-[#A78BFA]/50 flex items-center justify-center transition-all group">
-                <UserIcon className="h-5 w-5 md:h-6 md:w-6 text-white/60 group-hover:text-[#A78BFA]" />
-              </Link>
+              <div className="h-10 w-10 md:h-12 md:w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
+                <UserIcon className="h-5 w-5 md:h-6 md:w-6 text-white/60" />
+              </div>
             </div>
           )}
         </div>

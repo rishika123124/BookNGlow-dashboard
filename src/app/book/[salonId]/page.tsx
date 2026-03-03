@@ -481,10 +481,10 @@ export default function BookingPage() {
           
           <DialogFooter className="mt-8">
             <Button 
-              onClick={() => router.push('/dashboard')}
+              onClick={() => router.push('/')}
               className="w-full h-14 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-[1.02] transition-all font-headline text-lg border-none"
             >
-              Back to Dashboard
+              Return Home
             </Button>
           </DialogFooter>
         </DialogContent>
