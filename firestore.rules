@@ -2,7 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Version: 1.0.5 - Enhanced Booking Ownership & Support Rules
+    // Version: 1.0.7 - Fixed Dashboard Listing & Support Ticket Permissions
     
     function isSignedIn() {
       return request.auth != null;
@@ -20,17 +20,17 @@ service cloud.firestore {
 
     // Booking rules
     match /bookings/{bookingId} {
-      // Secure listing: Users can only see bookings they are involved in
-      // Firestore enforces this on queries: the client MUST filter by customerId or salonOwnerId
+      // Secure listing: Users can only see bookings where they are the customer or the involved salon owner
+      // NOTE: Queries MUST filter by customerId or salonOwnerId to satisfy these rules
       allow read, list: if isSignedIn() && (
-        request.auth.uid == resource.data.customerId || 
-        request.auth.uid == resource.data.salonOwnerId
+        resource.data.customerId == request.auth.uid || 
+        resource.data.salonOwnerId == request.auth.uid
       );
       
-      // Allow creation for any authenticated user
+      // Allow creation for any authenticated user if they are the customer
       allow create: if isSignedIn() && request.auth.uid == request.resource.data.customerId;
       
-      // Only the customer or the involved salon owner can update (e.g., status changes)
+      // Only the customer or the involved salon owner can update
       allow update: if isSignedIn() && (
         request.auth.uid == resource.data.customerId || 
         request.auth.uid == resource.data.salonOwnerId
@@ -47,8 +47,10 @@ service cloud.firestore {
 
     // Support Tickets
     match /support_tickets/{ticketId} {
+      // Allow anyone (guest or member) to create a ticket
       allow create: if true;
-      allow read: if isSignedIn() && (
+      // Allow the creator to read their own tickets
+      allow read, list: if isSignedIn() && (
         request.auth.uid == resource.data.userId || 
         resource.data.userId == 'guest'
       );

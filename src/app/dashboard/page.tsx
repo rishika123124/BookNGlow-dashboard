@@ -17,7 +17,6 @@ import {
   collection, 
   query, 
   where, 
-  orderBy, 
   doc 
 } from 'firebase/firestore';
 import { 
@@ -67,21 +66,19 @@ export default function DashboardPage() {
     const bookingsRef = collection(db, 'bookings');
     
     // Salon Owners see their salon's bookings using denormalized salonOwnerId
+    // NOTE: orderBy is removed for now to prevent index errors; filter is mandatory for rules
     if (profile?.role === 'salon' && mySalon) {
       return query(
         bookingsRef, 
-        where('salonOwnerId', '==', user.uid),
-        orderBy('createdAt', 'desc')
+        where('salonOwnerId', '==', user.uid)
       );
     } 
     
     // Customers see their own bookings
-    // This query matches the updated ownership-based security rules
     if (profile?.role === 'customer') {
       return query(
         bookingsRef, 
-        where('customerId', '==', user.uid),
-        orderBy('createdAt', 'desc')
+        where('customerId', '==', user.uid)
       );
     }
 
