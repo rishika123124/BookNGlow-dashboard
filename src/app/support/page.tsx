@@ -111,7 +111,12 @@ export default function SupportPage() {
     setIsLoading(true);
 
     const ticketData = {
-      ...formData,
+      fullName: formData.fullName,
+      contactInfo: formData.contactInfo,
+      category: formData.category,
+      subCategory: formData.subCategory,
+      bookingId: formData.bookingId || '',
+      description: formData.description,
       userId: user?.uid || 'guest',
       status: 'open',
       createdAt: serverTimestamp(),
@@ -120,11 +125,12 @@ export default function SupportPage() {
     try {
       const ticketsRef = collection(db, 'support_tickets');
       await addDoc(ticketsRef, ticketData).catch((e) => {
-        errorEmitter.emit('permission-error', new FirestorePermissionError({
+        const permissionError = new FirestorePermissionError({
           path: 'support_tickets',
           operation: 'create',
           requestResourceData: ticketData,
-        }));
+        });
+        errorEmitter.emit('permission-error', permissionError);
         throw e;
       });
 
@@ -142,7 +148,7 @@ export default function SupportPage() {
         description: '',
       }));
     } catch (error: any) {
-      // Error is already handled by errorEmitter in the .catch block
+      // Error is centrally handled by the emitter
     } finally {
       setIsLoading(false);
     }
