@@ -53,8 +53,8 @@ export default function SalonDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#FAF9F6] flex items-center justify-center">
-        <Loader2 className="h-12 w-12 text-[#E57373] animate-spin" />
+      <div className="min-h-screen bg-[#D6C4BC] flex items-center justify-center">
+        <Loader2 className="h-12 w-12 text-[#DB2777] animate-spin" />
       </div>
     );
   }
@@ -75,16 +75,21 @@ export default function SalonDetailPage() {
   const services = salon?.services || defaultServices;
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A] font-sans selection:bg-[#E57373]/20">
+    <div className="min-h-screen bg-[#D6C4BC] text-[#333333] selection:bg-[#BCA396]/30 font-sans relative">
+      {/* Background Gradient Layer */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#D6C4BC_0%,_#C7B1A6_100%)]" />
+      </div>
+
       {/* Header with Dark Navy Background */}
-      <div className="bg-[#0B1120] text-white">
+      <div className="relative z-50 bg-slate-950/90 backdrop-blur-md">
         <Navbar />
       </div>
 
-      <main className="pb-20">
+      <main className="relative z-10 pb-20">
         {/* Hero Section */}
         <div className="container mx-auto px-4 pt-8 md:pt-12">
-          <div className="relative h-[300px] md:h-[500px] w-full rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl">
+          <div className="relative h-[300px] md:h-[500px] w-full rounded-[2.5rem] md:rounded-[3.5rem] overflow-hidden shadow-2xl">
             <Image 
               src={salonImage} 
               alt={salon?.name || "The Lush Studio"} 
@@ -119,17 +124,17 @@ export default function SalonDetailPage() {
                 )}>
                   {isOpen ? 'OPEN NOW' : 'CLOSED'}
                 </Badge>
-                <div className="flex items-center gap-1.5 text-amber-500">
+                <div className="flex items-center gap-1.5 text-amber-600">
                   <Star className="h-5 w-5 fill-current" />
                   <span className="font-bold text-lg">{salon?.rating || "4.7"}</span>
                 </div>
               </div>
               
-              <h1 className="font-display text-4xl md:text-6xl lg:text-7xl text-[#0B1120] tracking-tight">
+              <h1 className="font-display text-4xl md:text-6xl lg:text-7xl text-[#333333] tracking-tight drop-shadow-sm">
                 {salon?.name || "The Lush Studio"}
               </h1>
               
-              <div className="flex flex-wrap items-center gap-6 text-[#1A1A1A]/60">
+              <div className="flex flex-wrap items-center gap-6 text-[#333333]/70">
                 <div className="flex items-center gap-2">
                   <MapPin className="h-5 w-5 text-[#E57373]" />
                   <span className="font-medium">{salon?.area || "Rajpur Road"}, Dehradun</span>
@@ -142,13 +147,13 @@ export default function SalonDetailPage() {
             </div>
 
             <div className="flex flex-col items-start md:items-end gap-4">
-               <div className="flex items-center gap-4 text-sm font-medium mb-2">
-                  <div className="flex items-center gap-1.5 text-emerald-600"><ShieldCheck className="h-4 w-4" /> Verified</div>
-                  <div className="flex items-center gap-1.5 text-purple-600"><Award className="h-4 w-4" /> Premium</div>
+               <div className="flex items-center gap-4 text-sm font-bold mb-2 text-[#333333]/60 uppercase tracking-widest">
+                  <div className="flex items-center gap-1.5 text-emerald-700"><ShieldCheck className="h-4 w-4" /> Verified</div>
+                  <div className="flex items-center gap-1.5 text-purple-700"><Award className="h-4 w-4" /> Premium</div>
                </div>
-               <Button asChild size="lg" className="rounded-full bg-[#E57373] hover:bg-[#D46262] text-white font-semibold shadow-lg shadow-[#E57373]/20 border-none transition-all hover:scale-105 px-8 h-12">
+               <Button asChild className="rounded-full bg-[#E57373] hover:bg-[#D46262] text-white font-bold shadow-lg shadow-[#E57373]/20 border-none transition-all hover:scale-105 px-8 h-12 uppercase tracking-wide">
                 <Link href={`/book/${salonId}`} className="flex items-center gap-2">
-                  Book Appointment Now
+                  Book Appointment
                   <CalendarDays className="h-5 w-5" />
                 </Link>
               </Button>
@@ -163,23 +168,23 @@ export default function SalonDetailPage() {
             {/* Services List */}
             <section className="space-y-8">
               <div className="flex items-center justify-between">
-                <h2 className="font-display text-3xl text-[#0B1120]">Available Services</h2>
+                <h2 className="font-display text-3xl text-[#333333]">Signature Menu</h2>
                 <Scissors className="h-6 w-6 text-[#E57373]" />
               </div>
               
               <div className="grid grid-cols-1 gap-4">
                 {services.map((service, i) => (
-                  <div key={i} className="group p-6 rounded-2xl bg-white border border-black/5 hover:border-[#E57373]/30 transition-all shadow-sm flex items-center justify-between">
+                  <div key={i} className="group p-6 rounded-[2rem] bg-white/20 backdrop-blur-lg border border-white/30 hover:border-[#E57373]/40 transition-all shadow-[0_8px_30px_rgba(0,0,0,0.04)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div className="space-y-1">
-                      <h4 className="font-semibold text-lg md:text-xl text-[#0B1120] group-hover:text-[#E57373] transition-colors">
+                      <h4 className="font-headline text-xl md:text-2xl text-[#333333] group-hover:text-[#E57373] transition-colors">
                         {service.name}
                       </h4>
-                      <p className="text-black/40 text-sm font-medium">{service.time || "45 mins"}</p>
+                      <p className="text-[#333333]/50 text-sm font-medium tracking-wide">{service.time || "45 mins"}</p>
                     </div>
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center justify-between w-full sm:w-auto gap-6 border-t sm:border-t-0 pt-4 sm:pt-0">
                       <span className="font-bold text-xl md:text-2xl text-[#E57373]">₹{service.price}</span>
-                      <Button asChild variant="outline" className="rounded-full border-[#E57373]/20 hover:bg-[#E57373]/5 text-[#E57373] h-10 px-6 font-semibold">
-                        <Link href={`/book/${salonId}`}>Select</Link>
+                      <Button asChild className="rounded-full bg-[#DB2777] hover:bg-[#C21E66] text-white h-10 px-6 font-bold text-sm transition-all shadow-md">
+                        <Link href={`/book/${salonId}`}>Book Now</Link>
                       </Button>
                     </div>
                   </div>
@@ -191,33 +196,37 @@ export default function SalonDetailPage() {
           {/* Sidebar */}
           <aside className="space-y-8">
             {/* Location Card */}
-            <div className="bg-white border border-black/5 rounded-[2rem] p-8 space-y-6 shadow-sm">
+            <div className="bg-white/25 backdrop-blur-xl border border-white/30 rounded-[2.5rem] p-8 space-y-6 shadow-sm">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-xl bg-[#E57373]/10 flex items-center justify-center">
                   <MapPin className="h-5 w-5 text-[#E57373]" />
                 </div>
-                <h3 className="font-display text-2xl text-[#0B1120]">Location</h3>
+                <h3 className="font-display text-2xl text-[#333333]">Location</h3>
               </div>
-              <p className="text-black/60 leading-relaxed font-medium">
+              <p className="text-[#333333]/70 leading-relaxed font-medium">
                 {salon?.area || "Rajpur Road"}, Dehradun, Uttarakhand 248001
               </p>
-              <Button className="w-full h-12 rounded-full bg-white border border-black/10 text-[#0B1120] hover:bg-black/5 gap-2 font-semibold">
+              <Button variant="outline" className="w-full h-12 rounded-full border-white/40 bg-white/10 text-[#333333] hover:bg-white/30 gap-2 font-bold uppercase tracking-wider text-xs">
                 View on Map
                 <ExternalLink className="h-4 w-4" />
               </Button>
             </div>
 
             {/* Contact Card */}
-            <div className="bg-white border border-black/5 rounded-[2rem] p-8 space-y-6 shadow-sm">
-              <h3 className="font-display text-2xl text-[#0B1120]">Reach Us</h3>
+            <div className="bg-white/25 backdrop-blur-xl border border-white/30 rounded-[2.5rem] p-8 space-y-6 shadow-sm">
+              <h3 className="font-display text-2xl text-[#333333]">Reach Us</h3>
               <div className="space-y-4">
-                <div className="flex items-center gap-4 text-black/60 hover:text-[#0B1120] transition-colors cursor-pointer">
-                  <Phone className="h-5 w-5 text-[#E57373]" />
-                  <span className="font-medium">+91 135-GLOW-NOW</span>
+                <div className="flex items-center gap-4 text-[#333333]/70 hover:text-[#333333] transition-colors cursor-pointer group">
+                  <div className="p-2 rounded-lg bg-white/20 group-hover:bg-white/40 transition-colors">
+                    <Phone className="h-5 w-5 text-[#E57373]" />
+                  </div>
+                  <span className="font-bold">+91 135-GLOW-NOW</span>
                 </div>
-                <div className="flex items-center gap-4 text-black/60 hover:text-[#0B1120] transition-colors cursor-pointer">
-                  <Mail className="h-5 w-5 text-[#E57373]" />
-                  <span className="font-medium">hello@thelushstudio.com</span>
+                <div className="flex items-center gap-4 text-[#333333]/70 hover:text-[#333333] transition-colors cursor-pointer group">
+                  <div className="p-2 rounded-lg bg-white/20 group-hover:bg-white/40 transition-colors">
+                    <Mail className="h-5 w-5 text-[#E57373]" />
+                  </div>
+                  <span className="font-bold text-sm">hello@thelushstudio.com</span>
                 </div>
               </div>
             </div>
