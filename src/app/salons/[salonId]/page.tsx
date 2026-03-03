@@ -264,14 +264,13 @@ export default function SalonDetailPage() {
                   <p className="text-white/60 text-sm leading-relaxed">
                     {salon?.area || (isVelvet ? "Rajpur Road" : "Dehradun")}, Dehradun, Uttarakhand 248001
                   </p>
-                  <div className="h-40 w-full rounded-2xl bg-slate-800 flex items-center justify-center overflow-hidden border border-white/5 grayscale">
-                    <Image 
-                       src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=400&auto=format&fit=crop" 
-                       alt="Map placeholder" 
-                       fill 
-                       className="object-cover opacity-20"
+                  <div className="h-64 w-full rounded-2xl bg-slate-800 flex items-center justify-center overflow-hidden border border-white/5">
+                    <iframe
+                      title="Salon Location Map"
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3444.603370335032!2d78.0700!3d30.3600!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390929c356c888af%3A0x4c3562c03251d499!2sRajpur%20Road%2C%20Dehradun%2C%20Uttarakhand!5e0!3m2!1sen!2sin!4v1711200000000!5m2!1sen!2sin"
+                      className="w-full h-full brightness-90 contrast-110 saturate-[1.2]"
+                      loading="lazy"
                     />
-                    <span className="relative z-10 text-[10px] font-bold uppercase tracking-widest text-white/20">View on Interactive Map</span>
                   </div>
                 </div>
               </div>

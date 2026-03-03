@@ -250,13 +250,12 @@ export default function Home() {
                   </span>
                 </div>
 
-                <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/20 via-purple-600/20 to-pink-600/20 pointer-events-none mix-blend-overlay z-10" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 via-purple-600/10 to-pink-600/10 pointer-events-none z-10" />
                 
                 <iframe
                   title="Dehradun Map"
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55110.42835848529!2d78.016629983411!3d30.325515321590483!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390929c356c888af%3A0x4c3562c03251d499!2sDehradun%2C%20Uttarakhand!5e0!3m2!1sen!2sin!4v1711200000000!5m2!1sen!2sin"
-                  className="w-full h-full grayscale invert contrast-125 brightness-75 scale-110 transition-transform duration-700 group-hover:scale-105"
-                  style={{ filter: 'invert(100%) hue-rotate(240deg) brightness(85%) contrast(110%) saturate(140%)' }}
+                  className="w-full h-full brightness-75 contrast-110 saturate-[1.2] scale-110 transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                 />
 
