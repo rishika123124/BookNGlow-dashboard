@@ -129,7 +129,7 @@ export default function SupportPage() {
 
       toast({
         title: "Inquiry Sent!",
-        description: "Your luxury concierge will contact you shortly.",
+        description: "BookNGlow will contact you shortly.",
       });
       
       // Clear form except user identity
@@ -168,7 +168,7 @@ export default function SupportPage() {
           <div className="text-center space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-bold uppercase tracking-widest">
               <Sparkles className="h-3 w-3" />
-              Concierge Desk
+              BookNGlow Support
             </div>
             <h1 className="font-headline text-5xl md:text-7xl tracking-tight text-white">
               Support
@@ -293,7 +293,7 @@ export default function SupportPage() {
               <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl" />
               
               <div className="space-y-3 relative z-10">
-                <h3 className="font-headline text-3xl md:text-4xl text-white tracking-wide">Inquiry Concierge</h3>
+                <h3 className="font-headline text-3xl md:text-4xl text-white tracking-wide">BookNGlow</h3>
                 <p className="text-white/40 text-sm md:text-base italic">Provide your details below and we will resolve your query within 2 hours.</p>
               </div>
 
