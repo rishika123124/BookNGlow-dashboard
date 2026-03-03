@@ -29,7 +29,8 @@ import {
   XCircle, 
   AlertCircle,
   Sparkles,
-  ChevronRight
+  ChevronRight,
+  User as UserIcon
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
@@ -61,26 +62,26 @@ export default function DashboardPage() {
   const mySalon = salons?.[0];
 
   // 3. Fetch Bookings based on Role
-  // The query includes 'where' clauses that match the Security Rules 'list' requirements
   const bookingsQuery = useMemoFirebase(() => {
-    if (!db || !user || !profile) return null;
+    if (!db || !user) return null;
     const bookingsRef = collection(db, 'bookings');
     
-    // Explicitly filter by customerId or salonId to satisfy Firestore Security Rules for 'list'
-    if (profile.role === 'salon') {
-      if (!mySalon) return null;
+    // Salon Owners see their salon's bookings
+    if (profile?.role === 'salon' && mySalon) {
       return query(
         bookingsRef, 
         where('salonId', '==', mySalon.id),
         orderBy('createdAt', 'desc')
       );
-    } else {
-      return query(
-        bookingsRef, 
-        where('customerId', '==', user.uid),
-        orderBy('createdAt', 'desc')
-      );
-    }
+    } 
+    
+    // Customers (or users without a full salon profile yet) see their own bookings
+    // This query is optimized to match standard security rules
+    return query(
+      bookingsRef, 
+      where('customerId', '==', user.uid),
+      orderBy('createdAt', 'desc')
+    );
   }, [db, user, profile, mySalon]);
 
   const { data: bookings, isLoading: bookingsLoading } = useCollection(bookingsQuery);
@@ -95,7 +96,8 @@ export default function DashboardPage() {
     updateDocumentNonBlocking(bookingRef, { status: 'cancelled' });
   };
 
-  if (isUserLoading || profileLoading || (profile?.role === 'salon' && salonsLoading)) {
+  // Improved loading state handling
+  if (isUserLoading) {
     return (
       <div className="min-h-screen bg-[#020617] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -107,6 +109,24 @@ export default function DashboardPage() {
   }
 
   if (!user) return null;
+
+  // Handle case where profile might be missing
+  if (!profileLoading && !profile) {
+    return (
+      <div className="min-h-screen bg-[#020617] text-white">
+        <Navbar />
+        <main className="container mx-auto px-4 py-20 text-center space-y-6">
+          <div className="bg-amber-500/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto">
+            <UserIcon className="h-10 w-10 text-amber-500" />
+          </div>
+          <h1 className="text-3xl font-headline">Profile Setup Required</h1>
+          <p className="text-white/40 max-w-md mx-auto">We couldn't find your profile details. Please ensure you've completed your registration.</p>
+          <Button onClick={() => router.push('/login')} className="bg-purple-600 rounded-full px-8">Complete Registration</Button>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   const isSalon = profile?.role === 'salon';
 

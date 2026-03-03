@@ -77,8 +77,6 @@ export default function BookingPage() {
   // Auto-login anonymously if guest, or wait for actual user
   useEffect(() => {
     if (!isUserLoading && !user) {
-      // For now, let's just keep guest flow but ideally we'd show a login prompt
-      // if we want full notification functionality.
       signInAnonymously(auth).catch(err => {
         console.error("Anonymous auth failed", err);
       });
@@ -142,6 +140,7 @@ export default function BookingPage() {
       customerName: user.displayName || 'Glow Member',
       salonId: salonId as string,
       salonName: salon?.name || 'Velvet Grooming',
+      salonOwnerId: salon?.ownerId || '', // Denormalize ownerId for better security rules
       selectedServices: selectedServiceNames,
       totalAmount: totalAmount,
       date: format(selectedDate, 'yyyy-MM-dd'),
