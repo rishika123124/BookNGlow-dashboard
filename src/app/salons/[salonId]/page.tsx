@@ -18,7 +18,10 @@ import {
   Info,
   Award,
   ShieldCheck,
-  Zap
+  Zap,
+  Phone,
+  Mail,
+  Calendar
 } from 'lucide-react';
 import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
@@ -47,13 +50,28 @@ export default function SalonDetailPage() {
                      PlaceHolderImages.find(img => img.id === 'salon-hero')?.imageUrl || 
                      "https://picsum.photos/seed/salon/1200/800";
 
+  const isVelvet = salonId === 'velvet-grooming';
+
+  const services = isVelvet ? [
+    { name: "Executive Hair Design", price: "₹899", time: "45 mins", desc: "Precision cut tailored to your face shape." },
+    { name: "Luxury Beard Sculpting", price: "₹499", time: "30 mins", desc: "Hot towel treatment and razor finish." },
+    { name: "Revitalizing Scalp Therapy", price: "₹699", time: "40 mins", desc: "Deep conditioning with essential oils." },
+    { name: "Charcoal Detox Facial", price: "₹1,299", time: "60 mins", desc: "Deep pore cleansing for a fresh glow." },
+    { name: "Global Hair Color", price: "₹1,999", time: "90 mins", desc: "Premium ammonia-free coloring." },
+  ] : [
+    { name: "Signature Haircut", price: "₹499", time: "45 mins", desc: "Classic styling for the modern individual." },
+    { name: "Spa Pedicure", price: "₹799", time: "60 mins", desc: "Relaxing foot soak and massage." },
+    { name: "Deep Tissue Massage", price: "₹1,499", time: "60 mins", desc: "Muscle tension relief therapy." },
+    { name: "Classic Facial", price: "₹999", time: "45 mins", desc: "Standard skin rejuvenation." },
+  ];
+
   return (
     <div className="min-h-screen bg-[#020617] text-white selection:bg-purple-500/30 font-body relative overflow-hidden">
       <Navbar />
 
       <main className="relative z-10">
         {/* Hero Section */}
-        <div className="relative h-[60vh] md:h-[70vh] w-full overflow-hidden">
+        <div className="relative h-[60vh] md:h-[75vh] w-full overflow-hidden">
           <Image 
             src={salonImage} 
             alt={salon?.name || "Salon Details"} 
@@ -68,8 +86,8 @@ export default function SalonDetailPage() {
             <div className="container mx-auto space-y-6">
               <Button 
                 variant="ghost" 
-                onClick={() => router.back()}
-                className="text-white/60 hover:text-white mb-4 gap-2 group p-0"
+                onClick={() => router.push('/')}
+                className="text-white/60 hover:text-white mb-4 gap-2 group p-0 h-auto"
               >
                 <ChevronLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
                 Back to Discovery
@@ -81,21 +99,17 @@ export default function SalonDetailPage() {
                   VERIFIED PARTNER
                 </Badge>
                 <h1 className="font-headline text-5xl md:text-8xl tracking-tight leading-tight">
-                  {salon?.name || "Premium Salon"}
+                  {salon?.name || (isVelvet ? "Velvet Grooming" : "Premium Salon")}
                 </h1>
                 <div className="flex flex-wrap items-center gap-6 text-white/80 text-lg md:text-xl">
                   <div className="flex items-center gap-2">
                     <MapPin className="h-5 w-5 text-purple-400" />
-                    <span>{salon?.area || salon?.location || "Dehradun"}</span>
+                    <span>{salon?.area || (isVelvet ? "Rajpur Road" : "Dehradun")}, Dehradun</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Star className="h-5 w-5 text-amber-400 fill-current" />
                     <span className="font-bold">{salon?.rating || "4.9"}</span>
                     <span className="text-white/40 text-sm">(120+ Reviews)</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-5 w-5 text-blue-400" />
-                    <span>Open Today until 9:00 PM</span>
                   </div>
                 </div>
               </div>
@@ -114,7 +128,10 @@ export default function SalonDetailPage() {
                 <h2 className="font-headline text-3xl tracking-wide">About the Experience</h2>
               </div>
               <p className="text-white/60 text-lg md:text-xl leading-relaxed">
-                Experience unparalleled luxury at {salon?.name || "this salon"}. Our team of master stylists and therapists are dedicated to providing the gold standard of grooming in Dehradun. From precision haircuts to rejuvenating spa treatments, every visit is tailored to your unique style and relaxation needs.
+                Experience unparalleled luxury at {salon?.name || (isVelvet ? "Velvet Grooming" : "this salon")}. 
+                {isVelvet && " Known as Rajpur Road's most elite styling studio, we specialize in high-fashion grooming and therapeutic care."} 
+                Our team of master stylists and therapists are dedicated to providing the gold standard of grooming in Dehradun. 
+                Every visit is tailored to your unique style and relaxation needs.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
                 <div className="flex items-center gap-3 bg-white/5 p-4 rounded-2xl border border-white/10">
@@ -128,31 +145,77 @@ export default function SalonDetailPage() {
               </div>
             </section>
 
-            {/* Popular Services Preview */}
+            {/* Signature Services with Prices */}
             <section className="space-y-8">
               <div className="flex items-center gap-3">
                 <Scissors className="h-6 w-6 text-purple-400" />
-                <h2 className="font-headline text-3xl tracking-wide">Signature Services</h2>
+                <h2 className="font-headline text-3xl tracking-wide">Signature Services & Menu</h2>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {[
-                  { name: "Executive Hair Design", price: "₹899", time: "45 mins" },
-                  { name: "Luxury Beard Sculpting", price: "₹499", time: "30 mins" },
-                  { name: "Revitalizing Scalp Therapy", price: "₹699", time: "40 mins" },
-                  { name: "Charcoal Detox Facial", price: "₹1,299", time: "60 mins" },
-                ].map((service, i) => (
-                  <div key={i} className="group p-6 rounded-3xl bg-white/5 border border-white/10 hover:border-purple-500/40 transition-all hover:bg-white/10">
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-headline text-xl text-white group-hover:text-purple-400 transition-colors">{service.name}</h4>
-                      <span className="font-bold text-purple-400">{service.price}</span>
+              <div className="grid grid-cols-1 gap-4">
+                {services.map((service, i) => (
+                  <div key={i} className="group p-6 rounded-3xl bg-white/5 border border-white/10 hover:border-purple-500/40 transition-all hover:bg-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-3">
+                        <h4 className="font-headline text-xl text-white group-hover:text-purple-400 transition-colors">{service.name}</h4>
+                        <Badge variant="outline" className="text-[8px] border-white/10 text-white/40">{service.time}</Badge>
+                      </div>
+                      <p className="text-white/40 text-sm font-light">{service.desc}</p>
                     </div>
-                    <div className="flex items-center gap-2 text-white/40 text-xs">
-                      <Clock className="h-3 w-3" />
-                      <span>{service.time}</span>
+                    <div className="text-right">
+                      <span className="font-bold text-2xl text-purple-400 font-headline">{service.price}</span>
                     </div>
                   </div>
                 ))}
               </div>
+            </section>
+
+            {/* Timings and Contact Details */}
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+               {/* Working Hours */}
+               <div className="space-y-6">
+                 <div className="flex items-center gap-3">
+                   <Clock className="h-6 w-6 text-blue-400" />
+                   <h2 className="font-headline text-2xl">Operating Hours</h2>
+                 </div>
+                 <div className="bg-white/5 rounded-3xl p-6 border border-white/10 space-y-4">
+                    <div className="flex justify-between items-center pb-2 border-b border-white/5">
+                       <span className="text-white/60">Mon - Sun</span>
+                       <span className="font-bold text-emerald-400">10:00 AM - 9:00 PM</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-white/30 italic">
+                      <Info className="h-3 w-3" />
+                      Appointments recommended for weekends.
+                    </div>
+                 </div>
+               </div>
+
+               {/* Contact details */}
+               <div className="space-y-6">
+                 <div className="flex items-center gap-3">
+                   <Phone className="h-6 w-6 text-pink-400" />
+                   <h2 className="font-headline text-2xl">Contact Details</h2>
+                 </div>
+                 <div className="bg-white/5 rounded-3xl p-6 border border-white/10 space-y-4">
+                    <div className="flex items-center gap-3">
+                       <div className="h-10 w-10 rounded-xl bg-pink-500/10 flex items-center justify-center border border-pink-500/20">
+                          <Phone className="h-4 w-4 text-pink-400" />
+                       </div>
+                       <div>
+                          <p className="text-[10px] uppercase text-white/30 font-bold">Booking Hotline</p>
+                          <p className="text-white font-medium">+91 135-VELVET-GLOW</p>
+                       </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                       <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                          <Mail className="h-4 w-4 text-blue-400" />
+                       </div>
+                       <div>
+                          <p className="text-[10px] uppercase text-white/30 font-bold">Salon Email</p>
+                          <p className="text-white font-medium">contact@velvetgrooming.com</p>
+                       </div>
+                    </div>
+                 </div>
+               </div>
             </section>
           </div>
 
@@ -161,41 +224,55 @@ export default function SalonDetailPage() {
             <div className="sticky top-32 space-y-8">
               <div className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-8 space-y-8 shadow-2xl">
                 <div className="space-y-2">
-                  <p className="text-[10px] uppercase tracking-widest font-bold text-purple-400">Starting from</p>
-                  <p className="text-4xl font-bold">₹299</p>
+                  <p className="text-[10px] uppercase tracking-widest font-bold text-purple-400">Services starting from</p>
+                  <p className="text-4xl font-bold">₹499</p>
                 </div>
                 
                 <div className="space-y-4">
                   <div className="flex justify-between text-sm">
-                    <span className="text-white/40">Consultation</span>
+                    <span className="text-white/40">Initial Consultation</span>
                     <span className="text-emerald-400 font-bold uppercase text-[10px] tracking-widest">Free</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-white/40">Member Discount</span>
+                    <span className="text-white/40">Member Exclusive Rewards</span>
                     <span className="text-blue-400 font-bold uppercase text-[10px] tracking-widest">Available</span>
                   </div>
                 </div>
 
                 <Button asChild className="w-full h-16 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-[1.02] transition-all text-xl font-headline border-none shadow-2xl shadow-purple-500/30">
                   <Link href={`/book/${salonId}`}>
-                    Book Appointment
+                    Book Now
                     <Sparkles className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
                 
-                <p className="text-center text-[10px] text-white/30 uppercase tracking-widest font-bold">
-                  No advance payment required
-                </p>
+                <div className="flex items-center justify-center gap-2">
+                   <ShieldCheck className="h-3 w-3 text-emerald-400" />
+                   <p className="text-[10px] text-white/30 uppercase tracking-widest font-bold">
+                     No Pre-payment Required
+                   </p>
+                </div>
               </div>
 
               {/* Location Card */}
               <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 space-y-4">
-                <h3 className="font-headline text-xl">Find Us</h3>
-                <div className="flex items-start gap-3 text-white/60">
-                  <MapPin className="h-5 w-5 text-purple-400 mt-1 flex-shrink-0" />
-                  <p className="text-sm leading-relaxed">
-                    {salon?.area || "Rajpur Road"}, Dehradun, Uttarakhand 248001
+                <h3 className="font-headline text-xl flex items-center gap-2">
+                  <MapPin className="h-5 w-5 text-purple-400" />
+                  Locate Us
+                </h3>
+                <div className="space-y-4">
+                  <p className="text-white/60 text-sm leading-relaxed">
+                    {salon?.area || (isVelvet ? "Rajpur Road" : "Dehradun")}, Dehradun, Uttarakhand 248001
                   </p>
+                  <div className="h-40 w-full rounded-2xl bg-slate-800 flex items-center justify-center overflow-hidden border border-white/5 grayscale">
+                    <Image 
+                       src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=400&auto=format&fit=crop" 
+                       alt="Map placeholder" 
+                       fill 
+                       className="object-cover opacity-20"
+                    />
+                    <span className="relative z-10 text-[10px] font-bold uppercase tracking-widest text-white/20">View on Interactive Map</span>
+                  </div>
                 </div>
               </div>
             </div>
