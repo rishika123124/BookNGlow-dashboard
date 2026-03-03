@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -141,11 +142,7 @@ export default function SupportPage() {
         description: '',
       }));
     } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Submission Failed",
-        description: error.message || "An unexpected error occurred.",
-      });
+      // Error is already handled by errorEmitter in the .catch block
     } finally {
       setIsLoading(false);
     }

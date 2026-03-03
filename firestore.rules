@@ -5,7 +5,6 @@ service cloud.firestore {
     
     // User profile rules
     match /users/{userId} {
-      // Allow users to read their own profile and create one on signup
       allow read: if request.auth != null && request.auth.uid == userId;
       allow create: if request.auth != null && request.auth.uid == userId;
       allow update: if request.auth != null && request.auth.uid == userId;
@@ -29,10 +28,10 @@ service cloud.firestore {
 
     // Support Tickets
     match /support_tickets/{ticketId} {
-      // Allow anyone to create a support ticket
+      // Allow any user (authenticated or guest) to create a support ticket
       allow create: if true;
       // Allow the creator to read their own tickets
-      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow read: if request.auth != null && (request.auth.uid == resource.data.userId || resource.data.userId == 'guest');
     }
   }
 }
