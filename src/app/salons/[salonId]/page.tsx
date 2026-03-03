@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -15,13 +14,12 @@ import {
   Loader2, 
   Sparkles, 
   Scissors, 
-  Info,
   Award,
   ShieldCheck,
   Phone,
   Mail,
-  ArrowRight,
-  ExternalLink
+  ExternalLink,
+  CalendarDays
 } from 'lucide-react';
 import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
@@ -83,7 +81,7 @@ export default function SalonDetailPage() {
         <Navbar />
       </div>
 
-      <main className="pb-32">
+      <main className="pb-20">
         {/* Hero Section */}
         <div className="container mx-auto px-4 pt-8 md:pt-12">
           <div className="relative h-[300px] md:h-[500px] w-full rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl">
@@ -112,7 +110,7 @@ export default function SalonDetailPage() {
 
         {/* Info Header */}
         <div className="container mx-auto px-4 mt-8 md:mt-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-black/5 pb-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-black/5 pb-8">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <Badge className={cn(
@@ -138,16 +136,22 @@ export default function SalonDetailPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="h-5 w-5 text-[#E57373]" />
-                  <span className="font-medium">Open: 10:00 AM - Close: 09:00 PM</span>
+                  <span className="font-medium">10:00 AM - 09:00 PM</span>
                 </div>
               </div>
             </div>
 
-            <div className="hidden md:flex flex-col gap-3">
-               <div className="flex items-center gap-4 text-sm font-medium">
-                  <div className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-emerald-500" /> Verified</div>
-                  <div className="flex items-center gap-1.5"><Award className="h-4 w-4 text-purple-500" /> Premium</div>
+            <div className="flex flex-col items-start md:items-end gap-4">
+               <div className="flex items-center gap-4 text-sm font-medium mb-2">
+                  <div className="flex items-center gap-1.5 text-emerald-600"><ShieldCheck className="h-4 w-4" /> Verified</div>
+                  <div className="flex items-center gap-1.5 text-purple-600"><Award className="h-4 w-4" /> Premium</div>
                </div>
+               <Button asChild size="lg" className="rounded-full bg-[#E57373] hover:bg-[#D46262] text-white font-semibold shadow-lg shadow-[#E57373]/20 border-none transition-all hover:scale-105 px-8 h-12">
+                <Link href={`/book/${salonId}`} className="flex items-center gap-2">
+                  Book Appointment Now
+                  <CalendarDays className="h-5 w-5" />
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -220,16 +224,6 @@ export default function SalonDetailPage() {
           </aside>
         </div>
       </main>
-
-      {/* Primary Sticky CTA */}
-      <div className="fixed bottom-0 left-0 w-full p-4 bg-white/90 backdrop-blur-xl border-t border-black/5 z-50 flex justify-center">
-        <Button asChild size="lg" className="rounded-full bg-[#E57373] hover:bg-[#D46262] text-white font-semibold shadow-lg shadow-[#E57373]/20 border-none transition-all hover:scale-105 px-10">
-          <Link href={`/book/${salonId}`} className="flex items-center gap-2">
-            Book Appointment Now
-            <Sparkles className="h-5 w-5" />
-          </Link>
-        </Button>
-      </div>
 
       <Footer />
     </div>
