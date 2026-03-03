@@ -171,6 +171,25 @@
         "selectedServices",
         "totalAmount"
       ]
+    },
+    "SupportTicket": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "SupportTicket",
+      "type": "object",
+      "description": "Represents a support inquiry submitted by a user.",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "fullName": { "type": "string" },
+        "contactInfo": { "type": "string" },
+        "category": { "type": "string" },
+        "subCategory": { "type": "string" },
+        "bookingId": { "type": "string" },
+        "description": { "type": "string" },
+        "status": { "type": "string", "enum": ["open", "closed"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["fullName", "contactInfo", "category", "description", "createdAt"]
     }
   },
   "auth": {
@@ -190,6 +209,10 @@
     "/bookings/{bookingId}": {
       "schema": "Booking",
       "description": "Stores service bookings."
+    },
+    "/support_tickets/{ticketId}": {
+      "schema": "SupportTicket",
+      "description": "Stores user support inquiries."
     }
   }
 }

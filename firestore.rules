@@ -26,5 +26,13 @@ service cloud.firestore {
     match /salons/{salonId} {
       allow read: if true;
     }
+
+    // Support Tickets
+    match /support_tickets/{ticketId} {
+      // Allow anyone to create a support ticket
+      allow create: if true;
+      // Allow the creator to read their own tickets
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
   }
 }
