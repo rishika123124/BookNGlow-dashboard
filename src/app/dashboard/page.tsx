@@ -66,6 +66,7 @@ export default function DashboardPage() {
     if (!db || !user || !profile) return null;
     const bookingsRef = collection(db, 'bookings');
     
+    // Explicitly filter by customerId or salonId to satisfy Firestore Security Rules for 'list'
     if (profile.role === 'salon') {
       if (!mySalon) return null;
       return query(
@@ -94,7 +95,7 @@ export default function DashboardPage() {
     updateDocumentNonBlocking(bookingRef, { status: 'cancelled' });
   };
 
-  if (isUserLoading || profileLoading || salonsLoading || (profile?.role === 'salon' && !mySalon && bookingsLoading)) {
+  if (isUserLoading || profileLoading || (profile?.role === 'salon' && salonsLoading)) {
     return (
       <div className="min-h-screen bg-[#020617] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">

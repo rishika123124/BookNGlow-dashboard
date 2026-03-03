@@ -2,7 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Version: 1.0.2 - Ownership and Dashboard Fix
+    // Version: 1.0.3 - Strict Ownership and Index Alignment
     
     function isSignedIn() {
       return request.auth != null;
@@ -10,10 +10,6 @@ service cloud.firestore {
 
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
-    }
-
-    function isSalonOwner(salonId) {
-      return isSignedIn() && get(/databases/$(database)/documents/salons/$(salonId)).data.ownerId == request.auth.uid;
     }
 
     // User profile rules
@@ -24,16 +20,17 @@ service cloud.firestore {
 
     // Booking rules
     match /bookings/{bookingId} {
-      // Rule alignment: Users can only list/read their own bookings (Customer or Salon)
+      // Allow users to list and read their own bookings (Customer or Salon Owner)
+      // Note: Queries must include a .where('customerId', '==', auth.uid) filter for this to pass
       allow read: if isSignedIn() && (
         request.auth.uid == resource.data.customerId || 
         get(/databases/$(database)/documents/salons/$(resource.data.salonId)).data.ownerId == request.auth.uid
       );
       
-      // Support guest and member creation
-      allow create: if true;
+      // Allow creation for any authenticated user (Guest or Registered)
+      allow create: if isSignedIn();
       
-      // Only involved parties can update status or details
+      // Only the customer or the salon owner can update (e.g., status changes)
       allow update: if isSignedIn() && (
         request.auth.uid == resource.data.customerId || 
         get(/databases/$(database)/documents/salons/$(resource.data.salonId)).data.ownerId == request.auth.uid
