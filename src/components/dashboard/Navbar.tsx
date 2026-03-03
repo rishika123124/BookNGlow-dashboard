@@ -1,19 +1,24 @@
+
 "use client"
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { Search, MapPin, ChevronDown, Menu, HelpCircle, Store, Sparkles, Scissors, Heart, Users, User as UserIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Search, MapPin, ChevronDown, Menu, HelpCircle, Store, Sparkles, Scissors, Heart, Users, User as UserIcon, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { AISearchDialog } from './AISearchDialog'
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet'
-import { useUser } from '@/firebase'
+import { useUser, useAuth } from '@/firebase'
+import { signOut } from 'firebase/auth'
+import { useToast } from '@/hooks/use-toast'
 
 const LOCALITIES = [
   'Rajpur Road',
@@ -24,7 +29,20 @@ const LOCALITIES = [
 
 export function Navbar() {
   const [locality, setLocality] = useState(LOCALITIES[0])
-  const { user } = useUser();
+  const { user, isUserLoading } = useUser();
+  const auth = useAuth();
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      toast({ title: "Logged Out", description: "See you again soon!" });
+      router.push('/');
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-slate-950/95 backdrop-blur-md border-b border-white/10 h-20 md:h-24 flex items-center shadow-2xl">
@@ -88,6 +106,11 @@ export function Navbar() {
                 <Link href="/help" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
                   <HelpCircle className="h-5 w-5" /> Help
                 </Link>
+                {!isUserLoading && !user && (
+                  <Link href="/login" className="mt-4">
+                    <Button className="w-full bg-purple-600 rounded-xl py-6">Sign In</Button>
+                  </Link>
+                )}
               </div>
             </SheetContent>
           </Sheet>
@@ -180,10 +203,36 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Branding Info (Replacing Auth) */}
-        <div className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10">
-          <Sparkles className="h-4 w-4 text-accent animate-pulse" />
-          <span className="text-[10px] uppercase tracking-widest font-bold text-white/60">Elite Grooming</span>
+        {/* Auth Section */}
+        <div className="flex items-center gap-4">
+          {!isUserLoading && user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full bg-purple-600 p-0 overflow-hidden border border-white/10">
+                  <UserIcon className="h-5 w-5 text-white" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56 bg-slate-900 border-white/10 text-white rounded-2xl p-2" align="end">
+                <div className="px-4 py-3">
+                  <p className="text-sm font-bold truncate">{user.displayName || 'Glow Member'}</p>
+                  <p className="text-xs text-white/40 truncate">{user.email}</p>
+                </div>
+                <DropdownMenuSeparator className="bg-white/10" />
+                <DropdownMenuItem asChild className="focus:bg-white/10 rounded-xl cursor-pointer">
+                  <Link href="/help" className="flex items-center gap-3">
+                    <HelpCircle className="h-4 w-4" /> Support
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout} className="focus:bg-red-500/20 text-red-400 rounded-xl cursor-pointer">
+                  <LogOut className="h-4 w-4 mr-3" /> Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button asChild className="hidden md:flex rounded-full bg-purple-600 hover:bg-purple-700 text-white border-none px-6">
+              <Link href="/login">Sign In</Link>
+            </Button>
+          )}
         </div>
 
       </div>

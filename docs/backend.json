@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "User": {
@@ -22,7 +23,19 @@
         },
         "fullName": {
           "type": "string",
-          "description": "The full name of the customer, only applicable if the user's role is 'customer'."
+          "description": "The full name of the user."
+        },
+        "salonName": {
+          "type": "string",
+          "description": "The name of the salon (only for salon role)."
+        },
+        "businessCategory": {
+          "type": "string",
+          "description": "The category of the salon (only for salon role)."
+        },
+        "location": {
+          "type": "string",
+          "description": "The locality in Dehradun (only for salon role)."
         },
         "createdAt": {
           "type": "string",
@@ -162,7 +175,7 @@
   },
   "auth": {
     "providers": [
-      "anonymous"
+      "password"
     ]
   },
   "firestore": {
@@ -176,7 +189,7 @@
     },
     "/bookings/{bookingId}": {
       "schema": "Booking",
-      "description": "Stores service bookings. Accessible for availability checks and user history."
+      "description": "Stores service bookings."
     }
   }
 }

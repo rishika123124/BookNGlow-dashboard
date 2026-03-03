@@ -1,19 +1,24 @@
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
     // User profile rules
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // Allow users to read their own profile and create one on signup
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth != null && request.auth.uid == userId;
     }
 
     // Booking rules
     match /bookings/{bookingId} {
-      // Allow everyone (including anonymous guests) to list bookings to check availability
-      allow read: if true;
-      // Allow everyone to create a booking (guest or authenticated)
+      // Allow authenticated users to check availability
+      allow list: if request.auth != null;
+      // Allow anyone to create a booking (guest or authenticated)
       allow create: if true;
-      // Only the person who created the booking can update or delete it
+      // Allow customers or salons to read their specific bookings
+      allow read: if request.auth != null && (request.auth.uid == resource.data.customerId || request.auth.uid == resource.data.salonId);
       allow update, delete: if request.auth != null && request.auth.uid == resource.data.customerId;
     }
     

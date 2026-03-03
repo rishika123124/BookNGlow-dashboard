@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect } from 'react';
@@ -7,7 +8,8 @@ export default function SignupPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace('/');
+    // Both login and signup are handled by the unified /login page
+    router.replace('/login');
   }, [router]);
 
   return null;
