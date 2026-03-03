@@ -6,7 +6,7 @@ import { Footer } from '@/components/dashboard/Footer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Star, MapPin, Sparkles } from 'lucide-react';
+import { Star, MapPin, Sparkles, Info } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -148,9 +148,15 @@ export default function UnisexSalonsPage() {
                     ))}
                   </div>
 
-                  <div className="pt-4">
+                  <div className="pt-4 grid grid-cols-1 gap-3">
+                    <Button asChild variant="outline" className="w-full h-12 rounded-full border-white/20 hover:bg-white/10 text-white font-headline text-lg transition-all duration-300">
+                      <Link href={`/salons/${salon.id}`}>
+                        <Info className="mr-2 h-4 w-4" />
+                        View Detail
+                      </Link>
+                    </Button>
                     <Button asChild className="w-full h-14 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-headline text-xl transition-all duration-300 shadow-[0_10px_20px_rgba(139,92,246,0.2)] hover:shadow-[0_15px_30px_rgba(139,92,246,0.3)] border-none">
-                      <Link href={`/book/${salon.id}`}>Explore Salons</Link>
+                      <Link href={`/book/${salon.id}`}>Book Now</Link>
                     </Button>
                   </div>
                 </div>

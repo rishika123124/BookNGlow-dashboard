@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Navbar } from '@/components/dashboard/Navbar';
@@ -60,36 +59,42 @@ export default function Home() {
 
   const premiumSalons = [
     { 
+      id: "aura-luxe-spa",
       name: "Aura Luxe Spa", 
       area: "Jakhan", 
       rating: "4.9", 
       img: PlaceHolderImages.find(img => img.id === 'salon-aura')?.imageUrl || "https://picsum.photos/seed/aura/600/600" 
     },
     { 
+      id: "doon-mirror",
       name: "The Doon Mirror", 
       area: "Rajpur Road", 
       rating: "4.8", 
       img: PlaceHolderImages.find(img => img.id === 'salon-mirror')?.imageUrl || "https://picsum.photos/seed/mirror/600/600" 
     },
     { 
+      id: "velvet-grooming",
       name: "Velvet Grooming", 
       area: "Rajpur Road", 
       rating: "5.0", 
       img: PlaceHolderImages.find(img => img.id === 'salon-velvet')?.imageUrl || "https://picsum.photos/seed/velvet/600/600" 
     },
     { 
+      id: "lush-studio",
       name: "The Lush Studio", 
       area: "Jakhan", 
       rating: "4.7", 
       img: PlaceHolderImages.find(img => img.id === 'salon-lush')?.imageUrl || "https://picsum.photos/seed/lush/600/600" 
     },
     { 
+      id: "serene-day-spa",
       name: "Serene Day Spa", 
       area: "Rajpur Road", 
       rating: "4.9", 
       img: PlaceHolderImages.find(img => img.id === 'salon-serene')?.imageUrl || "https://picsum.photos/seed/serene/600/600" 
     },
     { 
+      id: "classic-cut-barbers",
       name: "Classic Cut Barbers", 
       area: "Ballupur", 
       rating: "4.8", 
@@ -218,8 +223,8 @@ export default function Home() {
                       <MapPin className="h-3 w-3 md:h-4 md:w-4" />
                       <span>{salon.area}, Dehradun</span>
                     </div>
-                    <Button className="w-full rounded-full bg-white/10 hover:bg-white/20 text-white border-none h-10 md:h-12 text-sm md:text-base">
-                      View Profile
+                    <Button asChild className="w-full rounded-full bg-white/10 hover:bg-white/20 text-white border-none h-10 md:h-12 text-sm md:text-base">
+                      <Link href={`/salons/${salon.id}`}>View Detail</Link>
                     </Button>
                   </div>
                 </div>
