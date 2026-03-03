@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/dashboard/Navbar';
 import { Footer } from '@/components/dashboard/Footer';
@@ -39,6 +39,13 @@ export default function DashboardPage() {
   const db = useFirestore();
   const router = useRouter();
 
+  // Redirect unauthenticated users
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.push('/login');
+    }
+  }, [user, isUserLoading, router]);
+
   // 1. Fetch User Profile to get Role
   const userProfileRef = useMemoFirebase(() => 
     user ? doc(db, 'users', user.uid) : null
@@ -54,6 +61,7 @@ export default function DashboardPage() {
   const mySalon = salons?.[0];
 
   // 3. Fetch Bookings based on Role
+  // The query includes 'where' clauses that match the Security Rules 'list' requirements
   const bookingsQuery = useMemoFirebase(() => {
     if (!db || !user || !profile) return null;
     const bookingsRef = collection(db, 'bookings');
@@ -78,7 +86,6 @@ export default function DashboardPage() {
 
   const handleConfirmBooking = (bookingId: string) => {
     const bookingRef = doc(db, 'bookings', bookingId);
-    // This status update triggers the "Final Confirmation" email logic in Cloud Functions
     updateDocumentNonBlocking(bookingRef, { status: 'confirmed' });
   };
 
@@ -90,15 +97,15 @@ export default function DashboardPage() {
   if (isUserLoading || profileLoading || salonsLoading || (profile?.role === 'salon' && !mySalon && bookingsLoading)) {
     return (
       <div className="min-h-screen bg-[#020617] flex items-center justify-center">
-        <Loader2 className="h-12 w-12 text-[#A78BFA] animate-spin" />
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-12 w-12 text-[#A78BFA] animate-spin" />
+          <p className="text-white/40 text-sm animate-pulse">Syncing with Elite Network...</p>
+        </div>
       </div>
     );
   }
 
-  if (!user) {
-    router.push('/login');
-    return null;
-  }
+  if (!user) return null;
 
   const isSalon = profile?.role === 'salon';
 
@@ -147,8 +154,9 @@ export default function DashboardPage() {
             </div>
 
             {bookingsLoading ? (
-              <div className="flex items-center justify-center py-20">
+              <div className="flex flex-col items-center justify-center py-20 gap-4">
                 <Loader2 className="h-8 w-8 text-[#A78BFA] animate-spin" />
+                <p className="text-white/20 text-xs">Fetching your history...</p>
               </div>
             ) : bookings && bookings.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

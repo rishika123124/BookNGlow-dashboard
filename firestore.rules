@@ -2,12 +2,18 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
+    // Version: 1.0.2 - Ownership and Dashboard Fix
+    
     function isSignedIn() {
       return request.auth != null;
     }
 
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isSalonOwner(salonId) {
+      return isSignedIn() && get(/databases/$(database)/documents/salons/$(salonId)).data.ownerId == request.auth.uid;
     }
 
     // User profile rules
@@ -18,16 +24,16 @@ service cloud.firestore {
 
     // Booking rules
     match /bookings/{bookingId} {
-      // Allow any authenticated user to list and get bookings.
-      // Filtering is handled by the application logic (querying by customerId or salonId).
-      allow list: if isSignedIn();
-      allow get: if isSignedIn();
+      // Rule alignment: Users can only list/read their own bookings (Customer or Salon)
+      allow read: if isSignedIn() && (
+        request.auth.uid == resource.data.customerId || 
+        get(/databases/$(database)/documents/salons/$(resource.data.salonId)).data.ownerId == request.auth.uid
+      );
       
-      // Allow anyone to create a booking (supports guest booking flow)
+      // Support guest and member creation
       allow create: if true;
       
-      // Allow customers to manage their own bookings
-      // Allow salons to update the status of bookings for their salon
+      // Only involved parties can update status or details
       allow update: if isSignedIn() && (
         request.auth.uid == resource.data.customerId || 
         get(/databases/$(database)/documents/salons/$(resource.data.salonId)).data.ownerId == request.auth.uid
@@ -45,7 +51,10 @@ service cloud.firestore {
     // Support Tickets
     match /support_tickets/{ticketId} {
       allow create: if true;
-      allow read: if isSignedIn() && (request.auth.uid == resource.data.userId || resource.data.userId == 'guest');
+      allow read: if isSignedIn() && (
+        request.auth.uid == resource.data.userId || 
+        resource.data.userId == 'guest'
+      );
     }
   }
 }
