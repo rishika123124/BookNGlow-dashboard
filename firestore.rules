@@ -2,7 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Version: 1.0.4 - Optimized for Dashboard Visibility
+    // Version: 1.0.5 - Enhanced Booking Ownership & Support Rules
     
     function isSignedIn() {
       return request.auth != null;
@@ -20,15 +20,21 @@ service cloud.firestore {
 
     // Booking rules
     match /bookings/{bookingId} {
-      // Allow authenticated users to read and list bookings.
-      // Security is enforced by the frontend query which filters by customerId or salonId.
-      allow read, list: if isSignedIn();
+      // Secure listing: Users can only see bookings they are involved in
+      // Firestore enforces this on queries: the client MUST filter by customerId or salonOwnerId
+      allow read, list: if isSignedIn() && (
+        request.auth.uid == resource.data.customerId || 
+        request.auth.uid == resource.data.salonOwnerId
+      );
       
       // Allow creation for any authenticated user
-      allow create: if isSignedIn();
+      allow create: if isSignedIn() && request.auth.uid == request.resource.data.customerId;
       
       // Only the customer or the involved salon owner can update (e.g., status changes)
-      allow update: if isSignedIn();
+      allow update: if isSignedIn() && (
+        request.auth.uid == resource.data.customerId || 
+        request.auth.uid == resource.data.salonOwnerId
+      );
       
       allow delete: if isSignedIn() && request.auth.uid == resource.data.customerId;
     }

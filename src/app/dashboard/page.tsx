@@ -63,26 +63,30 @@ export default function DashboardPage() {
 
   // 3. Fetch Bookings based on Role
   const bookingsQuery = useMemoFirebase(() => {
-    if (!db || !user) return null;
+    if (!db || !user || profileLoading) return null;
     const bookingsRef = collection(db, 'bookings');
     
-    // Salon Owners see their salon's bookings
+    // Salon Owners see their salon's bookings using denormalized salonOwnerId
     if (profile?.role === 'salon' && mySalon) {
       return query(
         bookingsRef, 
-        where('salonId', '==', mySalon.id),
+        where('salonOwnerId', '==', user.uid),
         orderBy('createdAt', 'desc')
       );
     } 
     
-    // Customers (or users without a full salon profile yet) see their own bookings
-    // This query is optimized to match standard security rules
-    return query(
-      bookingsRef, 
-      where('customerId', '==', user.uid),
-      orderBy('createdAt', 'desc')
-    );
-  }, [db, user, profile, mySalon]);
+    // Customers see their own bookings
+    // This query matches the updated ownership-based security rules
+    if (profile?.role === 'customer') {
+      return query(
+        bookingsRef, 
+        where('customerId', '==', user.uid),
+        orderBy('createdAt', 'desc')
+      );
+    }
+
+    return null;
+  }, [db, user, profile, profileLoading, mySalon]);
 
   const { data: bookings, isLoading: bookingsLoading } = useCollection(bookingsQuery);
 
@@ -97,7 +101,7 @@ export default function DashboardPage() {
   };
 
   // Improved loading state handling
-  if (isUserLoading) {
+  if (isUserLoading || profileLoading) {
     return (
       <div className="min-h-screen bg-[#020617] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -111,7 +115,7 @@ export default function DashboardPage() {
   if (!user) return null;
 
   // Handle case where profile might be missing
-  if (!profileLoading && !profile) {
+  if (!profile && !profileLoading) {
     return (
       <div className="min-h-screen bg-[#020617] text-white">
         <Navbar />
