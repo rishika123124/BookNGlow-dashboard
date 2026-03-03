@@ -18,7 +18,6 @@ import {
   query, 
   where, 
   orderBy, 
-  updateDoc, 
   doc 
 } from 'firebase/firestore';
 import { 
@@ -29,12 +28,9 @@ import {
   CheckCircle2, 
   XCircle, 
   AlertCircle,
-  Store,
-  User as UserIcon,
   Sparkles,
   ChevronRight
 } from 'lucide-react';
-import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { updateDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 
@@ -82,6 +78,7 @@ export default function DashboardPage() {
 
   const handleConfirmBooking = (bookingId: string) => {
     const bookingRef = doc(db, 'bookings', bookingId);
+    // This status update triggers the "Final Confirmation" email logic in Cloud Functions
     updateDocumentNonBlocking(bookingRef, { status: 'confirmed' });
   };
 
@@ -129,7 +126,7 @@ export default function DashboardPage() {
               </h1>
               <p className="text-white/40 text-lg md:text-xl">
                 {isSalon 
-                  ? 'Manage your elite appointments and client flow.' 
+                  ? 'Confirm appointments and manage client flow.' 
                   : 'Track your upcoming luxury grooming sessions.'}
               </p>
             </div>
@@ -145,7 +142,7 @@ export default function DashboardPage() {
             <div className="flex items-center gap-3">
               <Calendar className="h-6 w-6 text-[#A78BFA]" />
               <h2 className="font-headline text-2xl tracking-wide">
-                {isSalon ? 'Client Requests' : 'My Appointment History'}
+                {isSalon ? 'Appointment Requests' : 'My Bookings'}
               </h2>
             </div>
 
@@ -184,7 +181,7 @@ export default function DashboardPage() {
                     <div className="space-y-3">
                       <div className="flex items-center gap-2 text-white/40 text-xs">
                         <Scissors className="h-3 w-3" />
-                        <span className="uppercase tracking-widest font-bold">Services Selected</span>
+                        <span className="uppercase tracking-widest font-bold">Services</span>
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {booking.selectedServices?.map((s: string) => (
@@ -213,7 +210,7 @@ export default function DashboardPage() {
 
                     <div className="flex justify-between items-center pt-2">
                        <div className="space-y-0.5">
-                         <p className="text-[10px] text-white/30 font-bold uppercase">Amount</p>
+                         <p className="text-[10px] text-white/30 font-bold uppercase">Total</p>
                          <p className="text-lg font-bold text-[#A78BFA]">₹{booking.totalAmount}</p>
                        </div>
                        
@@ -248,11 +245,11 @@ export default function DashboardPage() {
                   <AlertCircle className="h-10 w-10 text-[#A78BFA]" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="font-headline text-3xl">No Glows Found</h3>
+                  <h3 className="font-headline text-3xl">No Bookings Yet</h3>
                   <p className="text-white/40 max-w-sm mx-auto">
                     {isSalon 
-                      ? "You don't have any appointment requests yet. Your excellence will attract them soon!" 
-                      : "You haven't booked any glows yet. Start your luxury journey today."}
+                      ? "You don't have any appointment requests yet." 
+                      : "You haven't booked any services yet. Start your luxury journey today."}
                   </p>
                 </div>
                 {!isSalon && (

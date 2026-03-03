@@ -18,16 +18,21 @@ service cloud.firestore {
 
     // Booking rules
     match /bookings/{bookingId} {
-      // Allow authenticated users to check availability and list their own bookings
-      allow read, list: if isSignedIn();
-      // Allow anyone to create a booking
+      // Allow any authenticated user to list and get bookings.
+      // Filtering is handled by the application logic (querying by customerId or salonId).
+      allow list: if isSignedIn();
+      allow get: if isSignedIn();
+      
+      // Allow anyone to create a booking (supports guest booking flow)
       allow create: if true;
+      
       // Allow customers to manage their own bookings
       // Allow salons to update the status of bookings for their salon
       allow update: if isSignedIn() && (
         request.auth.uid == resource.data.customerId || 
         get(/databases/$(database)/documents/salons/$(resource.data.salonId)).data.ownerId == request.auth.uid
       );
+      
       allow delete: if isSignedIn() && request.auth.uid == resource.data.customerId;
     }
     
