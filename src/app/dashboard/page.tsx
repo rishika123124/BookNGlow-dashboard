@@ -61,13 +61,14 @@ export default function DashboardPage() {
   const mySalon = salons?.[0];
 
   // 3. Fetch Bookings based on Role
+  // CRITICAL: We only evaluate the query if profile data is ready and contains a valid role.
   const bookingsQuery = useMemoFirebase(() => {
-    if (!db || !user || profileLoading) return null;
+    if (!db || !user || profileLoading || !profile) return null;
+    
     const bookingsRef = collection(db, 'bookings');
     
     // Salon Owners see their salon's bookings using denormalized salonOwnerId
-    // NOTE: orderBy is removed for now to prevent index errors; filter is mandatory for rules
-    if (profile?.role === 'salon' && mySalon) {
+    if (profile.role === 'salon' && mySalon) {
       return query(
         bookingsRef, 
         where('salonOwnerId', '==', user.uid)
@@ -75,7 +76,7 @@ export default function DashboardPage() {
     } 
     
     // Customers see their own bookings
-    if (profile?.role === 'customer') {
+    if (profile.role === 'customer') {
       return query(
         bookingsRef, 
         where('customerId', '==', user.uid)
@@ -97,7 +98,6 @@ export default function DashboardPage() {
     updateDocumentNonBlocking(bookingRef, { status: 'cancelled' });
   };
 
-  // Improved loading state handling
   if (isUserLoading || profileLoading) {
     return (
       <div className="min-h-screen bg-[#020617] flex items-center justify-center">
@@ -111,7 +111,7 @@ export default function DashboardPage() {
 
   if (!user) return null;
 
-  // Handle case where profile might be missing
+  // Handle case where profile might be missing (e.g. anonymous or new signup)
   if (!profile && !profileLoading) {
     return (
       <div className="min-h-screen bg-[#020617] text-white">
@@ -121,7 +121,7 @@ export default function DashboardPage() {
             <UserIcon className="h-10 w-10 text-amber-500" />
           </div>
           <h1 className="text-3xl font-headline">Profile Setup Required</h1>
-          <p className="text-white/40 max-w-md mx-auto">We couldn't find your profile details. Please ensure you've completed your registration.</p>
+          <p className="text-white/40 max-w-md mx-auto">We couldn't find your profile details. Please ensure you've completed your registration to view bookings.</p>
           <Button onClick={() => router.push('/login')} className="bg-purple-600 rounded-full px-8">Complete Registration</Button>
         </main>
         <Footer />

@@ -2,7 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Version: 1.0.7 - Fixed Dashboard Listing & Support Ticket Permissions
+    // Version: 1.0.8 - Enhanced Booking Permissions & Compatibility
     
     function isSignedIn() {
       return request.auth != null;
@@ -20,23 +20,33 @@ service cloud.firestore {
 
     // Booking rules
     match /bookings/{bookingId} {
-      // Secure listing: Users can only see bookings where they are the customer or the involved salon owner
-      // NOTE: Queries MUST filter by customerId or salonOwnerId to satisfy these rules
+      // Allow users to see their own bookings (as customer, salon owner, or via generic userId)
+      // NOTE: Queries must include filters for customerId, salonOwnerId, or salonId+date
       allow read, list: if isSignedIn() && (
         resource.data.customerId == request.auth.uid || 
-        resource.data.salonOwnerId == request.auth.uid
+        resource.data.salonOwnerId == request.auth.uid ||
+        resource.data.userId == request.auth.uid ||
+        // Allow availability checks for specific salons and dates
+        (request.query.filters.salonId != null && request.query.filters.date != null)
       );
       
       // Allow creation for any authenticated user if they are the customer
-      allow create: if isSignedIn() && request.auth.uid == request.resource.data.customerId;
+      allow create: if isSignedIn() && (
+        request.resource.data.customerId == request.auth.uid ||
+        request.resource.data.userId == request.auth.uid
+      );
       
       // Only the customer or the involved salon owner can update
       allow update: if isSignedIn() && (
         request.auth.uid == resource.data.customerId || 
-        request.auth.uid == resource.data.salonOwnerId
+        request.auth.uid == resource.data.salonOwnerId ||
+        request.auth.uid == resource.data.userId
       );
       
-      allow delete: if isSignedIn() && request.auth.uid == resource.data.customerId;
+      allow delete: if isSignedIn() && (
+        request.auth.uid == resource.data.customerId ||
+        request.auth.uid == resource.data.userId
+      );
     }
     
     // Salons list - Publicly readable
