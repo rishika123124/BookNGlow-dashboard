@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Search, MapPin, ChevronDown, Menu, HelpCircle, Store, Sparkles, Scissors, Heart, Users, User as UserIcon, LogOut } from 'lucide-react'
+import { Search, MapPin, ChevronDown, Menu, HelpCircle, Store, Sparkles, Scissors, Heart, Users, User as UserIcon, LogOut, LayoutDashboard } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -90,6 +90,11 @@ export function Navbar() {
                 <Link href="/" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
                   <Store className="h-5 w-5" /> Home
                 </Link>
+                {user && (
+                  <Link href="/dashboard" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
+                    <LayoutDashboard className="h-5 w-5" /> Dashboard
+                  </Link>
+                )}
                 <div className="flex flex-col gap-3">
                    <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Our Salons</span>
                    <Link href="/salons/male" className="flex items-center gap-3 text-white/60 hover:text-white pl-4">
@@ -132,6 +137,13 @@ export function Navbar() {
             Home
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 group-hover:w-full shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
           </Link>
+
+          {user && (
+            <Link href="/dashboard" className="text-white/80 hover:text-white transition-colors relative group">
+              Dashboard
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 group-hover:w-full shadow-[0_0_8px_rgba(236,72,153,0.8)]" />
+            </Link>
+          )}
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -218,10 +230,16 @@ export function Navbar() {
                 </div>
                 <DropdownMenuSeparator className="bg-white/10" />
                 <DropdownMenuItem asChild className="focus:bg-white/10 rounded-xl cursor-pointer">
+                  <Link href="/dashboard" className="flex items-center gap-3">
+                    <LayoutDashboard className="h-4 w-4" /> My Dashboard
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild className="focus:bg-white/10 rounded-xl cursor-pointer">
                   <Link href="/support" className="flex items-center gap-3">
                     <HelpCircle className="h-4 w-4" /> Support
                   </Link>
                 </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-white/10" />
                 <DropdownMenuItem onClick={handleLogout} className="focus:bg-red-500/20 text-red-400 rounded-xl cursor-pointer">
                   <LogOut className="h-4 w-4 mr-3" /> Sign Out
                 </DropdownMenuItem>

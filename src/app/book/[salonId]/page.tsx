@@ -74,9 +74,11 @@ export default function BookingPage() {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
 
-  // Auto-login anonymously to ensure a guest has a valid ID for Firestore
+  // Auto-login anonymously if guest, or wait for actual user
   useEffect(() => {
     if (!isUserLoading && !user) {
+      // For now, let's just keep guest flow but ideally we'd show a login prompt
+      // if we want full notification functionality.
       signInAnonymously(auth).catch(err => {
         console.error("Anonymous auth failed", err);
       });
@@ -95,7 +97,7 @@ export default function BookingPage() {
       collection(db, 'bookings'),
       where('salonId', '==', salonId),
       where('date', '==', dateStr),
-      where('status', '==', 'confirmed')
+      where('status', 'in', ['pending', 'confirmed'])
     );
   }, [db, salonId, selectedDate]);
 
@@ -120,7 +122,6 @@ export default function BookingPage() {
   };
 
   const handleBooking = async () => {
-    // If auth is still loading, wait
     if (isUserLoading || !user) {
       toast({
         title: "Preparing Session",
@@ -138,13 +139,14 @@ export default function BookingPage() {
 
     const bookingData = {
       customerId: user.uid,
+      customerName: user.displayName || 'Glow Member',
       salonId: salonId as string,
       salonName: salon?.name || 'Velvet Grooming',
       selectedServices: selectedServiceNames,
       totalAmount: totalAmount,
       date: format(selectedDate, 'yyyy-MM-dd'),
       time: selectedSlot,
-      status: 'confirmed',
+      status: 'pending', // Starts as pending for Salon confirmation workflow
       createdAt: serverTimestamp(),
     };
 
@@ -333,7 +335,7 @@ export default function BookingPage() {
                           {slot}
                           {isBooked && (
                             <span className="absolute -top-2 -right-2 bg-slate-800 text-[8px] px-2 py-0.5 rounded-full text-white/40 uppercase tracking-tighter">
-                              Booked
+                              Reserved
                             </span>
                           )}
                         </button>
@@ -354,7 +356,7 @@ export default function BookingPage() {
                         </div>
                       ))}
                       <div className="pt-2 border-t border-white/10 flex justify-between font-bold text-lg text-[#A78BFA]">
-                        <span>Total</span>
+                        <span>Total Estimate</span>
                         <span>₹{totalAmount}</span>
                       </div>
                     </div>
@@ -365,11 +367,11 @@ export default function BookingPage() {
                 <div className="sticky bottom-0 pt-8 border-t border-white/10 bg-gradient-to-t from-[#020617]/80 via-[#020617]/50 to-transparent flex flex-col items-center gap-6 mt-auto pb-4 backdrop-blur-sm">
                   <div className="text-center">
                     <p className="text-white/40 text-sm italic">
-                      Experience the gold standard of grooming.
+                      Send a request to the salon for confirmation.
                     </p>
                     {selectedSlot && selectedDate && (
                       <p className="text-[#A78BFA] font-bold text-sm mt-1 animate-in fade-in slide-in-from-bottom-1">
-                        Selected: {format(selectedDate, 'EEE, MMM do')} @ {selectedSlot}
+                        Requesting: {format(selectedDate, 'EEE, MMM do')} @ {selectedSlot}
                       </p>
                     )}
                   </div>
@@ -378,15 +380,9 @@ export default function BookingPage() {
                     onClick={() => setIsConfirmOpen(true)}
                     className="w-full md:w-80 h-14 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-[1.02] transition-all text-lg font-headline shadow-2xl shadow-purple-500/30 border-none group"
                   >
-                    Confirm Appointment
+                    Request Appointment
                     <Sparkles className="ml-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
                   </Button>
-                  {!selectedSlot && selectedServices.length > 0 && (
-                    <p className="text-white/40 text-xs uppercase tracking-widest font-bold">Please select a time slot</p>
-                  )}
-                  {selectedServices.length === 0 && (
-                    <p className="text-white/40 text-xs uppercase tracking-widest font-bold">Please select at least one service</p>
-                  )}
                 </div>
               </div>
             </div>
@@ -401,36 +397,24 @@ export default function BookingPage() {
             <div className="bg-purple-500/20 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-2">
               <Clock className="h-8 w-8 text-[#A78BFA]" />
             </div>
-            <DialogTitle className="font-headline text-3xl text-center tracking-wide">Confirm Your Glow</DialogTitle>
+            <DialogTitle className="font-headline text-3xl text-center tracking-wide">Ready to Glow?</DialogTitle>
             <DialogDescription className="text-white/60 text-center text-lg">
-              You're booking a luxury session at <span className="text-[#A78BFA] font-bold">{salon?.name || "Velvet Grooming"}</span>.
+              Your request will be sent to <span className="text-[#A78BFA] font-bold">{salon?.name || "Velvet Grooming"}</span>. We'll notify you once confirmed.
             </DialogDescription>
           </DialogHeader>
           
           <div className="bg-white/5 rounded-3xl p-6 space-y-4 border border-white/10 my-6">
             <div className="flex justify-between items-center text-sm">
-              <span className="text-white/40 uppercase tracking-widest font-bold">Selected Date</span>
+              <span className="text-white/40 uppercase tracking-widest font-bold">Preferred Date</span>
               <span className="font-bold">{selectedDate ? format(selectedDate, 'EEEE, MMMM do') : ''}</span>
             </div>
             <div className="flex justify-between items-center text-sm">
-              <span className="text-white/40 uppercase tracking-widest font-bold">Appointment Time</span>
+              <span className="text-white/40 uppercase tracking-widest font-bold">Time Slot</span>
               <span className="font-bold">{selectedSlot}</span>
             </div>
             <div className="h-px bg-white/10 w-full" />
-            <div className="space-y-2">
-              <span className="text-white/40 uppercase tracking-widest font-bold text-[10px]">Services</span>
-              <div className="space-y-1">
-                {SALON_SERVICES.filter(s => selectedServices.includes(s.id)).map(s => (
-                  <div key={s.id} className="flex justify-between text-xs">
-                    <span>{s.name}</span>
-                    <span className="text-white/60">₹{s.price}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="h-px bg-white/10 w-full" />
             <div className="flex justify-between items-center">
-              <span className="text-white/40 uppercase tracking-widest font-bold">Total Amount</span>
+              <span className="text-white/40 uppercase tracking-widest font-bold">Estimated Total</span>
               <span className="text-xl font-bold text-[#A78BFA]">₹{totalAmount}</span>
             </div>
           </div>
@@ -441,14 +425,14 @@ export default function BookingPage() {
               onClick={() => setIsConfirmOpen(false)}
               className="rounded-full h-12 border-white/10 text-white hover:bg-white/5 px-8"
             >
-              Go Back
+              Wait, Let me think
             </Button>
             <Button 
               disabled={isBooking}
               onClick={handleBooking}
               className="rounded-full h-12 bg-purple-600 hover:bg-purple-700 text-white px-8 font-bold border-none"
             >
-              {isBooking ? <Loader2 className="h-4 w-4 animate-spin" /> : "Confirm Booking"}
+              {isBooking ? <Loader2 className="h-4 w-4 animate-spin" /> : "Send Request"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -463,37 +447,26 @@ export default function BookingPage() {
             </div>
             <div className="space-y-2">
               <DialogTitle className="font-headline text-4xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-400">
-                Glow Confirmed!
+                Request Sent!
               </DialogTitle>
               <DialogDescription className="text-white/60 text-lg">
-                Your appointment at <span className="text-white font-bold">{salon?.name}</span> is secured.
+                We've sent your request to <span className="text-white font-bold">{salon?.name}</span>.
               </DialogDescription>
             </div>
           </DialogHeader>
 
           <div className="mt-8 space-y-4">
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4">
-              <div className="bg-purple-500/20 p-3 rounded-xl">
-                <CalendarCheck className="h-6 w-6 text-purple-400" />
-              </div>
-              <div className="text-left">
-                <p className="text-white/40 text-xs uppercase tracking-widest font-bold">Appointment</p>
-                <p className="font-bold text-sm md:text-base">
-                  {selectedDate ? format(selectedDate, 'MMM do') : ''} • {selectedSlot}
-                </p>
-              </div>
-            </div>
             <p className="text-white/30 text-xs italic">
-              Your luxury session has been reserved.
+              Please check your dashboard for updates. You will receive an email once the salon confirms.
             </p>
           </div>
           
           <DialogFooter className="mt-8">
             <Button 
-              onClick={() => router.push('/')}
+              onClick={() => router.push('/dashboard')}
               className="w-full h-14 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-[1.02] transition-all font-headline text-lg border-none"
             >
-              Return Home
+              Go to Dashboard
             </Button>
           </DialogFooter>
         </DialogContent>

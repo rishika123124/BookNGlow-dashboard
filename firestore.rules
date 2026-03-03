@@ -1,36 +1,46 @@
-
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
     // User profile rules
     match /users/{userId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == userId;
+      allow read: if isSignedIn();
+      allow write: if isOwner(userId);
     }
 
     // Booking rules
     match /bookings/{bookingId} {
       // Allow authenticated users to check availability and list their own bookings
-      allow read, list: if request.auth != null;
-      // Allow anyone to create a booking (guest or authenticated)
+      allow read, list: if isSignedIn();
+      // Allow anyone to create a booking
       allow create: if true;
       // Allow customers to manage their own bookings
-      allow update, delete: if request.auth != null && request.auth.uid == resource.data.customerId;
+      // Allow salons to update the status of bookings for their salon
+      allow update: if isSignedIn() && (
+        request.auth.uid == resource.data.customerId || 
+        get(/databases/$(database)/documents/salons/$(resource.data.salonId)).data.ownerId == request.auth.uid
+      );
+      allow delete: if isSignedIn() && request.auth.uid == resource.data.customerId;
     }
     
     // Salons list - Publicly readable
     match /salons/{salonId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if isSignedIn();
     }
 
-    // Support Tickets - Explicitly allowing creation for all users
+    // Support Tickets
     match /support_tickets/{ticketId} {
-      // Deployment trigger: Ensure support ticket creation is globally allowed
       allow create: if true;
-      // Allow the creator or an authenticated user with matching ID to read their ticket
-      allow read: if request.auth != null && (request.auth.uid == resource.data.userId || resource.data.userId == 'guest');
+      allow read: if isSignedIn() && (request.auth.uid == resource.data.userId || resource.data.userId == 'guest');
     }
   }
 }
