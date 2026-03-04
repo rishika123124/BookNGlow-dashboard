@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Sparkles, Search, Loader2 } from 'lucide-react'
-import { aiSalonServiceSearch } from '@/ai/flows/ai-salon-service-search'
+import { aiSalonServiceSearch } from '@/components/dashboard/ai/flows/ai-salon-service-search'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
 export function AISearchDialog() {

@@ -7,7 +7,7 @@
  * - AISalonServiceSearchOutput - The return type for the aiSalonServiceSearch function.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai} from '@/components/dashboard/ai/genkit';
 import {z} from 'genkit';
 
 const AISalonServiceSearchInputSchema = z.object({
