@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Support Form Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #1e293b; color: white; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input, select, textarea { width: 100%; padding: 8px; background: #334155; border: 1px solid #475569; color: white; border-radius: 4px; }
+        button { background: #3b82f6; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:disabled { background: #6b7280; cursor: not-allowed; }
+        .result { margin-top: 20px; padding: 15px; background: #1f2937; border-radius: 4px; }
+        .success { border-left: 4px solid #10b981; }
+        .error { border-left: 4px solid #ef4444; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Support Form Test</h1>
+        <form id="supportForm">
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select id="category" required>
+                    <option value="">Select category</option>
+                    <option value="booking">Booking Issues</option>
+                    <option value="technical">Technical Support</option>
+                    <option value="account">Account Help</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" placeholder="your@email.com" required>
+            </div>
+            <div class="form-group">
+                <label for="subject">Subject:</label>
+                <input type="text" id="subject" placeholder="Brief description of your issue" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <textarea id="message" placeholder="Please describe your issue in detail..." rows="5" required></textarea>
+            </div>
+            <button type="submit" id="submitBtn">Submit Support Request</button>
+        </form>
+        
+        <div id="result" class="result" style="display: none;"></div>
+        
+        <div style="margin-top: 30px;">
+            <h3>Test Instructions:</h3>
+            <ol>
+                <li>Fill out all form fields above</li>
+                <li>Click "Submit Support Request"</li>
+                <li>Check the result section below for API response</li>
+                <li>Check browser console (F12) for detailed logs</li>
+                <li>After successful submission, check admin dashboard at <a href="/admin/support" target="_blank">/admin/support</a></li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('supportForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const resultDiv = document.getElementById('result');
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            resultDiv.style.display = 'none';
+            
+            console.log('=== SUPPORT FORM SUBMISSION ===');
+            
+            const formData = {
+                name: 'Test User',
+                email: document.getElementById('email').value,
+                phone: '9876543210',
+                subject: `[${document.getElementById('category').value}] ${document.getElementById('subject').value}`,
+                message: `Category: ${document.getElementById('category').value}\n\n${document.getElementById('message').value}\n\nContact Details:\nEmail: ${document.getElementById('email').value}\nPhone: 9876543210`,
+                category: document.getElementById('category').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value,
+                createdAt: new Date()
+            };
+            
+            console.log('Form data:', formData);
+            
+            try {
+                const response = await fetch('/api/support', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                const result = await response.json();
+                console.log('Response data:', result);
+                
+                if (result.success) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <h3>✅ Success!</h3>
+                        <p><strong>Message:</strong> ${result.message}</p>
+                        <p><strong>ID:</strong> ${result.data?.id || 'N/A'}</p>
+                        <p><strong>Status:</strong> ${result.data?.status || 'N/A'}</p>
+                        <p><strong>Next:</strong> Check admin dashboard at <a href="/admin/support" target="_blank">/admin/support</a> to see your message.</p>
+                    `;
+                    
+                    // Reset form
+                    document.getElementById('supportForm').reset();
+                    
+                    // Show success alert
+                    alert('✅ Support Request Submitted Successfully!\n\nYour support request has been sent to our team. We will respond soon.\n\nCheck admin dashboard to see your message.');
+                    
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `
+                        <h3>❌ Error!</h3>
+                        <p><strong>Message:</strong> ${result.message}</p>
+                        <p>Please try again or contact support directly.</p>
+                    `;
+                    
+                    alert('❌ Submission Failed!\n\n' + result.message);
+                }
+                
+            } catch (error) {
+                console.error('Submission error:', error);
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <h3>❌ Network Error!</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p>Please check your internet connection and try again.</p>
+                `;
+                
+                alert('❌ Network Error!\n\n' + error.message);
+                
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Support Request';
+                resultDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

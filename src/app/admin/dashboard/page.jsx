@@ -1,0 +1,565 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { 
+  Users, 
+  Store, 
+  Calendar, 
+  Star, 
+  MessageSquare, 
+  Crown, 
+  CheckCircle, 
+  XCircle, 
+  Clock,
+  TrendingUp,
+  TrendingDown,
+  AlertCircle
+} from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Sidebar } from '@/components/admin/Sidebar';
+
+export default function AdminDashboard() {
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    totalSalons: 0,
+    totalBookings: 0,
+    totalPremiumSalons: 0,
+    pendingSalons: 0,
+    approvedSalons: 0,
+    rejectedSalons: 0,
+    totalSupportMessages: 0,
+    pendingSupportMessages: 0
+  });
+  const [pendingSalons, setPendingSalons] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState('dashboard');
+  const router = useRouter();
+
+  useEffect(() => {
+    const adminToken = localStorage.getItem('adminToken');
+    if (!adminToken) {
+      router.push('/admin/login');
+      return;
+    }
+    console.log('=== ADMIN DASHBOARD MOUNTED ===');
+    console.log('Token found, fetching data...');
+    
+    // Simple approach with timeout fallback
+    const loadData = async () => {
+      try {
+        await fetchStats();
+        await fetchPendingSalons();
+      } catch (error) {
+        console.error('Error loading data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadData();
+    
+    // Fallback timeout - ensure loading stops after 3 seconds
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+    
+    return () => clearTimeout(timeout);
+  }, []);
+
+  const fetchPendingSalons = async () => {
+    try {
+      console.log('=== FETCHING PENDING SALONS ===');
+      const adminToken = localStorage.getItem('adminToken');
+      console.log('Admin Token:', adminToken ? 'Present' : 'Missing');
+      
+      const response = await fetch('/api/admin/salons', {
+        headers: {
+          'Authorization': `Bearer ${adminToken}`
+        }
+      });
+      
+      console.log('API Response Status:', response.status);
+      const result = await response.json();
+      console.log('API Response Data:', result);
+
+      if (result.success) {
+        const pending = result.data.filter(salon => salon.status === 'pending');
+        setPendingSalons(pending);
+        console.log('=== ADMIN DASHBOARD PENDING SALONS ===');
+        console.log('Pending Salons Found:', pending.length);
+        pending.forEach((salon, index) => {
+          console.log(`${index + 1}. ${salon.salonName} - ${salon.email}`);
+        });
+      } else {
+        console.error('API Error:', result.message);
+      }
+    } catch (error) {
+      console.error('Error fetching pending salons:', error);
+    }
+  };
+
+  const fetchStats = async () => {
+    try {
+      // Fetch stats from API
+      const response = await fetch('/api/admin/stats');
+      const result = await response.json();
+      
+      if (result.success) {
+        setStats(result.data);
+      } else {
+        console.error('API Error:', result.message);
+        // Don't use mock data - show error state
+        setStats({
+          totalUsers: 0,
+          totalSalons: 0,
+          totalBookings: 0,
+          totalPremiumSalons: 0,
+          pendingSalons: 0,
+          approvedSalons: 0,
+          rejectedSalons: 0,
+          totalSupportMessages: 0,
+          pendingSupportMessages: 0
+        });
+      }
+    } catch (error) {
+      console.error('Stats fetch error:', error);
+      // Don't use mock data - show error state
+      setStats({
+        totalUsers: 0,
+        totalSalons: 0,
+        totalBookings: 0,
+        totalPremiumSalons: 0,
+        pendingSalons: 0,
+        approvedSalons: 0,
+        rejectedSalons: 0,
+        totalSupportMessages: 0,
+        pendingSupportMessages: 0
+      });
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminUser');
+    router.push('/admin/login');
+  };
+
+  const handleApproveSalon = async (salonId) => {
+    if (!confirm('Are you sure you want to approve this salon?')) return;
+
+    try {
+      const adminToken = localStorage.getItem('adminToken');
+      const response = await fetch('/api/admin/salons', {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${adminToken}`
+        },
+        body: JSON.stringify({ salonId, action: 'approve' })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert('Salon approved successfully!');
+        fetchPendingSalons(); // Refresh pending list
+        fetchStats(); // Refresh stats
+        console.log('=== SALON APPROVED FROM DASHBOARD ===');
+        console.log('Approved Salon ID:', salonId);
+      } else {
+        alert(result.message || 'Approval failed');
+      }
+    } catch (error) {
+      console.error('Approval error:', error);
+      alert('Something went wrong');
+    }
+  };
+
+  const handleRejectSalon = async (salonId) => {
+    const reason = prompt('Please provide rejection reason:');
+    if (!reason) return;
+
+    if (!confirm('Are you sure you want to reject this salon?')) return;
+
+    try {
+      const adminToken = localStorage.getItem('adminToken');
+      const response = await fetch('/api/admin/salons', {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${adminToken}`
+        },
+        body: JSON.stringify({ salonId, action: 'reject', reason })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert('Salon rejected successfully!');
+        fetchPendingSalons(); // Refresh pending list
+        fetchStats(); // Refresh stats
+        console.log('=== SALON REJECTED FROM DASHBOARD ===');
+        console.log('Rejected Salon ID:', salonId);
+      } else {
+        alert(result.message || 'Rejection failed');
+      }
+    } catch (error) {
+      console.error('Rejection error:', error);
+      alert('Something went wrong');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+        <div className="text-white">
+          <div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
+      <Sidebar activeSection={activeSection} setActiveSection={setActiveSection} />
+      
+      {/* Main Content */}
+      <div className="lg:ml-64">
+        {/* Header */}
+        <div className="bg-slate-900/50 backdrop-blur-xl border-b border-white/10 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold">
+                Admin <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400">Dashboard</span>
+              </h1>
+              <p className="text-white/60 text-sm md:text-base">Manage your BookNGlow platform with ease</p>
+            </div>
+            <Button onClick={handleLogout} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full px-6 py-2">
+              Logout
+            </Button>
+          </div>
+        </div>
+
+        {/* Dashboard Content */}
+        <div className="p-6">
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <Card className="bg-slate-900/50 backdrop-blur-xl border-white/10 hover:border-purple-500/30 transition-all">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium text-white/60">Total Users</CardTitle>
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                  <Users className="h-4 w-4 text-white" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+                  {stats.totalUsers.toLocaleString()}
+                </div>
+                <p className="text-xs text-green-400">+12% from last month</p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-slate-900/50 backdrop-blur-xl border-white/10 hover:border-purple-500/30 transition-all">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium text-white/60">Total Salons</CardTitle>
+                <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
+                  <Store className="h-4 w-4 text-white" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+                  {stats.totalSalons}
+                </div>
+                <p className="text-xs text-green-400">+8% from last month</p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-slate-900/50 backdrop-blur-xl border-white/10 hover:border-purple-500/30 transition-all">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium text-white/60">Total Bookings</CardTitle>
+                <div className="w-8 h-8 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg flex items-center justify-center">
+                  <Calendar className="h-4 w-4 text-white" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-400">
+                  {stats.totalBookings.toLocaleString()}
+                </div>
+                <p className="text-xs text-green-400">+23% from last month</p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-slate-900/50 backdrop-blur-xl border-white/10 hover:border-purple-500/30 transition-all">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium text-white/60">Premium Salons</CardTitle>
+                <div className="w-8 h-8 bg-gradient-to-r from-yellow-600 to-orange-600 rounded-lg flex items-center justify-center">
+                  <Crown className="h-4 w-4 text-white" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-400">
+                  {stats.totalPremiumSalons}
+                </div>
+                <p className="text-xs text-green-400">+5% from last month</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Salon Status Overview */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <Card className="bg-slate-900/50 backdrop-blur-xl border-white/10">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold text-white">Salon Approval Requests</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between p-4 rounded-lg bg-slate-800/50">
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 bg-yellow-400 rounded-full shadow-[0_0_25px_rgba(250,204,21,0.9)]"></div>
+                    <span className="text-sm font-medium text-white">Pending Approval</span>
+                  </div>
+                  <Badge className="bg-yellow-400/20 text-yellow-400 border-yellow-400/30">
+                    {stats.pendingSalons}
+                  </Badge>
+                </div>
+                
+                {/* Show actual pending salons */}
+                {pendingSalons.length > 0 && (
+                  <div className="space-y-3 mt-4">
+                    <h4 className="text-sm font-semibold text-white/80">Recent Pending Requests:</h4>
+                    {pendingSalons.slice(0, 3).map((salon) => (
+                      <div key={salon._id} className="p-4 rounded-lg bg-slate-800/30 border border-white/10">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <p className="font-semibold text-white text-lg">{salon.salonName}</p>
+                              <Badge className="bg-blue-600/20 text-blue-400 border-blue-600/30 text-xs">
+                                {salon.gender}
+                              </Badge>
+                              <Badge className="bg-yellow-600/20 text-yellow-400 border-yellow-600/30 text-xs">
+                                {salon.status}
+                              </Badge>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-white/70 mb-3">
+                              <div className="flex items-center gap-2">
+                                <span className="font-medium">Owner:</span>
+                                <span>{salon.ownerName}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-medium">Email:</span>
+                                <span>{salon.email}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-medium">Phone:</span>
+                                <span>{salon.phone}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-medium">Type:</span>
+                                <span>{salon.salonType}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-medium">Location:</span>
+                                <span>{salon.city}, {salon.state}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-medium">Timing:</span>
+                                <span>{salon.openingTime} - {salon.closingTime}</span>
+                              </div>
+                            </div>
+
+                            {/* Services */}
+                            {salon.services && salon.services.length > 0 && (
+                              <div className="mb-3">
+                                <p className="font-medium text-white/80 text-sm mb-1">Services:</p>
+                                <div className="flex flex-wrap gap-1">
+                                  {salon.services.map((service, idx) => (
+                                    <Badge key={idx} className="bg-purple-600/20 text-purple-400 border-purple-600/30 text-xs">
+                                      {service.name} - ₹{service.price}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Offers */}
+                            {salon.offers && salon.offers.length > 0 && (
+                              <div className="mb-3">
+                                <p className="font-medium text-white/80 text-sm mb-1">Special Offers:</p>
+                                <div className="flex flex-wrap gap-1">
+                                  {salon.offers.map((offer, idx) => (
+                                    <Badge key={idx} className="bg-green-600/20 text-green-400 border-green-600/30 text-xs">
+                                      {offer}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Address */}
+                            <div className="text-sm text-white/60">
+                              <p className="font-medium text-white/80">Address:</p>
+                              <p>{salon.address}, {salon.city}, {salon.state} - {salon.pincode}</p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex flex-col gap-2 ml-4">
+                            <Button 
+                              size="sm" 
+                              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-xs"
+                              onClick={() => handleApproveSalon(salon._id)}
+                            >
+                              <CheckCircle className="w-4 h-4 mr-1" />
+                              Approve
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              className="border-red-600 text-red-400 hover:bg-red-600/20 px-4 py-2 text-xs"
+                              onClick={() => handleRejectSalon(salon._id)}
+                            >
+                              <XCircle className="w-4 h-4 mr-1" />
+                              Reject
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    {pendingSalons.length > 3 && (
+                      <Button 
+                        variant="outline" 
+                        className="w-full border-purple-600 text-purple-400 hover:bg-purple-600/20"
+                        onClick={() => window.location.href = '/admin/approval'}
+                      >
+                        View All {pendingSalons.length} Pending Requests
+                      </Button>
+                    )}
+                  </div>
+                )}
+                
+                {pendingSalons.length === 0 && (
+                  <div className="text-center py-8">
+                    <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Store className="h-8 w-8 text-slate-600" />
+                    </div>
+                    <p className="text-white/60">No pending salon requests</p>
+                    <p className="text-xs text-white/40 mt-1">All salons have been reviewed</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card className="bg-slate-900/50 backdrop-blur-xl border-white/10">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold text-white">Support Messages</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between p-4 rounded-lg bg-slate-800/50">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                      <MessageSquare className="h-4 w-4 text-white" />
+                    </div>
+                    <span className="text-sm font-medium text-white">Total Messages</span>
+                  </div>
+                  <Badge className="bg-blue-400/20 text-blue-400 border-blue-400/30">
+                    {stats.totalSupportMessages}
+                  </Badge>
+                </div>
+                <div className="flex items-center justify-between p-4 rounded-lg bg-slate-800/50">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-gradient-to-r from-yellow-600 to-orange-600 rounded-lg flex items-center justify-center">
+                      <Clock className="h-4 w-4 text-white" />
+                    </div>
+                    <span className="text-sm font-medium text-white">Pending Response</span>
+                  </div>
+                  <Badge className="bg-yellow-400/20 text-yellow-400 border-yellow-400/30">
+                    {stats.pendingSupportMessages}
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Booking Management Section */}
+          <Card className="bg-slate-900/50 backdrop-blur-xl border-white/10">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold text-white">Recent Bookings</CardTitle>
+              <Button 
+                variant="outline" 
+                className="border-purple-600 text-purple-400 hover:bg-purple-600/20"
+                onClick={() => window.location.href = '/admin/bookings'}
+              >
+                View All Bookings
+              </Button>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between p-4 rounded-lg bg-slate-800/50">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-blue-400 rounded-full shadow-[0_0_25px_rgba(59,130,246,0.9)]"></div>
+                  <span className="text-sm font-medium text-white">Total Bookings</span>
+                </div>
+                <Badge className="bg-blue-400/20 text-blue-400 border-blue-400/30">
+                  {stats.totalBookings || 0}
+                </Badge>
+              </div>
+              
+              <div className="flex items-center justify-between p-4 rounded-lg bg-slate-800/50">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-yellow-400 rounded-full shadow-[0_0_25px_rgba(250,204,21,0.9)]"></div>
+                  <span className="text-sm font-medium text-white">Pending</span>
+                </div>
+                <Badge className="bg-yellow-400/20 text-yellow-400 border-yellow-400/30">
+                  {stats.pendingBookings || 0}
+                </Badge>
+              </div>
+              
+              <div className="flex items-center justify-between p-4 rounded-lg bg-slate-800/50">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 bg-green-400 rounded-full shadow-[0_0_25px_rgba(34,197,94,0.9)]"></div>
+                  <span className="text-sm font-medium text-white">Accepted</span>
+                </div>
+                <Badge className="bg-green-400/20 text-green-400 border-green-400/30">
+                  {stats.acceptedBookings || 0}
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Actions */}
+          <Card className="bg-slate-900/50 backdrop-blur-xl border-white/10">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold text-white">Quick Actions</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Button 
+                  onClick={() => router.push('/admin/approval')}
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full h-12 font-semibold shadow-lg"
+                >
+                  <Store className="mr-2 h-5 w-5" />
+                  Review Salon Approvals
+                </Button>
+                <Button 
+                  onClick={() => router.push('/admin/users')}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full h-12 font-semibold shadow-lg"
+                >
+                  <Users className="mr-2 h-5 w-5" />
+                  Manage Users
+                </Button>
+                <Button 
+                  onClick={() => router.push('/admin/support')}
+                  className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white rounded-full h-12 font-semibold shadow-lg"
+                >
+                  <MessageSquare className="mr-2 h-5 w-5" />
+                  View Support Messages
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}

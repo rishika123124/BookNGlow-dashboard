@@ -1,0 +1,8 @@
+{
+  "json.schemas": [],
+  "json.validate.enabled": false,
+  "json.schemas.enable": false,
+  "json.maxItemsComputed": 5000,
+  "typescript.validate.enable": false,
+  "eslint.validate": []
+}

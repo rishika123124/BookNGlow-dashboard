@@ -1,0 +1,920 @@
+import { NextResponse } from 'next/server';
+import { connectToDatabase } from '@/lib/mongodb';
+import { verifyToken } from '@/lib/auth';
+import nodemailer from 'nodemailer';
+import { ObjectId } from 'mongodb';
+
+// Email configuration
+const transporter = nodemailer.createTransporter({
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: process.env.SMTP_PORT || 587,
+  secure: false,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
+
+// Helper function to verify JWT and get user info
+async function authenticateRequest(request) {
+  const authHeader = request.headers.get('authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return { error: 'Authorization token required', status: 401 };
+  }
+
+  const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+  const decoded = verifyToken(token);
+  
+  if (!decoded) {
+    return { error: 'Invalid or expired token', status: 401 };
+  }
+
+  return { authenticatedUser: decoded };
+}
+
+// Helper function to send confirmation email
+async function sendConfirmationEmail(customerEmail, salonName) {
+  try {
+    console.log('Sending confirmation email to:', customerEmail);
+    
+    const mailOptions = {
+      from: process.env.SMTP_USER,
+      to: customerEmail,
+      subject: `Booking Confirmed at ${salonName}!`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #4CAF50;">Your booking at ${salonName} is confirmed!</h2>
+          <p>Thank you for choosing BookNGlow!</p>
+          <p>Your booking has been confirmed by the salon. We look forward to seeing you!</p>
+          <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3>Booking Details:</h3>
+            <p><strong>Salon:</strong> ${salonName}</p>
+            <p><strong>Status:</strong> <span style="color: #4CAF50; font-weight: bold;">CONFIRMED</span></p>
+          </div>
+          <p style="color: #666;">If you have any questions, please contact the salon directly.</p>
+          <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
+          <p style="color: #999; font-size: 12px;">This is an automated message from BookNGlow.</p>
+        </div>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log('Confirmation email sent successfully to:', customerEmail);
+  } catch (error) {
+    console.error('Error sending confirmation email:', error);
+    // Don't throw error - booking should still be confirmed even if email fails
+  }
+}
+
+// POST /api/bookings - Create new booking
+export async function POST(request) {
+  try {
+    console.log('POST /api/bookings - Starting booking creation');
+    
+    // Authenticate request
+    const auth = await authenticateRequest(request);
+    if (auth.error) {
+      console.log('Authentication failed:', auth.error);
+      return NextResponse.json(
+        { success: false, message: auth.error },
+        { status: auth.status }
+      );
+    }
+
+    const { authenticatedUser } = auth;
+    console.log('User authenticated:', { id: authenticatedUser.id, role: authenticatedUser.role });
+
+    // Parse request body
+    const { salonId, serviceDetails, customerEmail } = await request.json();
+    console.log('Booking request received:', { salonId, serviceDetails, customerEmail });
+
+    // Validate required fields
+    if (!salonId || !serviceDetails || !customerEmail) {
+      console.log('Missing required fields:', { salonId, serviceDetails, customerEmail });
+      return NextResponse.json(
+        { success: false, message: 'Missing required fields: salonId, serviceDetails, customerEmail' },
+        { status: 400 }
+      );
+    }
+
+    // Bypass ownership checks for customers
+    if (authenticatedUser.role === 'customer') {
+      console.log('Customer creating booking - bypassing ownership checks');
+    } else {
+      console.log('Non-customer user attempting to create booking');
+      return NextResponse.json(
+        { success: false, message: 'Only customers can create bookings' },
+        { status: 403 }
+      );
+    }
+
+    // Connect to database
+    console.log('Connecting to database...');
+    const dbConnection = await connectToDatabase();
+    console.log('Database connected successfully to:', dbConnection.dbName);
+    const db = dbConnection.db;
+
+    // Validate salon exists - implement flexible lookup with fallback
+    console.log('=== SALON LOOKUP DEBUG ===');
+    console.log('Searching for salon with ID:', salonId, 'Type:', typeof salonId);
+    console.log('Database being queried:', dbConnection.dbName);
+    
+    let salon;
+    let salonObjectId;
+    
+    // First try ObjectId conversion
+    try {
+      salonObjectId = new ObjectId(salonId);
+      console.log('Converted salonId to ObjectId:', salonObjectId);
+      
+      console.log('Step 1: Trying ObjectId lookup...');
+      salon = await db.collection('salons').findOne({ _id: salonObjectId });
+      console.log('ObjectId lookup result:', salon ? 'Found' : 'Not found');
+      
+    } catch (error) {
+      console.log('ObjectId conversion failed:', error.message);
+      console.log('Step 2: Falling back to string lookup...');
+    }
+
+    // Fallback to string lookup if ObjectId failed or returned null
+    if (!salon) {
+      console.log('Step 2: Trying string lookup with raw ID...');
+      try {
+        salon = await db.collection('salons').findOne({ _id: salonId });
+        console.log('String lookup result:', salon ? 'Found' : 'Not found');
+      } catch (stringError) {
+        console.log('String lookup failed:', stringError.message);
+      }
+    }
+
+    // Additional fallback: try searching by other common ID fields
+    if (!salon) {
+      console.log('Step 3: Trying additional fallback lookups...');
+      try {
+        // Try searching by string representation of ObjectId
+        if (salonObjectId) {
+          salon = await db.collection('salons').findOne({ _id: salonObjectId.toString() });
+          console.log('ObjectId.toString() lookup result:', salon ? 'Found' : 'Not found');
+        }
+        
+        // Try searching by id field (if exists)
+        if (!salon) {
+          salon = await db.collection('salons').findOne({ id: salonId });
+          console.log('id field lookup result:', salon ? 'Found' : 'Not found');
+        }
+      } catch (fallbackError) {
+        console.log('Fallback lookup failed:', fallbackError.message);
+      }
+    }
+
+    console.log('=== END SALON LOOKUP DEBUG ===');
+    
+    // Handle salon not found gracefully
+    if (!salon) {
+      console.log('SALON NOT FOUND - All lookup methods failed');
+      console.log('Attempted lookups:');
+      console.log('1. ObjectId lookup:', salonObjectId ? 'Attempted' : 'Skipped');
+      console.log('2. String lookup:', 'Attempted');
+      console.log('3. Fallback lookups:', 'Attempted');
+      
+      return NextResponse.json(
+        { 
+          success: false, 
+          message: 'Salon not found. Please verify the salon ID and ensure the salon exists in the database.',
+          debug: {
+            searchedId: salonId,
+            searchedType: typeof salonId,
+            database: dbConnection.dbName,
+            lookupAttempts: ['ObjectId', 'String', 'Fallback']
+          }
+        },
+        { status: 404 }
+      );
+    }
+
+    console.log('SALON FOUND SUCCESSFULLY:', salon.name || 'Unnamed salon');
+
+    // Create booking object with the ID format that worked
+    const booking = {
+      salonId: salonObjectId || salon._id, // Use ObjectId if available, otherwise use the found salon's _id
+      customerId: authenticatedUser.id,
+      customerEmail: customerEmail,
+      serviceDetails: serviceDetails,
+      status: 'pending',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    console.log('Creating booking object:', booking);
+
+    // Save booking to database
+    console.log('Inserting booking into database...');
+    const result = await db.collection('bookings').insertOne(booking);
+    console.log('Booking created successfully:', result.insertedId);
+
+    // Return success response
+    return NextResponse.json({
+      success: true,
+      data: {
+        bookingId: result.insertedId,
+        message: 'Booking created successfully. Awaiting salon confirmation.',
+        status: 'pending'
+      }
+    }, { status: 201 });
+
+  } catch (error) {
+    console.error('Booking creation error:', error);
+    console.error('Error stack:', error.stack);
+    return NextResponse.json(
+      { success: false, message: 'Internal server error', details: error.message },
+      { status: 500 }
+    );
+  }
+}
+
+// GET /api/bookings - Fetch bookings
+export async function GET(request) {
+  try {
+    console.log('GET /api/bookings - Starting bookings fetch');
+    
+    // Authenticate request
+    const auth = await authenticateRequest(request);
+    if (auth.error) {
+      console.log('Authentication failed:', auth.error);
+      return NextResponse.json(
+        { success: false, message: auth.error },
+        { status: auth.status }
+      );
+    }
+
+    const { authenticatedUser } = auth;
+    console.log('User authenticated:', { id: authenticatedUser.id, role: authenticatedUser.role });
+
+    // Get query parameters
+    const { searchParams } = new URL(request.url);
+    const salonId = searchParams.get('salonId');
+    const userId = searchParams.get('userId');
+
+    console.log('Query parameters:', { salonId, userId });
+
+    // Connect to database
+    console.log('Connecting to database...');
+    const dbConnection = await connectToDatabase();
+    console.log('Database connected successfully to:', dbConnection.dbName);
+    const db = dbConnection.db;
+
+    let bookings;
+    let query = {};
+
+    // Build query based on user role and parameters
+    if (authenticatedUser.role === 'salon' && salonId) {
+      // Salon owner fetching bookings for their salon
+      console.log('Salon owner fetching bookings for salonId:', salonId);
+      try {
+        const salonObjectId = new ObjectId(salonId);
+        query = { salonId: salonObjectId };
+      } catch (error) {
+        console.log('Invalid salonId format:', salonId);
+        return NextResponse.json(
+          { success: false, message: 'Invalid salon ID format' },
+          { status: 400 }
+        );
+      }
+    } else if (authenticatedUser.role === 'customer' && userId) {
+      // Customer fetching their own bookings
+      console.log('Customer fetching bookings for userId:', userId);
+      if (authenticatedUser.id !== userId) {
+        console.log('Access denied: Customer trying to access other user bookings');
+        return NextResponse.json(
+          { success: false, message: 'Access denied. You can only access your own bookings.' },
+          { status: 403 }
+        );
+      }
+      query = { customerId: userId };
+    } else {
+      console.log('Invalid request parameters for user role:', authenticatedUser.role);
+      return NextResponse.json(
+        { success: false, message: 'Invalid request parameters' },
+        { status: 400 }
+      );
+    }
+
+    console.log('Executing query:', query);
+
+    // Fetch bookings from database
+    bookings = await db.collection('bookings')
+      .find(query)
+      .sort({ createdAt: -1 })
+      .toArray();
+
+    console.log('Found bookings:', bookings.length);
+
+    return NextResponse.json({
+      success: true,
+      data: bookings
+    }, { status: 200 });
+
+  } catch (error) {
+    console.error('Bookings fetch error:', error);
+    console.error('Error stack:', error.stack);
+    return NextResponse.json(
+      { success: false, message: 'Internal server error', details: error.message },
+      { status: 500 }
+    );
+  }
+}
+
+// PATCH /api/bookings - Update booking status
+export async function PATCH(request) {
+  try {
+    console.log('PATCH /api/bookings - Starting booking status update');
+    
+    // Authenticate request
+    const auth = await authenticateRequest(request);
+    if (auth.error) {
+      console.log('Authentication failed:', auth.error);
+      return NextResponse.json(
+        { success: false, message: auth.error },
+        { status: auth.status }
+      );
+    }
+
+    const { authenticatedUser } = auth;
+    console.log('User authenticated:', { id: authenticatedUser.id, role: authenticatedUser.role });
+
+    // Parse request body
+    const { bookingId, status } = await request.json();
+    console.log('Update request received:', { bookingId, status });
+
+    // Validate required fields
+    if (!bookingId || !status) {
+      console.log('Missing required fields:', { bookingId, status });
+      return NextResponse.json(
+        { success: false, message: 'Missing required fields: bookingId, status' },
+        { status: 400 }
+      );
+    }
+
+    // Validate status
+    if (!['pending', 'confirmed', 'cancelled', 'rejected'].includes(status)) {
+      console.log('Invalid status:', status);
+      return NextResponse.json(
+        { success: false, message: 'Invalid status. Must be pending, confirmed, cancelled, or rejected' },
+        { status: 400 }
+      );
+    }
+
+    // Only salon owners can update booking status
+    if (authenticatedUser.role !== 'salon') {
+      console.log('Access denied: Non-salon user trying to update booking status');
+      return NextResponse.json(
+        { success: false, message: 'Access denied. Only salon owners can update booking status.' },
+        { status: 403 }
+      );
+    }
+
+    // Connect to database
+    console.log('Connecting to database...');
+    const dbConnection = await connectToDatabase();
+    console.log('Database connected successfully to:', dbConnection.dbName);
+    const db = dbConnection.db;
+
+    // Convert bookingId to ObjectId
+    let bookingObjectId;
+    try {
+      bookingObjectId = new ObjectId(bookingId);
+      console.log('Converted bookingId to ObjectId:', bookingObjectId);
+    } catch (error) {
+      console.log('Invalid bookingId format:', bookingId);
+      return NextResponse.json(
+        { success: false, message: 'Invalid booking ID format' },
+        { status: 400 }
+      );
+    }
+
+    // Find and update booking
+    console.log('Finding booking to update:', bookingObjectId);
+    const booking = await db.collection('bookings').findOne({ _id: bookingObjectId });
+
+    if (!booking) {
+      console.log('Booking not found:', bookingObjectId);
+      return NextResponse.json(
+        { success: false, message: 'Booking not found' },
+        { status: 404 }
+      );
+    }
+
+    console.log('Found booking:', booking);
+
+    // Verify salon ownership
+    if (authenticatedUser.role === 'salon') {
+      console.log('Verifying salon ownership...');
+      const salon = await db.collection('salons').findOne({ 
+        _id: booking.salonId, 
+        email: authenticatedUser.email 
+      });
+      
+      if (!salon) {
+        console.log('Access denied: Salon owner trying to update booking for different salon');
+        return NextResponse.json(
+          { success: false, message: 'Access denied. You can only update bookings for your own salon.' },
+          { status: 403 }
+        );
+      }
+      console.log('Salon ownership verified');
+    }
+
+    // Update booking status
+    console.log('Updating booking status to:', status);
+    const updateResult = await db.collection('bookings').updateOne(
+      { _id: bookingObjectId },
+      { 
+        $set: { 
+          status: status,
+          updatedAt: new Date()
+        }
+      }
+    );
+
+    console.log('Booking updated successfully:', updateResult.modifiedCount);
+
+    // If booking is confirmed, send confirmation email
+    if (status === 'confirmed' && booking.customerEmail) {
+      console.log('Booking confirmed, sending email to customer:', booking.customerEmail);
+      
+      // Get salon details for email
+      const salon = await db.collection('salons').findOne({ _id: booking.salonId });
+      const salonName = salon ? salon.name : 'Unknown Salon';
+      
+      // Send confirmation email (async, don't wait)
+      sendConfirmationEmail(booking.customerEmail, salonName);
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        message: `Booking ${status} successfully`,
+        status: status,
+        bookingId: bookingObjectId
+      }
+    }, { status: 200 });
+
+  } catch (error) {
+    console.error('Booking update error:', error);
+    console.error('Error stack:', error.stack);
+    return NextResponse.json(
+      { success: false, message: 'Internal server error', details: error.message },
+      { status: 500 }
+    );
+  }
+}
+    
+    const { salonId, userId, service, date, time } = await request.json();
+
+    console.log('Booking request received:', { salonId, userId, service, date, time });
+    console.log('Request URL:', request.url);
+    console.log('Request method:', request.method);
+    console.log('Request headers:', Object.fromEntries(request.headers.entries()));
+
+    // Add timeout handling to prevent context deadline exceeded
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Request timeout')), 30000); // 30 second timeout
+    });
+
+    const timeoutRace = Promise.race([
+      request.json(),
+      timeoutPromise
+    ]);
+
+    try {
+      const { salonId, userId, service, date, time } = await timeoutRace;
+    } catch (error) {
+      if (error.message === 'Request timeout') {
+        return NextResponse.json(
+          { success: false, message: 'Booking request timed out. Please try again.' },
+          { status: 408 } // Request Timeout
+        );
+      }
+      throw error; // Re-throw other errors
+    }
+
+    if (!salonId || !userId || !service || !date || !time) {
+      console.log('Missing required fields:', { salonId, userId, service, date, time });
+      return NextResponse.json(
+        { success: false, message: 'Missing required fields' },
+        { status: 400 }
+      );
+    }
+
+    // Verify user can create booking (customers can book for any salon, salon owners only for their salon)
+    console.log('Permission check - User role:', authenticatedUser.role);
+    console.log('Permission check - User type:', authenticatedUser.type);
+    
+    // For customers - completely bypass ownership checks
+    if (authenticatedUser.role === 'customer' || authenticatedUser.type === 'customer') {
+      console.log('Customer creating booking - bypassing all ownership checks');
+      // Customers can book at any salon, no ownership verification needed
+    } else if (authenticatedUser.role === 'salon' || authenticatedUser.type === 'owner') {
+      console.log('Salon owner creating booking - verifying ownership');
+      // Salon owners need ownership verification (will be checked later)
+    } else {
+      console.log('Unknown user role:', authenticatedUser.role);
+      return NextResponse.json(
+        { success: false, message: 'Access denied. Invalid user role.' },
+        { status: 401 }
+      );
+    }
+
+    console.log('Connecting to database...');
+    const dbConnection = await connectToDatabase();
+    console.log('Database connected successfully');
+    const db = dbConnection.db;
+
+    console.log('Step 1: Starting salon lookup...');
+    // Get salon details - simplified logic
+    let salon;
+    if (authenticatedUser.role === 'customer' || authenticatedUser.type === 'customer') {
+      console.log('Step 1b: Customer detected - direct salon lookup for ID:', salonId);
+      console.log('Searching for salon with ID:', salonId);
+      // Customers - direct salon lookup, no ownership checks
+      try {
+        console.log('Step 1b: Attempting string lookup with:', salonId);
+        salon = await db.collection('salons').findOne({ _id: salonId });
+        console.log('Step 1b success: Salon found via string lookup:', !!salon);
+        
+        if (!salon) {
+          console.log('Step 1b fallback: Trying ObjectId lookup with:', salonId);
+          salon = await db.collection('salons').findOne({ _id: new ObjectId(salonId) });
+          console.log('Step 1b fallback: Salon found via ObjectId:', !!salon);
+        }
+      } catch (error) {
+        console.log('Step 1b error: Salon lookup failed:', error.message);
+        salon = null;
+      }
+    } else if (authenticatedUser.role === 'salon' || authenticatedUser.type === 'owner') {
+      console.log('Step 1a: Salon owner detected - ownership verification');
+      // Salon owners - verify ownership by email
+      salon = await db.collection('salons').findOne({ 
+        email: authenticatedUser.email 
+      });
+      
+      if (!salon) {
+        console.log('Step 1a failed: Access denied: Salon owner not found');
+        return NextResponse.json(
+          { success: false, message: 'Access denied. Salon owner not found.' },
+          { status: 401 }
+        );
+      }
+      console.log('Step 1a success: Salon ownership verified for booking creation');
+    } else {
+      console.log('Step 1c: Unknown user role, returning error');
+      return NextResponse.json(
+        { success: false, message: 'Access denied. Invalid user role.' },
+        { status: 401 }
+      );
+    }
+    
+    console.log('Step 2: Salon lookup completed, found salon:', !!salon);
+    
+    // Debug: Check database structure for salon ID formats
+    try {
+      const sampleSalons = await db.collection('salons').find({}).limit(3).toArray();
+      console.log('Debug: Sample salons in database:');
+      sampleSalons.forEach((salon, index) => {
+        console.log(`  Salon ${index + 1}:`, {
+          id: salon._id,
+          idType: typeof salon._id,
+          name: salon.name,
+          idString: salon._id.toString()
+        });
+      });
+    } catch (error) {
+      console.log('Debug: Error checking salon structure:', error.message);
+    }
+    
+    console.log('Found salon:', salon);
+    
+    if (!salon) {
+      console.log('Salon not found:', salonId);
+      console.log('Debug: Available salon IDs:', sampleSalons?.map(s => s._id.toString()));
+      return NextResponse.json(
+        { success: false, message: 'Salon not found' },
+        { status: 404 }
+      );
+    }
+
+    console.log('Step 3: Starting user lookup...');
+    // Get user details with proper ObjectId handling
+    console.log('Fetching user details for ID:', userId);
+    let user;
+    try {
+      // Try ObjectId first (proper MongoDB format)
+      user = await db.collection('users').findOne({ _id: new ObjectId(userId) });
+      console.log('Step 3a: User found via ObjectId');
+    } catch (error) {
+      console.log('Step 3b: Invalid ObjectId, trying string lookup:', userId);
+      // Fallback to string lookup
+      user = await db.collection('users').findOne({ _id: userId });
+      console.log('Step 3b: User found via string lookup');
+    }
+    console.log('Step 3 completed: Found user:', !!user);
+    
+    if (!user) {
+      console.log('Step 3 failed: User not found:', userId);
+      return NextResponse.json(
+        { success: false, message: 'User not found' },
+        { status: 404 }
+      );
+    }
+
+    console.log('Step 4: Creating booking object...');
+    // Create booking with pending status
+    const booking = {
+      salonId,
+      userId,
+      service,
+      date: new Date(date),
+      time,
+      status: 'pending',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    console.log('Step 4 completed: Booking object created:', booking);
+
+    console.log('Step 5: Inserting booking into database...');
+    console.log('Creating booking:', booking);
+    const result = await db.collection('bookings').insertOne(booking);
+    console.log('Step 5 completed: Booking created successfully:', result.insertedId);
+
+    // Send notifications
+    const bookingDetails = {
+      ...booking,
+      _id: result.insertedId,
+    };
+
+    // Send booking request email (async, don't wait - don't fail booking if email fails)
+    sendBookingEmail(bookingDetails, salon, user).catch(emailError => {
+      console.error('Email sending failed (booking still created):', emailError);
+    });
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        bookingId: result.insertedId,
+        message: 'Booking request submitted successfully. Awaiting salon approval.',
+      },
+    });
+
+  } catch (error) {
+    console.error('Booking API error:', error);
+    console.error('Error stack:', error.stack);
+    console.error('Error details:', {
+      message: error.message,
+      name: error.name,
+      code: error.code
+    });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error', details: error.message },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(request) {
+  try {
+    console.log('PATCH /api/bookings - Starting booking status update');
+    
+    // Authenticate request
+    const auth = await authenticateRequest(request);
+    if (auth.error) {
+      console.log('Authentication failed:', auth.error);
+      return NextResponse.json(
+        { success: false, message: auth.error },
+        { status: auth.status }
+      );
+    }
+
+    const { authenticatedUser } = auth;
+    console.log('User authenticated:', { id: authenticatedUser.id, role: authenticatedUser.role });
+    
+    const { bookingId, status } = await request.json();
+
+    if (!bookingId || !status) {
+      console.log('Missing bookingId or status:', { bookingId, status });
+      return NextResponse.json(
+        { success: false, message: 'Missing bookingId or status' },
+        { status: 400 }
+      );
+    }
+
+    if (!['confirmed', 'cancelled', 'rejected'].includes(status)) {
+      console.log('Invalid status:', status);
+      return NextResponse.json(
+        { success: false, message: 'Invalid status. Must be confirmed, cancelled, or rejected' },
+        { status: 400 }
+      );
+    }
+
+    console.log('Connecting to database...');
+    const db = await connectToDatabase();
+    console.log('Database connected successfully');
+
+    // Get booking details
+    console.log('Fetching booking details for ID:', bookingId);
+    const booking = await db.collection('bookings').findOne({ _id: bookingId });
+    if (!booking) {
+      console.log('Booking not found:', bookingId);
+      return NextResponse.json(
+        { success: false, message: 'Booking not found' },
+        { status: 404 }
+      );
+    }
+
+    // Get salon and user details for email
+    console.log('Fetching salon and user details');
+    const salon = await db.collection('salons').findOne({ _id: booking.salonId });
+    const user = await db.collection('users').findOne({ _id: booking.userId });
+
+    if (!salon || !user) {
+      console.log('Salon or user not found:', { salon: !!salon, user: !!user });
+      return NextResponse.json(
+        { success: false, message: 'Salon or user not found' },
+        { status: 404 }
+      );
+    }
+
+    // Update booking status
+    console.log('Updating booking status to:', status);
+    const result = await db.collection('bookings').updateOne(
+      { _id: bookingId },
+      { 
+        $set: { 
+          status,
+          updatedAt: new Date()
+        }
+      }
+    );
+
+    if (result.matchedCount === 0) {
+      console.log('No booking matched for update:', bookingId);
+      return NextResponse.json(
+        { success: false, message: 'Booking not found' },
+        { status: 404 }
+      );
+    }
+
+    console.log('Booking status updated successfully');
+
+    // Send status update email (async, don't wait - don't fail update if email fails)
+    sendStatusUpdateEmail(booking, salon, user, status).catch(emailError => {
+      console.error('Status update email failed (booking still updated):', emailError);
+    });
+
+    return NextResponse.json({
+      success: true,
+      data: {
+        message: `Booking ${status} successfully`,
+        status,
+      },
+    });
+
+  } catch (error) {
+    console.error('Update booking status API error:', error);
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(request) {
+  try {
+    console.log('GET /api/bookings - Starting bookings fetch');
+    
+    // Authenticate request
+    const auth = await authenticateRequest(request);
+    if (auth.error) {
+      console.log('Authentication failed:', auth.error);
+      return NextResponse.json(
+        { success: false, message: auth.error },
+        { status: auth.status }
+      );
+    }
+
+    const { authenticatedUser } = auth;
+    console.log('User authenticated:', { id: authenticatedUser.id, role: authenticatedUser.role });
+    
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
+    const salonId = searchParams.get('salonId');
+
+    if (!userId && !salonId) {
+      console.log('Missing userId or salonId parameter');
+      return NextResponse.json(
+        { success: false, message: 'Missing userId or salonId' },
+        { status: 400 }
+      );
+    }
+
+    // Verify access permissions
+    if (authenticatedUser.role === 'salon' && salonId) {
+      // For salon owners, verify they own the salon by checking email
+      console.log('Salon owner accessing bookings, verifying ownership...');
+      // We'll connect to database later, so just note the verification needed
+      console.log('Will verify salon ownership with email:', authenticatedUser.email);
+    }
+
+    if (authenticatedUser.role === 'customer' && userId && authenticatedUser.id !== userId) {
+      console.log('Access denied: Customer trying to access bookings for different user');
+      return NextResponse.json(
+        { success: false, message: 'Access denied. You can only access your own bookings.' },
+        { status: 401 }
+      );
+    }
+
+    console.log('Connecting to database...');
+    const dbConnection = await connectToDatabase();
+    console.log('Database connected successfully');
+    const db = dbConnection.db;
+
+    // If salon owner, verify they own the salon
+    if (authenticatedUser.role === 'salon' && salonId) {
+      console.log('Verifying salon ownership...');
+      // Using string lookup (ObjectId disabled for now)
+      const salon = await db.collection('salons').findOne({ 
+        _id: salonId, 
+        email: authenticatedUser.email 
+      });
+      
+      if (!salon) {
+        console.log('Access denied: Salon owner trying to access bookings for different salon');
+        return NextResponse.json(
+          { success: false, message: 'Access denied. You can only access bookings for your own salon.' },
+          { status: 401 }
+        );
+      }
+      console.log('Salon ownership verified');
+    }
+
+    let bookings;
+
+    if (userId) {
+      console.log('Fetching bookings for userId:', userId);
+      console.log('Debug: User role:', authenticatedUser.role);
+      console.log('Debug: Authenticated user ID:', authenticatedUser.id);
+      console.log('Debug: Requested userId:', userId);
+      
+      try {
+        bookings = await db.collection('bookings')
+          .find({ userId }) // Keep as string since userId is stored as string in bookings
+          .sort({ createdAt: -1 })
+          .toArray();
+        console.log('Successfully fetched bookings for userId:', bookings.length, 'bookings found');
+      } catch (error) {
+        console.error('Error fetching bookings for userId:', error);
+        console.error('Error stack:', error.stack);
+        return NextResponse.json(
+          { success: false, message: 'Database error while fetching bookings', details: error.message },
+          { status: 500 }
+        );
+      }
+    } else if (salonId) {
+      console.log('Fetching bookings for salonId:', salonId);
+      try {
+        bookings = await db.collection('bookings')
+          .find({ salonId }) // Keep as string since salonId is stored as string in bookings
+          .sort({ createdAt: -1 })
+          .toArray();
+        console.log('Successfully fetched bookings for salonId:', bookings.length, 'bookings found');
+      } catch (error) {
+        console.error('Error fetching bookings for salonId:', error);
+        console.error('Error stack:', error.stack);
+        return NextResponse.json(
+          { success: false, message: 'Database error while fetching bookings', details: error.message },
+          { status: 500 }
+        );
+      }
+    } else {
+      console.log('Neither userId nor salonId provided - this should not happen');
+      return NextResponse.json(
+        { success: false, message: 'Invalid request: neither userId nor salonId provided' },
+        { status: 400 }
+      );
+    }
+
+    console.log(`Found ${bookings?.length || 0} bookings`);
+
+    return NextResponse.json({
+      success: true,
+      data: bookings || [],
+    });
+
+  } catch (error) {
+    console.error('Get bookings API error:', error);
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
