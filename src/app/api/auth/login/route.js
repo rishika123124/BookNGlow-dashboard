@@ -3,7 +3,7 @@ import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
 import Salon from '@/models/Salon';
 import { generateToken, setAuthCookie } from '@/lib/auth';
-import bcrypt from 'bcryptjs';
+import bcryptjs from 'bcryptjs';
 
 export async function POST(request) {
   try {

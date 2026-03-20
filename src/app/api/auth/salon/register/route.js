@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Salon from '@/models/Salon';
 import { generateToken, setAuthCookie } from '@/lib/auth';
-import bcrypt from 'bcryptjs';
+import bcryptjs from 'bcryptjs';
 
 export async function POST(request) {
   try {
