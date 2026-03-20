@@ -10,6 +10,7 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   reactStrictMode: true,
+  outputFileTracingRoot: __dirname,
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['lucide-react', 'react-hot-toast'],
