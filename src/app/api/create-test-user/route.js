@@ -25,7 +25,7 @@ export async function POST(request) {
     }
 
     // Create test user
-    const hashedPassword = await bcrypt.hash('test123', 12);
+    const hashedPassword = await bcryptjs.hash('test123', 12);
     
     const testUser = new User({
       name: 'Test User',
